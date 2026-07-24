@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日文學習筆記</title>
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --ink:#2b2b2b; --sub:#6b6b6b;
+    --accent:#c0392b; --accent2:#2e7d6b; --line:#e6e2d8;
+    --jp:#1a3a5c; --shadow:0 1px 3px rgba(0,0,0,.07);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Hiragino Sans","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  .wrap{max-width:720px;margin:0 auto;padding:40px 20px 60px}
+  h1{font-size:28px;margin:0 0 4px;color:var(--accent);letter-spacing:2px}
+  .sub{color:var(--sub);font-size:14px;margin-bottom:28px}
+  a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);padding:20px 22px;margin-bottom:16px;text-decoration:none;color:var(--ink);
+    transition:transform .12s, box-shadow .12s}
+  a.card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.10)}
+  .card h2{margin:0 0 6px;font-size:19px;color:var(--jp)}
+  .card p{margin:0;font-size:14px;color:var(--sub)}
+  .tag{display:inline-block;font-size:12px;color:var(--accent2);border:1px solid var(--accent2);
+    border-radius:12px;padding:1px 10px;margin-left:8px;vertical-align:2px}
+  footer{margin-top:36px;font-size:12px;color:var(--sub);text-align:center}
+  @media(max-width:600px){
+    .wrap{padding:24px 14px 40px}
+    h1{font-size:22px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📚 日文學習筆記</h1>
+  <div class="sub">個人日語學習整理，手機、電腦皆可瀏覽</div>
+
+  <a class="card" href="minna-notes.html">
+    <h2>大家的日本語 初級筆記<span class="tag">課程筆記</span></h2>
+    <p>依課次整理：單字、文法、朗讀、測驗，含五十音表</p>
+  </a>
+
+  <a class="card" href="n5-grammar.html">
+    <h2>N5 文法總整理<span class="tag">文法</span></h2>
+    <p>N5 文法句型分類整理，附學習進度追蹤與發音</p>
+  </a>
+
+  <a class="card" href="n5-vocab.html">
+    <h2>N5 總單字<span class="tag">單字</span></h2>
+    <p>767 個 N5 單字：假名、音調圖、中文、例句，可自測</p>
+  </a>
+
+  <footer>學習進度儲存在瀏覽器中，各裝置分開記錄</footer>
+</div>
+</body>
+</html>
