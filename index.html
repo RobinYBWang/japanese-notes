@@ -16,7 +16,7 @@
   .wrap{max-width:720px;margin:0 auto;padding:40px 20px 60px}
   h1{font-size:28px;margin:0 0 4px;color:var(--accent);letter-spacing:2px}
   .sub{color:var(--sub);font-size:14px;margin-bottom:28px}
-  a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  .card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;
     box-shadow:var(--shadow);padding:20px 22px;margin-bottom:16px;text-decoration:none;color:var(--ink);
     transition:transform .12s, box-shadow .12s}
   a.card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.10)}
@@ -24,6 +24,10 @@
   .card p{margin:0;font-size:14px;color:var(--sub)}
   .tag{display:inline-block;font-size:12px;color:var(--accent2);border:1px solid var(--accent2);
     border-radius:12px;padding:1px 10px;margin-left:8px;vertical-align:2px}
+  .card.off{opacity:.6;background:#f1eee7;box-shadow:none;cursor:default}
+  .card.off h2{color:var(--sub)}
+  .card.off .tag{color:var(--sub);border-color:#cfcabd}
+  .card.off .wip{font-size:14px;color:var(--sub);font-weight:400}
   footer{margin-top:36px;font-size:12px;color:var(--sub);text-align:center}
   @media(max-width:600px){
     .wrap{padding:24px 14px 40px}
@@ -41,15 +45,15 @@
     <p>依課次整理：單字、文法、朗讀、測驗，含五十音表</p>
   </a>
 
-  <a class="card" href="n5-grammar.html">
-    <h2>N5 文法總整理<span class="tag">文法</span></h2>
+  <div class="card off" aria-disabled="true">
+    <h2>N5 文法總整理<span class="wip">（整理中）</span><span class="tag">文法</span></h2>
     <p>N5 文法句型分類整理，附學習進度追蹤與發音</p>
-  </a>
+  </div>
 
-  <a class="card" href="n5-vocab.html">
-    <h2>N5 總單字<span class="tag">單字</span></h2>
+  <div class="card off" aria-disabled="true">
+    <h2>N5 總單字<span class="wip">（整理中）</span><span class="tag">單字</span></h2>
     <p>767 個 N5 單字：假名、音調圖、中文、例句，可自測</p>
-  </a>
+  </div>
 
   <footer>學習進度儲存在瀏覽器中，各裝置分開記錄</footer>
 </div>

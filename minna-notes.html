@@ -24,6 +24,7 @@
   body.zen #zen-add{display:flex}
   #zen-add:hover{background:#eef9f0}
   #zen-add:disabled{opacity:.4;cursor:not-allowed}
+  #add,#save,#zen-add,#zen-save{display:none!important}
   #zen-save:hover{background:#eef4f9}
   #zen-save.need{background:#fff3e0;border-color:#f0c987}
   body.zen{padding-top:6px}
@@ -151,7 +152,8 @@
   #tbody td.masked.revealed::after{display:none}
   #all-tbody td.spk-c{cursor:pointer}
   #all-tbody td.spk-c:hover{background:#fff7cc}
-  #all-quiz,#voc-quiz{position:sticky;top:var(--topbar-h,132px);z-index:17;background:#f7f9fb;border:1px solid var(--line);border-radius:10px 10px 0 0;padding:10px 12px;margin:0;max-width:760px;box-shadow:0 4px 8px rgba(0,0,0,.08)}
+  #all-quiz,#voc-quiz{position:sticky;top:var(--topbar-h,132px);z-index:17;background:#f7f9fb;border:1px solid var(--line);border-top:0;border-radius:0;padding:10px 12px;margin:0;box-shadow:0 4px 8px rgba(0,0,0,.08)}
+  .aq-modes,.aq-body{max-width:900px}
   .aq-modes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
   .aq-mode{font-size:13px;padding:4px 11px;border:1px solid var(--line);background:#fff;border-radius:16px;cursor:pointer}
   .aq-mode.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
@@ -210,6 +212,10 @@
   #read-text:focus{border-color:var(--accent)}
   #read-view{width:100%;min-height:calc(100vh - 260px);border:1px solid var(--line);border-radius:8px;padding:12px;cursor:text}
   .rvline{font-size:19px;line-height:2.2;padding:3px 4px;display:flex;gap:8px;align-items:baseline;border-radius:6px}
+  #panel-allread{padding:14px}
+  #allread-view{margin:10px auto 0;max-width:820px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px;max-height:calc(100vh - 300px);overflow-y:auto}
+  #allread-view .rvline{justify-content:flex-start}
+  #panel-allread .rtop{justify-content:center}
   .rvline.cur{background:#fff8e1}
   .rvwho{flex:0 0 auto;font-size:12px;font-weight:700;border-radius:10px;padding:1px 9px;align-self:center}
   .rvwho.a{background:#e0edfb;color:#2b6cb0}
@@ -279,10 +285,15 @@
   @media(max-width:600px){
     h1{font-size:15px}
     /* 手機版：表格自適應寬度（不可用 overflow-x:auto，會讓 sticky 失效） */
-    #panel-vocab table,#alltable{table-layout:auto!important;width:100%!important}
+    #panel-vocab table,.alltable,.gjtable{table-layout:auto!important;width:100%!important}
     #panel-vocab #cg col,#allcg col{width:auto!important}
-    #panel-vocab td,#panel-vocab th,#alltable td,#alltable th{padding:6px 4px}
+    #panel-vocab td,#panel-vocab th,.alltable td,.alltable th{padding:6px 4px}
     td.panote,th.panote{white-space:normal}
+  }
+  @media(max-width:340px){
+    #panel-vocab td,#panel-vocab th{font-size:12px;padding:5px 1px}
+    #panel-vocab .panote{font-size:10px}
+    #panel-vocab th .sub{font-size:9px}
   }
   /* ===== 發佈版（唯讀）===== */
   #add,#save,#zen-add,#zen-save,#bulkbar,.hint,
@@ -306,7 +317,7 @@
     <button class="btn-primary" id="add" style="display: none;">＋ 新增單字</button>
     <button id="save" class="">💾 儲存</button>
   </div>
-  <div class="hint">前面的方框是「選取」：勾選一列或多列後，上方會出現「刪除選取」。編輯後記得按「💾 儲存」寫回檔案（橘色代表有未儲存變動）。</div>
+  <div class="hint">唸書用筆記：點單字任一格會念發音；上方欄位的勾選框可遮住該欄做練習（再點格子掀開答案）。要新增或修改單字，直接告訴我即可。</div>
 </header>
 <div class="tabs" id="tabs"></div>
 <div class="subtabs" id="subtabs"></div>
@@ -334,7 +345,7 @@
 </div>
 
 <div id="panel-grammar" style="display: none;">
-  <div class="ghint">📘 文法　·　每一課各自獨立。</div>
+  <div class="ghint">📘 文法　·　點例句的 🔊 可聽發音。每一課各自獨立。</div>
   <div id="grammar-body" contenteditable="false"></div>
 </div>
 
@@ -361,10 +372,10 @@
 
 <div id="panel-read" style="display:none">
   <div class="rtop">
-    <button id="readnew">🔄 重新產生</button>
+    <button id="readnew-lesson">🔄 從該課單字產生</button> <button id="readnew-all">🔄 從單字總表產生</button>
     <span class="rhint" id="readhint"></span>
   </div>
-  <div class="ghint">用 <b>A:</b> / <b>B:</b> 開頭代表兩個人對話（A 用聲音A、B 用聲音B）；沒有標 A:／B: 的行就用聲音A念。也可以整段刪掉、貼上你自己的文章。編輯後記得按「💾 儲存」。</div>
+  <div class="ghint">用 <b>A:</b> / <b>B:</b> 開頭代表兩個人對話（A 用聲音A、B 用聲音B）；沒有標 A:／B: 的行就用聲音A念。按上方「重新產生」可換一篇。</div>
   <textarea id="read-text" spellcheck="false" placeholder="A: あのひとは 学生ですか。
 B: はい、学生です。
 （或直接貼上一篇文章…）"></textarea>
@@ -385,266 +396,8 @@ B: はい、学生です。
 
 <div id="panel-gram" style="display:none">
 <div class="gram-wrap">
-<div class="ghint">📖 <b>文法總表</b>：N5（《大家的日本語》初級I）基礎文法整理（唯讀參考）。點 🔊 可聽例句發音。</div>
-<section class="gsec">
-<h3>1. 基礎句型與判斷</h3>
-<p class="gdesc">這是日文最基礎的骨架，用來定義或否定事物。</p>
-<div class="gp">
-<div class="gp-label">A は B です（A 是 B）</div>
-<div class="gp-ex">私はエンジニアです。<button class="spk gspk" data-say="私はエンジニアです。" title="播放發音">🔊</button>（我是工程師。）<br>これは私の新しいモニターです。<button class="spk gspk" data-say="これは私の新しいモニターです。" title="播放發音">🔊</button>（這是我的新螢幕。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">A は B では ありません（A 不是 B）</div>
-<div class="gp-ex">私は学生ではありません。<button class="spk gspk" data-say="私は学生ではありません。" title="播放發音">🔊</button>（我不是學生。）<br>今日は日曜日ではありません。<button class="spk gspk" data-say="今日は日曜日ではありません。" title="播放發音">🔊</button>（今天不是星期日。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">A は B ですか（A 是 B 嗎？）</div>
-<div class="gp-ex">あなたは台湾人ですか。<button class="spk gspk" data-say="あなたは台湾人ですか。" title="播放發音">🔊</button>（你是台灣人嗎？）<br>それは新しいカメラですか。<button class="spk gspk" data-say="それは新しいカメラですか。" title="播放發音">🔊</button>（那是新的相機嗎？）</div>
-</div>
-<div class="gp">
-<div class="gp-label">A も B です（A 也是 B）</div>
-<div class="gp-ex">私もエンジニアです。<button class="spk gspk" data-say="私もエンジニアです。" title="播放發音">🔊</button>（我也是工程師。）<br>妹も台北に住んでいます。<button class="spk gspk" data-say="妹も台北に住んでいます。" title="播放發音">🔊</button>（我妹妹也住在台北。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">A の B（A 的 B）</div>
-<div class="gp-ex">会社のパソコン<button class="spk gspk" data-say="会社のパソコン" title="播放發音">🔊</button>（公司的電腦）<br>私のバイク<button class="spk gspk" data-say="私のバイク" title="播放發音">🔊</button>（我的機車）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>2. 指示詞與存在</h3>
-<p class="gdesc">用來指出事物的相對位置，以及描述人或物品的存在狀態。</p>
-<div class="gp">
-<div class="gp-label">これ / それ / あれ / どれ（這 / 那 / 那個 / 哪一個）</div>
-<div class="gp-ex">これは美味しいコーヒーです。<button class="spk gspk" data-say="これは美味しいコーヒーです。" title="播放發音">🔊</button>（這是好喝的咖啡。）<br>あなたのバイクはどれですか。<button class="spk gspk" data-say="あなたのバイクはどれですか。" title="播放發音">🔊</button>（你的機車是哪一輛？）</div>
-</div>
-<div class="gp">
-<div class="gp-label">ここ / そこ / あそこ / どこ（這裡 / 那裡 / 那裡 / 哪裡）</div>
-<div class="gp-ex">ここは台北です。<button class="spk gspk" data-say="ここは台北です。" title="播放發音">🔊</button>（這裡是台北。）<br>会議室はどこですか。<button class="spk gspk" data-say="会議室はどこですか。" title="播放發音">🔊</button>（會議室在哪裡？）</div>
-</div>
-<div class="gp">
-<div class="gp-label">あります / います（有 / 存在）</div>
-<div class="gp-note">あります 用於無生命，います 用於有生命。</div>
-<div class="gp-ex">机の上にパソコンがあります。<button class="spk gspk" data-say="机の上にパソコンがあります。" title="播放發音">🔊</button>（桌子上有電腦。）<br>オフィスに部長がいます。<button class="spk gspk" data-say="オフィスに部長がいます。" title="播放發音">🔊</button>（辦公室裡有經理。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>3. 動詞基礎（ます形系列）</h3>
-<p class="gdesc">日文動詞的「禮貌型態」，用於日常陳述與時態變化。</p>
-<div class="gp">
-<div class="gp-label">〜ます（肯定・現在／未來）</div>
-<div class="gp-ex">毎日プログラムを書きます。<button class="spk gspk" data-say="毎日プログラムを書きます。" title="播放發音">🔊</button>（我每天寫程式。）<br>週末は海へ行きます。<button class="spk gspk" data-say="週末は海へ行きます。" title="播放發音">🔊</button>（週末我要去海邊。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜ません（否定・現在／未來）</div>
-<div class="gp-ex">今日は残業しません。<button class="spk gspk" data-say="今日は残業しません。" title="播放發音">🔊</button>（我今天不加班。）<br>朝ごはんは食べません。<button class="spk gspk" data-say="朝ごはんは食べません。" title="播放發音">🔊</button>（我不吃早餐。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜ました（肯定・過去）</div>
-<div class="gp-ex">昨日、新しいモニターを買いました。<button class="spk gspk" data-say="昨日、新しいモニターを買いました。" title="播放發音">🔊</button>（我昨天買了新螢幕。）<br>先月、日本へ行きました。<button class="spk gspk" data-say="先月、日本へ行きました。" title="播放發音">🔊</button>（我上個月去了日本。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜ませんでした（否定・過去）</div>
-<div class="gp-ex">昨日は忙しかったですから、寝ませんでした。<button class="spk gspk" data-say="昨日は忙しかったですから、寝ませんでした。" title="播放發音">🔊</button>（因為昨天很忙，所以沒有睡覺。）<br>週末はどこへも行きませんでした。<button class="spk gspk" data-say="週末はどこへも行きませんでした。" title="播放發音">🔊</button>（週末哪裡都沒去。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>4. 助詞用法（句子的結構膠水）</h3>
-<p class="gdesc">助詞決定了名詞在句子中的功能（如同程式裡的指標）。</p>
-<div class="gp">
-<div class="gp-label">は（wa）：提示句子的主題</div>
-<div class="gp-ex">私は台北に住んでいます。<button class="spk gspk" data-say="私は台北に住んでいます。" title="播放發音">🔊</button>（我住在台北。）<br>このカメラは高いです。<button class="spk gspk" data-say="このカメラは高いです。" title="播放發音">🔊</button>（這台相機很貴。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">が（ga）：提示主語（能力、喜好或客觀存在）</div>
-<div class="gp-ex">私はダイビングが好きです。<button class="spk gspk" data-say="私はダイビングが好きです。" title="播放發音">🔊</button>（我喜歡潛水。）<br>机の上に本があります。<button class="spk gspk" data-say="机の上に本があります。" title="播放發音">🔊</button>（桌子上有書。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">を（o）：提示動作的受詞</div>
-<div class="gp-ex">毎日、コーヒーを飲みます。<button class="spk gspk" data-say="毎日、コーヒーを飲みます。" title="播放發音">🔊</button>（我每天喝咖啡。）<br>今、コードを書いています。<button class="spk gspk" data-say="今、コードを書いています。" title="播放發音">🔊</button>（我現在正在寫程式碼。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">に（ni）：具體時間、目的地或存在位置</div>
-<div class="gp-ex">9時に会社へ行きます。<button class="spk gspk" data-say="9時に会社へ行きます。" title="播放發音">🔊</button>（9點去公司。）<br>台北に住んでいます。<button class="spk gspk" data-say="台北に住んでいます。" title="播放發音">🔊</button>（住在台北。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">で（de）：動作發生的場所、手段或工具</div>
-<div class="gp-ex">バイクで会社へ行きます。<button class="spk gspk" data-say="バイクで会社へ行きます。" title="播放發音">🔊</button>（騎機車去公司。）<br>レストランでご飯を食べます。<button class="spk gspk" data-say="レストランでご飯を食べます。" title="播放發音">🔊</button>（在餐廳吃飯。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">と（to）：表示「和（某人）」或並列</div>
-<div class="gp-ex">友達と海へ行きます。<button class="spk gspk" data-say="友達と海へ行きます。" title="播放發音">🔊</button>（和朋友去海邊。）<br>机の上にペンとノートがあります。<button class="spk gspk" data-say="机の上にペンとノートがあります。" title="播放發音">🔊</button>（桌子上有筆和筆記本。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>5. 形容詞與副詞</h3>
-<p class="gdesc">用來修飾名詞或描述狀態。</p>
-<div class="gp">
-<div class="gp-label">い形容詞（字尾是「い」）</div>
-<div class="gp-ex">台湾の夏は暑いです。<button class="spk gspk" data-say="台湾の夏は暑いです。" title="播放發音">🔊</button>（台灣的夏天很熱。）<br>新しいモニターは大きいです。<button class="spk gspk" data-say="新しいモニターは大きいです。" title="播放發音">🔊</button>（新螢幕很大。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">な形容詞（修飾名詞時加「な」）</div>
-<div class="gp-ex">台北はとてもにぎやかな町です。<button class="spk gspk" data-say="台北はとてもにぎやかな町です。" title="播放發音">🔊</button>（台北是非常熱鬧的城市。）<br>私の部屋は静かです。<button class="spk gspk" data-say="私の部屋は静かです。" title="播放發音">🔊</button>（我的房間很安靜。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>6. 基本接續與助動詞</h3>
-<p class="gdesc">讓句子產生更多互動與時間邏輯。</p>
-<div class="gp">
-<div class="gp-label">〜から / 〜まで（從〜 / 到〜）</div>
-<div class="gp-ex">9時から6時まで働きます。<button class="spk gspk" data-say="9時から6時まで働きます。" title="播放發音">🔊</button>（我從9點工作到6點。）<br>家から会社までバイクで30分です。<button class="spk gspk" data-say="家から会社までバイクで30分です。" title="播放發音">🔊</button>（從家裡到公司騎機車要30分鐘。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜てください（請做某動作，搭配て形）</div>
-<div class="gp-ex">ここに名前を書いてください。<button class="spk gspk" data-say="ここに名前を書いてください。" title="播放發音">🔊</button>（請在這裡寫下名字。）<br>ちょっと待ってください。<button class="spk gspk" data-say="ちょっと待ってください。" title="播放發音">🔊</button>（請稍等一下。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜ましょう / 〜ませんか（一起做…吧 / 要不要一起…？）</div>
-<div class="gp-ex">一緒に昼ごはんを食べましょう。<button class="spk gspk" data-say="一緒に昼ごはんを食べましょう。" title="播放發音">🔊</button>（我們一起吃午餐吧。）<br>明日、一緒に海へ行きませんか。<button class="spk gspk" data-say="明日、一緒に海へ行きませんか。" title="播放發音">🔊</button>（明天要不要一起去海邊？）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>7. 形容詞的變化與比較</h3>
-<p class="gdesc">形容詞會隨時態改變，也用來做比較（第12課）。</p>
-<div class="gp">
-<div class="gp-label">い形：過去〈〜かったです〉／否定〈〜くないです〉／過去否定〈〜くなかったです〉</div>
-<div class="gp-ex">昨日は暑かったです。<button class="spk gspk" data-say="昨日は暑かったです。" title="播放發音">🔊</button>（昨天很熱。）<br>この本は高くないです。<button class="spk gspk" data-say="この本は高くないです。" title="播放發音">🔊</button>（這本書不貴。）<br>先週は忙しくなかったです。<button class="spk gspk" data-say="先週は忙しくなかったです。" title="播放發音">🔊</button>（上週不忙。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">な形：過去〈〜でした〉／否定〈〜じゃありません〉／過去否定〈〜じゃありませんでした〉</div>
-<div class="gp-ex">町はにぎやかでした。<button class="spk gspk" data-say="町はにぎやかでした。" title="播放發音">🔊</button>（那城鎮以前很熱鬧。）<br>部屋はきれいじゃありません。<button class="spk gspk" data-say="部屋はきれいじゃありません。" title="播放發音">🔊</button>（房間不乾淨。）<br>テストは簡単じゃありませんでした。<button class="spk gspk" data-say="テストは簡単じゃありませんでした。" title="播放發音">🔊</button>（考試不簡單。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">形容詞連接：い形〜くて／な形〜で</div>
-<div class="gp-ex">このカメラは安くて、いいです。<button class="spk gspk" data-say="このカメラは安くて、いいです。" title="播放發音">🔊</button>（這台相機又便宜又好。）<br>彼女はきれいで、親切です。<button class="spk gspk" data-say="彼女はきれいで、親切です。" title="播放發音">🔊</button>（她又漂亮又親切。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">比較：AはBより〜／Aのほうが〜／〜（の中）でいちばん〜</div>
-<div class="gp-ex">台北は東京より暑いです。<button class="spk gspk" data-say="台北は東京より暑いです。" title="播放發音">🔊</button>（台北比東京熱。）<br>バイクより車のほうが速いです。<button class="spk gspk" data-say="バイクより車のほうが速いです。" title="播放發音">🔊</button>（比起機車車子更快。）<br>果物の中でりんごがいちばん好きです。<button class="spk gspk" data-say="果物の中でりんごがいちばん好きです。" title="播放發音">🔊</button>（水果之中我最喜歡蘋果。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>8. 動詞て形（用途廣）</h3>
-<p class="gdesc">動詞的「て形」是許多 N5 句型的基礎（第14–16課）。</p>
-<div class="gp">
-<div class="gp-label">〜ています（正在／狀態、居住、職業）</div>
-<div class="gp-ex">今、ご飯を食べています。<button class="spk gspk" data-say="今、ご飯を食べています。" title="播放發音">🔊</button>（現在正在吃飯。）<br>台北に住んでいます。<button class="spk gspk" data-say="台北に住んでいます。" title="播放發音">🔊</button>（我住在台北。）<br>銀行で働いています。<button class="spk gspk" data-say="銀行で働いています。" title="播放發音">🔊</button>（我在銀行工作。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜てもいいです（可以…／許可）</div>
-<div class="gp-ex">ここに座ってもいいですか。<button class="spk gspk" data-say="ここに座ってもいいですか。" title="播放發音">🔊</button>（可以坐這裡嗎？）<br>写真を撮ってもいいです。<button class="spk gspk" data-say="写真を撮ってもいいです。" title="播放發音">🔊</button>（可以拍照。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜てはいけません（不可以…／禁止）</div>
-<div class="gp-ex">ここでたばこを吸ってはいけません。<button class="spk gspk" data-say="ここでたばこを吸ってはいけません。" title="播放發音">🔊</button>（這裡不可以抽菸。）<br>授業中に寝てはいけません。<button class="spk gspk" data-say="授業中に寝てはいけません。" title="播放發音">🔊</button>（上課中不可以睡覺。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜てから／〜て、〜（動作先後順序）</div>
-<div class="gp-ex">ご飯を食べてから、勉強します。<button class="spk gspk" data-say="ご飯を食べてから、勉強します。" title="播放發音">🔊</button>（吃完飯後讀書。）<br>朝起きて、顔を洗って、会社へ行きます。<button class="spk gspk" data-say="朝起きて、顔を洗って、会社へ行きます。" title="播放發音">🔊</button>（早上起床、洗臉，然後去公司。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>9. 動詞ない形</h3>
-<p class="gdesc">表示「不做／必須做」的句型（第17課）。</p>
-<div class="gp">
-<div class="gp-label">〜ないでください（請不要…）</div>
-<div class="gp-ex">ここに車を止めないでください。<button class="spk gspk" data-say="ここに車を止めないでください。" title="播放發音">🔊</button>（請不要在這裡停車。）<br>心配しないでください。<button class="spk gspk" data-say="心配しないでください。" title="播放發音">🔊</button>（請不要擔心。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜なければなりません（必須…）</div>
-<div class="gp-ex">明日までにレポートを出さなければなりません。<button class="spk gspk" data-say="明日までにレポートを出さなければなりません。" title="播放發音">🔊</button>（明天前必須交報告。）<br>薬を飲まなければなりません。<button class="spk gspk" data-say="薬を飲まなければなりません。" title="播放發音">🔊</button>（必須吃藥。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜なくてもいいです（不…也可以）</div>
-<div class="gp-ex">明日は来なくてもいいです。<button class="spk gspk" data-say="明日は来なくてもいいです。" title="播放發音">🔊</button>（明天不來也可以。）<br>急がなくてもいいです。<button class="spk gspk" data-say="急がなくてもいいです。" title="播放發音">🔊</button>（不用急。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>10. 動詞辭書形・た形</h3>
-<p class="gdesc">辭書形與た形延伸出的常用句型（第18–19課）。</p>
-<div class="gp">
-<div class="gp-label">辭書形＋ことができます（會／能夠）</div>
-<div class="gp-ex">私は日本語を話すことができます。<button class="spk gspk" data-say="私は日本語を話すことができます。" title="播放發音">🔊</button>（我會說日語。）<br>ここで泳ぐことができますか。<button class="spk gspk" data-say="ここで泳ぐことができますか。" title="播放發音">🔊</button>（這裡可以游泳嗎？）</div>
-</div>
-<div class="gp">
-<div class="gp-label">辭書形＋まえに（在…之前）</div>
-<div class="gp-ex">寝るまえに、歯を磨きます。<button class="spk gspk" data-say="寝るまえに、歯を磨きます。" title="播放發音">🔊</button>（睡覺前刷牙。）<br>食事のまえに、手を洗います。<button class="spk gspk" data-say="食事のまえに、手を洗います。" title="播放發音">🔊</button>（吃飯前洗手。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜たことがあります（曾經…過）</div>
-<div class="gp-ex">日本へ行ったことがあります。<button class="spk gspk" data-say="日本へ行ったことがあります。" title="播放發音">🔊</button>（我去過日本。）<br>寿司を食べたことがありますか。<button class="spk gspk" data-say="寿司を食べたことがありますか。" title="播放發音">🔊</button>（你吃過壽司嗎？）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜たり〜たりします（又…又…、列舉動作）</div>
-<div class="gp-ex">週末は本を読んだり、映画を見たりします。<button class="spk gspk" data-say="週末は本を読んだり、映画を見たりします。" title="播放發音">🔊</button>（週末看看書、看看電影。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜くなります／〜になります（變得…）</div>
-<div class="gp-ex">寒くなりました。<button class="spk gspk" data-say="寒くなりました。" title="播放發音">🔊</button>（變冷了。）<br>彼は先生になりました。<button class="spk gspk" data-say="彼は先生になりました。" title="播放發音">🔊</button>（他當上老師了。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>11. 願望與授受</h3>
-<p class="gdesc">表達想要，以及給予、得到（第7、13課）。</p>
-<div class="gp">
-<div class="gp-label">〜たいです（想做…）</div>
-<div class="gp-ex">日本へ行きたいです。<button class="spk gspk" data-say="日本へ行きたいです。" title="播放發音">🔊</button>（我想去日本。）<br>水が飲みたいです。<button class="spk gspk" data-say="水が飲みたいです。" title="播放發音">🔊</button>（我想喝水。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">Nが ほしいです（想要…〈東西〉）</div>
-<div class="gp-ex">新しいパソコンがほしいです。<button class="spk gspk" data-say="新しいパソコンがほしいです。" title="播放發音">🔊</button>（我想要新電腦。）<br>時間がほしいです。<button class="spk gspk" data-say="時間がほしいです。" title="播放發音">🔊</button>（我想要有時間。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">〜をあげます／もらいます（給／得到）</div>
-<div class="gp-ex">私は友達にプレゼントをあげました。<button class="spk gspk" data-say="私は友達にプレゼントをあげました。" title="播放發音">🔊</button>（我送了朋友禮物。）<br>友達に本をもらいました。<button class="spk gspk" data-say="友達に本をもらいました。" title="播放發音">🔊</button>（我從朋友那得到一本書。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>12. 更多助詞與小詞</h3>
-<p class="gdesc">N5 常用但容易漏掉的助詞與句尾詞。</p>
-<div class="gp">
-<div class="gp-label">へ（方向：去／來／回）</div>
-<div class="gp-ex">会社へ行きます。<button class="spk gspk" data-say="会社へ行きます。" title="播放發音">🔊</button>（去公司。）<br>国へ帰ります。<button class="spk gspk" data-say="国へ帰ります。" title="播放發音">🔊</button>（回國。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">から（原因：因為…）</div>
-<div class="gp-ex">時間がありませんから、急ぎます。<button class="spk gspk" data-say="時間がありませんから、急ぎます。" title="播放發音">🔊</button>（因為沒時間，所以趕快。）<br>寒いから、窓を閉めます。<button class="spk gspk" data-say="寒いから、窓を閉めます。" title="播放發音">🔊</button>（因為冷，把窗戶關上。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">や（列舉：…和…等）</div>
-<div class="gp-ex">机の上に本やペンがあります。<button class="spk gspk" data-say="机の上に本やペンがあります。" title="播放發音">🔊</button>（桌上有書和筆等。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">位置詞＋に あります／います（うえ・した・なか・まえ・うしろ・となり）</div>
-<div class="gp-ex">机の上に猫がいます。<button class="spk gspk" data-say="机の上に猫がいます。" title="播放發音">🔊</button>（桌上有貓。）<br>銀行はコンビニのとなりにあります。<button class="spk gspk" data-say="銀行はコンビニのとなりにあります。" title="播放發音">🔊</button>（銀行在便利商店隔壁。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">句尾 ね／よ（ね＝確認・同感；よ＝提醒對方）</div>
-<div class="gp-ex">いい天気ですね。<button class="spk gspk" data-say="いい天気ですね。" title="播放發音">🔊</button>（天氣真好呢。）<br>この店は安いですよ。<button class="spk gspk" data-say="この店は安いですよ。" title="播放發音">🔊</button>（這家店很便宜喔。）</div>
-</div>
-<div class="gp">
-<div class="gp-label">もう〜ました／まだ〜ていません（已經／還沒）</div>
-<div class="gp-ex">もう昼ごはんを食べました。<button class="spk gspk" data-say="もう昼ごはんを食べました。" title="播放發音">🔊</button>（已經吃過午餐了。）<br>まだ宿題をしていません。<button class="spk gspk" data-say="まだ宿題をしていません。" title="播放發音">🔊</button>（還沒寫作業。）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>13. 疑問詞總覽</h3>
-<p class="gdesc">把常用疑問詞一次記起來。</p>
-<div class="gp">
-<div class="gp-label">常用疑問詞一覽</div>
-<div class="gp-note">何〈なに／なん〉＝什麼｜誰〈だれ〉／どなた＝誰｜いつ＝何時｜どこ＝哪裡｜どれ／どの＝哪個｜いくら＝多少錢｜いくつ＝幾個／幾歲｜どうして／なぜ＝為什麼｜どんな＝什麼樣的｜どうやって＝怎麼做</div>
-<div class="gp-ex">これはいくらですか。<button class="spk gspk" data-say="これはいくらですか。" title="播放發音">🔊</button>（這個多少錢？）<br>誕生日はいつですか。<button class="spk gspk" data-say="誕生日はいつですか。" title="播放發音">🔊</button>（生日是什麼時候？）<br>どうして遅れましたか。<button class="spk gspk" data-say="どうして遅れましたか。" title="播放發音">🔊</button>（為什麼遲到？）<br>どんな音楽が好きですか。<button class="spk gspk" data-say="どんな音楽が好きですか。" title="播放發音">🔊</button>（你喜歡什麼樣的音樂？）</div>
-</div>
-</section>
-<section class="gsec">
-<h3>14. 數量詞・量詞</h3>
-<p class="gdesc">數東西時要配合正確的量詞（第11課）。</p>
-<div class="gp">
-<div class="gp-label">常見量詞</div>
-<div class="gp-note">〜つ(一般物)｜〜個〈こ〉｜〜枚〈まい〉(薄的)｜〜本〈ほん〉(細長)｜〜杯〈はい〉(杯裝)｜〜匹〈ひき〉(動物)｜〜人〈にん〉(人)｜〜回〈かい〉(次數)｜〜歳〈さい〉(年齡)</div>
-<div class="gp-ex">りんごを三つ買いました。<button class="spk gspk" data-say="りんごを三つ買いました。" title="播放發音">🔊</button>（買了三個蘋果。）<br>切手を五枚ください。<button class="spk gspk" data-say="切手を五枚ください。" title="播放發音">🔊</button>（請給我五張郵票。）<br>ビールを二本飲みました。<button class="spk gspk" data-say="ビールを二本飲みました。" title="播放發音">🔊</button>（喝了兩瓶啤酒。）<br>一週間に三回、日本語を勉強します。<button class="spk gspk" data-say="一週間に三回、日本語を勉強します。" title="播放發音">🔊</button>（一週學三次日語。）</div>
-</div>
-</section>
+<div class="ghint">📖 <b>文法總表</b>：目前已學課程的文法整理（唯讀參考）。點 🔊 可聽例句發音。</div>
+<div id="gram-body"></div>
 </div></div>
 <div id="panel-num" style="display:none">
   <div class="wrap">
@@ -662,6 +415,11 @@ B: はい、学生です。
 </div>
 <div id="panel-time" style="display:none">
   <div class="wrap"><div class="ghint">⏰ <b>時間</b>：內容尚未建立，之後再一起補上。</div></div>
+</div>
+<div id="panel-allread" style="display:none">
+  <div class="rtop"><button id="allread-new">🔄 重新產生</button> <span class="rhint" id="allread-hint"></span></div>
+  <div class="ghint">📻 <b>朗讀總表</b>：依目前所有單字＋文法隨機產生（約100句、順序打亂）。用下方播放器播放。</div>
+  <div id="allread-view"></div>
 </div>
 <div id="readplayer" class="collapsed">
   <button id="rp-toggle" title="收合／展開播放器"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
@@ -1502,7 +1260,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1513,7 +1272,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1524,7 +1284,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1535,7 +1296,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -1546,7 +1308,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1557,7 +1320,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1568,7 +1332,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1579,7 +1344,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1590,7 +1356,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1601,7 +1368,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1612,7 +1380,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1623,7 +1392,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1634,7 +1404,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -1645,7 +1416,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1656,7 +1428,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1667,7 +1440,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1678,7 +1452,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1689,7 +1464,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1700,7 +1476,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1711,7 +1488,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -1722,7 +1500,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1733,7 +1512,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -1744,7 +1524,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1755,7 +1536,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1766,7 +1548,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1777,7 +1560,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1788,7 +1572,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1799,7 +1584,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -1810,7 +1596,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1821,7 +1608,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1832,7 +1620,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "job"
       },
       {
         "done": 0,
@@ -1843,7 +1632,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1854,7 +1644,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1865,7 +1656,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1876,7 +1668,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1887,7 +1680,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1898,7 +1692,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1909,7 +1704,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1920,7 +1716,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1931,7 +1728,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1942,7 +1740,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1953,7 +1752,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1964,7 +1764,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1975,7 +1776,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -1986,7 +1788,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -1997,7 +1800,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2008,7 +1812,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2019,7 +1824,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2030,7 +1836,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2041,7 +1848,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2052,7 +1860,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2063,7 +1872,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2074,7 +1884,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2085,7 +1896,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "country"
       },
       {
         "done": 0,
@@ -2096,7 +1908,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2107,7 +1920,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2118,7 +1932,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2129,7 +1944,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       }
     ],
     "2": [
@@ -2142,7 +1958,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2153,7 +1970,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2164,7 +1982,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2175,7 +1994,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2186,7 +2006,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2197,7 +2018,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2208,7 +2030,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2219,7 +2042,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2230,7 +2054,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2241,7 +2066,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2252,7 +2078,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2263,7 +2090,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2274,7 +2102,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2285,7 +2114,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2296,7 +2126,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2307,7 +2138,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2318,7 +2150,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2329,7 +2162,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2340,7 +2174,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2351,7 +2186,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2362,7 +2198,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2373,7 +2210,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2384,7 +2222,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2395,7 +2234,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2406,7 +2246,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2417,7 +2258,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2428,7 +2270,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2439,7 +2282,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2450,7 +2294,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "くるま 是訓読み(訓讀):\n日本固有的說法,單獨當一個詞用時念這個\n車を買いました(買了車)。\n\n\nしゃ(羅馬字寫 sha)是音読み(音讀):\n從古代漢語傳過去的讀音,幾乎都用在漢字複合詞裡\n-電車(でんしゃ)電車\n-自転車(じてんしゃ)腳踏車\n-自動車(じどうしゃ)汽車\n-駐車場(ちゅうしゃじょう)停車場"
+        "note": "くるま 是訓読み(訓讀):\n日本固有的說法,單獨當一個詞用時念這個\n車を買いました(買了車)。\n\n\nしゃ(羅馬字寫 sha)是音読み(音讀):\n從古代漢語傳過去的讀音,幾乎都用在漢字複合詞裡\n-電車(でんしゃ)電車\n-自転車(じてんしゃ)腳踏車\n-自動車(じどうしゃ)汽車\n-駐車場(ちゅうしゃじょう)停車場",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2461,7 +2306,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2472,7 +2318,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2483,7 +2330,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2494,7 +2342,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2505,7 +2354,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "お 可加可不加，お 是禮貌性的接頭語(美化語),加了會讓說法更客氣、更柔和。實際說話時通常會加 ，直接說 みやげ 會顯得比較粗率(男性隨意口吻)\n- [お]酒\n- [お]菓子\n- [お]祭り\n- [お]風呂\n \n出現在複合詞時就不加\n- 手土産(てみやげ)\n- 土産話(みやげばなし) \n"
+        "note": "お 可加可不加，お 是禮貌性的接頭語(美化語),加了會讓說法更客氣、更柔和。實際說話時通常會加 ，直接說 みやげ 會顯得比較粗率(男性隨意口吻)\n- [お]酒\n- [お]菓子\n- [お]祭り\n- [お]風呂\n \n出現在複合詞時就不加\n- 手土産(てみやげ)\n- 土産話(みやげばなし) \n",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2516,7 +2366,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2527,7 +2378,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2538,7 +2390,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2549,7 +2402,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2560,7 +2414,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2571,7 +2426,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2582,7 +2438,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2593,7 +2450,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2604,7 +2462,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2615,7 +2474,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2626,7 +2486,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2637,7 +2498,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2648,7 +2510,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2659,7 +2522,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2670,7 +2534,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2681,7 +2546,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2692,7 +2558,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2703,7 +2570,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2714,7 +2582,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2725,7 +2594,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2736,7 +2606,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2747,7 +2618,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2758,7 +2630,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2769,7 +2642,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2780,7 +2654,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2791,7 +2666,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2802,7 +2678,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2813,7 +2690,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2824,7 +2702,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -2835,7 +2714,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "魯夫招式:\nゴムゴムの..."
+        "note": "魯夫招式:\nゴムゴムの...",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2846,7 +2726,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "携帯電話(けいたいでんわ) 是正式的完整說法,口語會縮成 携帯(けいたい)。這個詞涵蓋所有行動電話,包括以前的摺疊機。\n\n- 日常聊天:スマホ、携帯 、「携帯の番号」(手機號碼)\n- 正式文件、廣告、店面:スマートフォン、携帯電話\n- 電車廣播會聽到:携帯電話はマナーモードに設定してください(手機請調成靜音模式)"
+        "note": "携帯電話(けいたいでんわ) 是正式的完整說法,口語會縮成 携帯(けいたい)。這個詞涵蓋所有行動電話,包括以前的摺疊機。\n\n- 日常聊天:スマホ、携帯 、「携帯の番号」(手機號碼)\n- 正式文件、廣告、店面:スマートフォン、携帯電話\n- 電車廣播會聽到:携帯電話はマナーモードに設定してください(手機請調成靜音模式)",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2857,7 +2738,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "現在說手機基本上都用這個:\nスマホを忘れた!(手機忘了帶!)"
+        "note": "現在說手機基本上都用這個:\nスマホを忘れた!(手機忘了帶!)",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2868,7 +2750,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2879,7 +2762,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2890,7 +2774,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2901,7 +2786,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2912,7 +2798,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2923,7 +2810,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2934,7 +2822,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2945,7 +2834,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2956,7 +2846,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2967,7 +2858,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "くすり = 訓讀,單獨當「藥」這個詞用:薬を飲む(吃藥)\n\n\nやく = 音讀,出現在複合詞裡:薬局(やっきょく,藥局)、薬品(やくひん)、麻薬(まやく,毒品)、火薬(かやく,火藥)"
+        "note": "くすり = 訓讀,單獨當「藥」這個詞用:薬を飲む(吃藥)\n\n\nやく = 音讀,出現在複合詞裡:薬局(やっきょく,藥局)、薬品(やくひん)、麻薬(まやく,毒品)、火薬(かやく,火藥)",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2978,7 +2870,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -2989,7 +2882,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "x"
       },
       {
         "done": 0,
@@ -3000,7 +2894,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -3011,7 +2906,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -3022,7 +2918,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -3033,7 +2930,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -3044,7 +2942,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -3055,7 +2954,8 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
       },
       {
         "done": 0,
@@ -3066,7 +2966,92 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": ""
+        "note": "",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "アップル",
+        "kana": "アップル",
+        "cho": "1",
+        "mean": "蘋果、Apple（品牌）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "ルイスウトン",
+        "kana": "ルイスウトン",
+        "cho": "",
+        "mean": "LV（Louis Vuitton，精品品牌）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "ファッション",
+        "kana": "ファッション",
+        "cho": "1",
+        "mean": "時尚、流行（fashion）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "旅行",
+        "kana": "りょこう",
+        "cho": "0",
+        "mean": "旅行",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ゼロ",
+        "kana": "ゼロ",
+        "cho": "1",
+        "mean": "零、0（也可唸 れい／まる）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "第一課",
+        "kana": "だいいっか",
+        "cho": "",
+        "mean": "第一課（唸法：だいいっか）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "つまらない物ですが",
+        "kana": "つまらないものですが",
+        "cho": "",
+        "mean": "一點小意思、不成敬意（送禮時的客套話）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
       }
     ],
     "3": [],
@@ -3118,18 +3103,23 @@ const GRAMMAR_DEFAULT={
 <div class="gp"><div class="gp-label">③ 疑問句（問句）</div><div class="gp-form">名詞〈主語〉＋ は ＋ 名詞 ＋ です ＋ <u>か</u></div><div class="gp-note">句尾加 <b>か</b> 就變問句，語調上揚。</div><div class="gp-ex">例：あなた<b>は</b> <ruby>学生<rt>がくせい</rt></ruby><b>ですか</b>。<button class="spk gspk" contenteditable="false" data-say="あなたは がくせいですか" title="播放發音">🔊</button>（你是學生嗎？）<br>─ はい、<ruby>学生<rt>がくせい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="はい、がくせいです" title="播放發音">🔊</button>／ いいえ、<ruby>学生<rt>がくせい</rt></ruby>じゃ ありません。<button class="spk gspk" contenteditable="false" data-say="いいえ、がくせいじゃ ありません" title="播放發音">🔊</button></div></div>
 <div class="gp"><div class="gp-label">④ 疑問詞「何〈なん〉」：問「是什麼」</div><div class="gp-form">名詞 ＋ は ＋ 何〈なん〉 ＋ ですか</div><div class="gp-note"><b>何〈なん〉</b>＝什麼，用來問某物是什麼；回答用「〜は〜です」。<b>お</b>名前 的 お 是表尊敬的接頭辭。</div><div class="gp-ex">問：お<ruby>名前<rt>なまえ</rt></ruby><b>は</b> <ruby>何<rt>なん</rt></ruby><b>ですか</b>。<button class="spk gspk" contenteditable="false" data-say="おなまえは なんですか" title="播放發音">🔊</button>（您叫什麼名字？）<br>答：<ruby>私<rt>わたし</rt></ruby><b>は</b> <ruby>田中<rt>たなか</rt></ruby><b>です</b>。<button class="spk gspk" contenteditable="false" data-say="わたしは たなかです" title="播放發音">🔊</button>（我姓田中）</div></div>
 <div class="gp"><div class="gp-label">⑤ 連接名詞的「の」：的</div><div class="gp-form">名詞 ＋ <u>の</u> ＋ 名詞（＋ です）</div><div class="gp-note"><b>の</b> 用來連接兩個名詞，等於中文的「的」。</div><div class="gp-ex">例：<ruby>日本語<rt>にほんご</rt></ruby><b>の</b><ruby>本<rt>ほん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="にほんごの ほんです" title="播放發音">🔊</button>（日文的書）<br><ruby>彼<rt>かれ</rt></ruby>は <ruby>父<rt>ちち</rt></ruby><b>の</b><ruby>太郎<rt>たろう</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="かれは ちちの たろうです" title="播放發音">🔊</button>（他是我父親，名叫太郎）</div></div>
-<div class="gp"><div class="gp-label">⑥ 名詞 ＋ も：也</div><div class="gp-form">名詞 ＋ <u>も</u> ＋ 名詞 ＋ です</div><div class="gp-note"><b>も</b> 取代 は，表示「也」。注意：<b>否定回答時仍用 は</b>，不用 も。</div><div class="gp-ex">A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいですか" title="播放發音">🔊</button>（你也是學生嗎？）<br>B：はい、<ruby>私<rt>わたし</rt></ruby><b>も</b><ruby>学生<rt>がくせい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="はい、わたしも がくせいです" title="播放發音">🔊</button>（是，我也是學生）<br><br>A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいですか" title="播放發音">🔊</button><br>C：いいえ、<ruby>私<rt>わたし</rt></ruby><b>は</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありません。<button class="spk gspk" contenteditable="false" data-say="いいえ、わたしは がくせいじゃ ありません" title="播放發音">🔊</button>（不，我不是學生）<br><br>A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありませんか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいじゃ ありませんか" title="播放發音">🔊</button>（你也不是學生嗎？）<br>D：はい、<ruby>私<rt>わたし</rt></ruby><b>も</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありません。<button class="spk gspk" contenteditable="false" data-say="はい、わたしも がくせいじゃ ありません" title="播放發音">🔊</button>（對，我也不是學生）<br><br>A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありませんか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいじゃ ありませんか" title="播放發音">🔊</button><br>E：いいえ、<ruby>私<rt>わたし</rt></ruby><b>は</b><ruby>学生<rt>がくせい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="いいえ、わたしは がくせいです" title="播放發音">🔊</button>（不，我是學生）</div></div>`,
+<div class="gp"><div class="gp-label">⑥ 名詞 ＋ も：也</div><div class="gp-form">名詞 ＋ <u>も</u> ＋ 名詞 ＋ です</div><div class="gp-note"><b>も</b> 取代 は，表示「也」。注意：<b>否定回答時仍用 は</b>，不用 も。</div><div class="gp-ex">A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいですか" title="播放發音">🔊</button>（你也是學生嗎？）<br>B：はい、<ruby>私<rt>わたし</rt></ruby><b>も</b><ruby>学生<rt>がくせい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="はい、わたしも がくせいです" title="播放發音">🔊</button>（是，我也是學生）<br><br>A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいですか" title="播放發音">🔊</button><br>C：いいえ、<ruby>私<rt>わたし</rt></ruby><b>は</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありません。<button class="spk gspk" contenteditable="false" data-say="いいえ、わたしは がくせいじゃ ありません" title="播放發音">🔊</button>（不，我不是學生）<br><br>A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありませんか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいじゃ ありませんか" title="播放發音">🔊</button>（你也不是學生嗎？）<br>D：はい、<ruby>私<rt>わたし</rt></ruby><b>も</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありません。<button class="spk gspk" contenteditable="false" data-say="はい、わたしも がくせいじゃ ありません" title="播放發音">🔊</button>（對，我也不是學生）<br><br>A：あなた<b>も</b><ruby>学生<rt>がくせい</rt></ruby>じゃ ありませんか。<button class="spk gspk" contenteditable="false" data-say="あなたも がくせいじゃ ありませんか" title="播放發音">🔊</button><br>E：いいえ、<ruby>私<rt>わたし</rt></ruby><b>は</b><ruby>学生<rt>がくせい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="いいえ、わたしは がくせいです" title="播放發音">🔊</button>（不，我是學生）</div></div>
+<div class="gp"><div class="gp-label">⑦ 問年齡：何歳〈なんさい〉ですか／おいくつですか</div><div class="gp-form">〜は 何歳ですか（おいくつですか＝更客氣）</div><div class="gp-note"><b>何歳〈なんさい〉</b>＝幾歲（一般問法）；<b>おいくつですか</b>＝更客氣、禮貌的問法。回答用「〜歳です」；20 歲特殊唸「<b>はたち</b>」。</div><div class="gp-ex">A：<ruby>何歳<rt>なんさい</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="なんさいですか" title="播放發音">🔊</button>（幾歲？）<br>B：<ruby>十歳<rt>じゅっさい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="じゅっさいです" title="播放發音">🔊</button>（十歲）<br><br>A：おいくつですか。<button class="spk gspk" contenteditable="false" data-say="おいくつですか" title="播放發音">🔊</button>（幾歲？——更客氣）<br>B：<ruby>二十歳<rt>はたち</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="はたちです" title="播放發音">🔊</button>（二十歲）<br><br>A：<ruby>鈴木<rt>すずき</rt></ruby>さんは <ruby>何歳<rt>なんさい</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="すずきさんは なんさいですか" title="播放發音">🔊</button>（鈴木先生幾歲？）<br>B：<ruby>鈴木<rt>すずき</rt></ruby>さんは <ruby>八十八歳<rt>はちじゅうはっさい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="すずきさんは はちじゅうはっさいです" title="播放發音">🔊</button>（鈴木先生88歲）</div></div>`,
 2:`<h3>第二課　指示詞（こそあど）</h3>
 <div class="gp"><div class="gp-label">① これ／それ／あれ／どれ：事物代名詞</div><div class="gp-form">これ／それ／あれ／どれ ＋ は／も …</div><div class="gp-note">指「東西」的代名詞，可單獨當主語。<b>これ</b>＝離自己近；<b>それ</b>＝離對方近；<b>あれ</b>＝離雙方都遠；<b>どれ</b>＝哪一個（問句用）。</div><div class="gp-ex">これは <ruby>本<rt>ほん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="これは ほんです" title="播放發音">🔊</button>（這是書）<br>それは <ruby>何<rt>なん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="それは なんですか" title="播放發音">🔊</button>（那是什麼？）<br>あれ<b>も</b> <ruby>辞書<rt>じしょ</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="あれも じしょです" title="播放發音">🔊</button>（那也是字典）</div></div>
 <div class="gp"><div class="gp-label">② この／その／あの／どの ＋ 名詞：連體詞</div><div class="gp-form">この／その／あの／どの ＋ 名詞</div><div class="gp-note">後面<b>一定要接名詞</b>，不能單獨使用。この＝這個～、その＝那個～、あの＝那個～（遠）、どの＝哪個～。</div><div class="gp-ex">このケーキは おいしいです。<button class="spk gspk" contenteditable="false" data-say="このケーキは おいしいです" title="播放發音">🔊</button>（這個蛋糕很好吃）<br>あの<ruby>人<rt>ひと</rt></ruby>は <ruby>先生<rt>せんせい</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="あのひとは せんせいです" title="播放發音">🔊</button>（那個人是老師）</div></div>
-<div class="gp"><div class="gp-label">③「〜は 何〈なん〉ですか」：問「這是什麼」</div><div class="gp-form">これ／それ／あれ ＋ は ＋ 何〈なん〉ですか</div><div class="gp-note">問東西是什麼；回答時常換一個指示詞（你問 これ、對方答 それ）。</div><div class="gp-ex">A：これは <ruby>何<rt>なん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは なんですか" title="播放發音">🔊</button>（這是什麼？）<br>B：それは <ruby>辞書<rt>じしょ</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="それは じしょです" title="播放發音">🔊</button>（那是字典）</div></div>`
+<div class="gp"><div class="gp-label">③「〜は 何〈なん〉ですか」：問「這是什麼」</div><div class="gp-form">これ／それ／あれ ＋ は ＋ 何〈なん〉ですか</div><div class="gp-note">問東西是什麼；回答時常換一個指示詞（你問 これ、對方答 それ）。</div><div class="gp-ex">A：これは <ruby>何<rt>なん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは なんですか" title="播放發音">🔊</button>（這是什麼？）<br>B：それは <ruby>辞書<rt>じしょ</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="それは じしょです" title="播放發音">🔊</button>（那是字典）</div></div>
+<div class="gp"><div class="gp-label">④「〜ですか」的 はい／いいえ 回答</div><div class="gp-form">はい、〜です／そうです。｜いいえ、〜じゃ ありません／ちがいます。</div><div class="gp-note"><b>そうです</b>＝「是的、沒錯」；<b>ちがいます</b>＝「不對、不是」，是比「〜じゃ ありません」更口語的否定。</div><div class="gp-ex">A：これは <ruby>本<rt>ほん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは ほんですか" title="播放發音">🔊</button>（這是書嗎？）<br>B：はい、<ruby>本<rt>ほん</rt></ruby>です。／ はい、そうです。<button class="spk gspk" contenteditable="false" data-say="はい、ほんです。はい、そうです" title="播放發音">🔊</button>（是，是書／是的）<br>B：いいえ、<ruby>本<rt>ほん</rt></ruby>じゃ ありません。／ いいえ、ちがいます。<button class="spk gspk" contenteditable="false" data-say="いいえ、ほんじゃ ありません。いいえ、ちがいます" title="播放發音">🔊</button>（不，不是書／不對）</div></div>
+<div class="gp"><div class="gp-label">⑤ 選擇疑問：Aですか、（それとも）Bですか</div><div class="gp-form">〜は 名詞A ですか、（それとも）名詞B ですか</div><div class="gp-note"><b>それとも</b>＝「或者」，<b>可加可不加</b>，用來問「是 A 還是 B」；回答時直接說是哪一個。</div><div class="gp-ex">A：それは <ruby>辞書<rt>じしょ</rt></ruby>ですか、（それとも）<ruby>雑誌<rt>ざっし</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="それは じしょですか、それとも ざっしですか" title="播放發音">🔊</button>（那是字典還是雜誌？）<br>B：<ruby>辞書<rt>じしょ</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="じしょです" title="播放發音">🔊</button>（是字典）</div></div>
+<div class="gp"><div class="gp-label">⑥ 誰〈だれ〉の 〜：這是誰的～</div><div class="gp-form">これ／それ／あれ ＋ は ＋ 誰の ＋ 名詞 ＋ ですか</div><div class="gp-note">問「東西是誰的」。回答用「〜は［人］の 名詞です」。<b>名詞前面提過就可省略</b>：この本は 誰のですか。</div><div class="gp-ex">A：これは <ruby>誰<rt>だれ</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは だれの ほんですか" title="播放發音">🔊</button>（這是誰的書？）<br>B：それは <ruby>私<rt>わたし</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="それは わたしの ほんです" title="播放發音">🔊</button>（那是我的書）<br>▶ 省略名詞：この<ruby>本<rt>ほん</rt></ruby>は <ruby>誰<rt>だれ</rt></ruby>のですか。<button class="spk gspk" contenteditable="false" data-say="このほんは だれのですか" title="播放發音">🔊</button>（這本書是誰的？）</div></div>
+<div class="gp"><div class="gp-label">⑦ 何〈なん〉の 〜：什麼樣的／關於什麼的～</div><div class="gp-form">これ／それ／あれ ＋ は ＋ 何の ＋ 名詞 ＋ ですか</div><div class="gp-note"><b>何の＋名詞</b>＝問「哪一種、關於什麼的」。跟「これは 何ですか（這是什麼）」不同：<b>何の 後面一定接名詞</b>。</div><div class="gp-ex">A：これは <ruby>何<rt>なん</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは なんの ほんですか" title="播放發音">🔊</button>（這是什麼書？關於什麼的書？）<br>B：<ruby>日本語<rt>にほんご</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="にほんごの ほんです" title="播放發音">🔊</button>（是日文書）</div></div>`
 };
 
 /* ===== 未儲存提醒 ===== */
 let dirty=false;
 function setDirty(v){dirty=v;const b=document.getElementById('save');if(b){b.textContent=v?'💾 儲存 *':'💾 儲存';b.classList.toggle('need',v);}const zs=document.getElementById('zen-save');if(zs)zs.classList.toggle('need',v);}
 function touch(){if(!dirty)setDirty(true);}
-window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
+
 let toastT=null;
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200);}
 
@@ -3319,7 +3309,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('#searchresults')&&e.
 
 /* ===== 課程分頁 ===== */
 const tabsEl=document.getElementById('tabs');
-function lessonName(n){if(names[n]!=null&&names[n]!=='')return names[n];return n===0?'第0課（五十音）':(n===13?'數字':(n===14?'總學習':'第'+n+'課'));}
+function lessonName(n){if(names[n]!=null&&names[n]!=='')return names[n];return n===99?'朗讀總表':n===0?'第0課（五十音）':(n===13?'數字':(n===14?'總學習':'第'+n+'課'));}
 function lessonCount(n){return (workbook.lessons[n]||[]).length;}
 function renderTabs(){
   tabsEl.innerHTML='';
@@ -3361,7 +3351,7 @@ function switchLesson(n){
 
 /* ===== 子分頁：單字 / 文法 / 測驗 ===== */
 const subtabsEl=document.getElementById('subtabs');
-function subsFor(n){return n===0?[['gojuon','五十音'],['quiz','測驗']]:(n===13?[['num','數字'],['counter','量詞'],['time','時間']]:(n===14?[['vocab','其他單字'],['all','單字總表'],['gram','文法總表'],['quiz','測驗']]:[['vocab','單字'],['grammar','文法'],['read','朗讀'],['quiz','測驗']]));}
+function subsFor(n){return n===0?[['gojuon','五十音'],['quiz','測驗']]:(n===13?[['num','數字'],['counter','量詞'],['time','時間']]:(n===14?[['vocab','其他單字'],['all','單字總表'],['gram','文法總表'],['allread','朗讀總表'],['quiz','測驗']]:[['vocab','單字'],['grammar','文法'],['read','朗讀'],['quiz','測驗']]));}
 if(!subsFor(lesson).some(s=>s[0]===section))section=subsFor(lesson)[0][0];
 function renderSubtabs(){
   subtabsEl.innerHTML='';
@@ -3382,14 +3372,17 @@ function applySection(){
   document.getElementById('panel-num').style.display=section==='num'?'':'none';
   document.getElementById('panel-counter').style.display=section==='counter'?'':'none';
   document.getElementById('panel-time').style.display=section==='time'?'':'none';
+  document.getElementById('panel-allread').style.display=section==='allread'?'':'none';
   document.getElementById('add').style.display=(section==='vocab')?'':'none';
   document.getElementById('bulkbar').style.display=(section==='vocab'&&selected.size)?'flex':'none';
   if(section==='grammar')loadGrammar();
   if(section==='gojuon')renderGojuon();
   if(section==='vocab')setVocQuizH();
   if(section==='all')renderAll();
+  if(section==='gram')renderGram();
   if(section==='num')renderNum();
   if(section==='counter')renderCounter();
+  if(section==='allread'){if(playLesson===99&&readState!=='idle'){buildReadView(readAllLines);for(let k=0;k<playIdx;k++)litAll(k);if(playIdx>=0&&playIdx<readAllLines.length){setPast(playIdx);litUpto(playIdx,litCountL(playIdx));}}else{renderAllRead();if(readState==='idle')setPlayLesson(99);}}
   if(section==='read')loadReading();
   if(section==='quiz'){if(lesson===0){buildKanaQuiz();}else if(lesson===14){buildTotalQuiz();}else{buildQuiz();}}
   setTopbarH();
@@ -3397,6 +3390,9 @@ function applySection(){
 
 /* ===== 文法（各課獨立、可編輯）===== */
 function gkey(n){return String(n);}
+function renderAllRead(){const v=document.getElementById('allread-view');if(!v)return;let t=workbook.reading['99'];if(!t){t=genTotalReading();workbook.reading['99']=t;}const lines=parseRead(t);v.innerHTML=lines.map(ln=>'<div class="rvline"><span class="rvwho '+(ln.role==='B'?'b':'a')+'">'+ln.role+'</span><span class="rvtx">'+esc(ln.jp)+'</span></div>').join('');const hint=document.getElementById('allread-hint');if(hint)hint.textContent=lines.length+' 句';}
+document.addEventListener('click',function(e){if(e.target&&e.target.id==='allread-new'){stopPlay();const t=genTotalReading();if(!t){alert('單字不足，先累積一些單字。');return;}workbook.reading['99']=t;renderAllRead();setPlayLesson(99);const hint=document.getElementById('allread-hint');if(hint)hint.textContent=parseRead(t).length+' 句（已載入播放器，按下方 ▶ 播放）';}});
+function renderGram(){const body=document.getElementById('gram-body');if(!body)return;let html='';for(let n=1;n<=LESSONS;n++){if(n===13)continue;const g=(workbook.grammar&&workbook.grammar[gkey(n)])||GRAMMAR_DEFAULT[n]||'';if(g&&g.trim())html+='<section class="gsec">'+g+'</section>';}body.innerHTML=html||'<div class="ghint">目前還沒有文法內容。</div>';}
 function loadGrammar(){
   const body=document.getElementById('grammar-body');
   const saved=workbook.grammar[gkey(lesson)];
@@ -3440,26 +3436,45 @@ wireGojuonResizers();
 /* ===== 朗讀（可編輯；A:/B: 兩人對話，也可貼文章）===== */
 const READ_NAMES=['田中','佐藤','鈴木','山田','キム','スミス','リン'];
 function rpick(a){return a[Math.floor(Math.random()*a.length)];}
-function genReadingText(n){
-  const rs=(workbook.lessons[n]||[]);
-  const jobs=rs.filter(r=>/職員|老師|醫生|學生|教師|研究|課長|店員|職|生$/.test(r.mean||'')).map(r=>r.word||r.kana);
-  const countries=rs.filter(r=>['中国','日本','韓国','アメリカ','イギリス','インド','インドネシア','タイ','ドイツ','ブラジル'].includes(r.word)).map(r=>r.word);
-  if(jobs.length<2)return '';
-  const L=[];L.push('A: はじめまして。');L.push('B: はじめまして。どうぞ よろしく お願いします。');
-  const _tomo=rs.find(r=>r.word==='友達'||r.kana==='ともだち');
-  if(_tomo&&jobs.length){const nm=rpick(READ_NAMES);const j=rpick(jobs);L.push('A: あの人は だれですか。');L.push('B: わたしの ともだちの '+nm+'さんです。');L.push('A: '+nm+'さんも '+j+'ですか。');L.push('B: はい、'+nm+'さんも '+j+'です。');}
-  for(let k=0;k<8;k++){
-    const nm=rpick(READ_NAMES);const j=rpick(jobs);const oj=jobs.filter(x=>x!==j);const j2=rpick(oj.length?oj:jobs);
-    const c=countries.length?rpick(countries):'日本';const nat=c+'人';
-    L.push('A: あの人は だれですか。');L.push('B: '+nm+'さんです。');
-    L.push('A: '+nm+'さんは '+j+'ですか。');
-    L.push(Math.random()<0.6?('B: はい、'+j+'です。'):('B: いいえ、'+j+'じゃ ありません。'+j2+'です。'));
-    L.push('A: '+nm+'さんは '+nat+'ですか。');
-    if(Math.random()<0.6)L.push('B: はい、'+nat+'です。');else{const c2=countries.length?rpick(countries):'日本';L.push('B: いいえ、'+nat+'じゃ ありません。'+c2+'人です。');}
-  }
-  L.push('A: いろいろ ありがとう ございました。');L.push('B: いいえ、どういたしまして。');
-  return L.join('\n');
+function allVocabRows(){return allWords().map(x=>x.r);}
+function posWords(rs,p){return [...new Set(rs.filter(r=>r.pos===p).map(r=>r.word||r.kana))];}
+function cycleTemplates(T,target){const L=[];let g=0;while(L.length<target&&g<25){for(let i=0;i<T.length&&L.length<target;i++){const pr=T[i]();if(pr)pr.forEach(x=>L.push(x));}g++;}return L;}
+function randomAge(){const c=(typeof COUNTER_DATA!=='undefined')&&COUNTER_DATA.find(x=>x.grid&&x.rows);if(!c)return '20歳';const R=c.rows.filter(r=>/^[0-9]+歳$/.test(r[0]));return R.length?rpick(R)[0]:'20歳';}
+function rtmpl1(rs){
+  const J=posWords(rs,'job'),C=posWords(rs,'country');if(J.length<2)return [];
+  const nm=()=>rpick(READ_NAMES),rj=e=>{const o=J.filter(x=>x!==e);return rpick(o.length?o:J);},rc=()=>C.length?rpick(C):'日本';
+  return [
+    ()=>['A: あの人は 誰ですか。','B: '+nm()+'さんです。'],
+    ()=>{const n=nm(),j=rpick(J);return ['A: '+n+'さんは '+j+'ですか。','B: はい、'+j+'です。'];},
+    ()=>{const n=nm(),j=rpick(J);return ['A: '+n+'さんは '+j+'ですか。','B: いいえ、'+j+'じゃ ありません。'+rj(j)+'です。'];},
+    ()=>{const n=nm();return ['A: お名前は 何ですか。','B: '+n+'です。'];},
+    ()=>{const n=nm(),c=rc();return ['A: '+n+'さんは '+c+'人ですか。','B: はい、'+c+'人です。'];},
+    ()=>{const n=nm(),j=rpick(J);return ['A: '+n+'さんも '+j+'ですか。','B: はい、'+n+'さんも '+j+'です。'];},
+    ()=>{const n=nm();return ['A: あの人は 誰ですか。','B: 私の 友達の '+n+'さんです。'];},
+    ()=>['A: 何歳ですか。','B: '+randomAge()+'です。'],
+    ()=>['A: おいくつですか。','B: '+randomAge()+'です。'],
+    ()=>{const n=nm();return ['A: '+n+'さんは 何歳ですか。','B: '+n+'さんは '+randomAge()+'です。'];}
+  ];
 }
+function rtmpl2(rs){
+  const N=posWords(rs,'n');if(N.length<3)return [];
+  const nm=()=>rpick(READ_NAMES),dem=()=>rpick(['これ','それ','あれ']),kono=()=>rpick(['この','その','あの']);
+  const flip={'これ':'それ','それ':'これ','あれ':'あれ'};
+  const rn=e=>{let x=rpick(N),g=0;while(e&&x===e&&g<6){x=rpick(N);g++;}return x;};
+  return [
+    ()=>{const d=dem(),n=rn();return ['A: '+d+'は 何ですか。','B: '+flip[d]+'は '+n+'です。'];},
+    ()=>{const d=dem(),n=rn();return ['A: '+d+'は '+n+'ですか。','B: はい、そうです。'+n+'です。'];},
+    ()=>{const d=dem(),n=rn(),n2=rn(n);return ['A: '+d+'は '+n+'ですか。','B: いいえ、違います。'+n2+'です。'];},
+    ()=>{const d=dem(),n=rn(),n2=rn(n);return ['A: '+d+'は '+n+'ですか、それとも '+n2+'ですか。','B: '+rpick([n,n2])+'です。'];},
+    ()=>{const d=dem(),n=rn();return ['A: '+d+'は 誰の '+n+'ですか。','B: '+nm()+'さんの '+n+'です。'];},
+    ()=>{const n=rn();return ['A: この'+n+'は 誰のですか。','B: '+nm()+'さんのです。'];},
+    ()=>{const k=kono(),n=rn();return ['A: '+k+n+'は 誰のですか。','B: 私のです。'];}
+  ];
+}
+function buildReading1(rs){const T=rtmpl1(rs);if(!T.length)return '';const L=['A: はじめまして。','B: はじめまして。どうぞ よろしく お願いします。'].concat(cycleTemplates(T,50));L.push('A: いろいろ ありがとう ございました。','B: いいえ、どういたしまして。');return L.join('\n');}
+function buildReading2(rs){const T=rtmpl2(rs);if(!T.length)return '';return cycleTemplates(T,52).join('\n');}
+function genTotalReading(){const rs=allVocabRows();const T=rtmpl1(rs).concat(rtmpl2(rs));if(!T.length)return '';const ex=[];let g=0;while(ex.length<50&&g<400){const pr=rpick(T)();if(pr&&pr.length)ex.push(pr);g++;}shuffle(ex);const L=[];ex.forEach(pr=>pr.forEach(x=>L.push(x)));return L.join('\n');}
+function genReadingText(n,source){const rs=(source==='all')?allVocabRows():(workbook.lessons[n]||[]);if(n===1)return buildReading1(rs);return buildReading2(rs);}
 function loadReading(){
   if(lesson===playLesson&&readState!=='idle'){buildReadView(readAllLines);showPlayView();for(let k=0;k<playIdx;k++)litAll(k);if(playIdx>=0&&playIdx<readAllLines.length){setPast(playIdx);litUpto(playIdx,litCountL(playIdx));}return;}
   readEdit();const t=document.getElementById('read-text');const s=workbook.reading[lesson];t.value=(s!=null&&s!=='')?s:genReadingText(lesson);document.getElementById('readhint').textContent='';
@@ -3467,27 +3482,28 @@ function loadReading(){
 function parseRead(text){return text.split('\n').map(l=>l.trim()).filter(l=>l).map(l=>{const m=l.match(/^([ABＡＢ])\s*[:：]\s*(.*)$/);return m?{role:(m[1]==='B'||m[1]==='Ｂ')?'B':'A',jp:m[2]}:{role:'A',jp:l};});}
 let readTimer=null;
 function clearReadTimer(){if(readTimer){clearInterval(readTimer);readTimer=null;}}
+function rvRoot(){return (section==='allread'&&playLesson===99)?document.getElementById('allread-view'):document.getElementById('read-view');}
 function readEdit(){const v=document.getElementById('read-view');if(v)v.style.display='none';const t=document.getElementById('read-text');if(t)t.style.display='';}
-function buildReadView(lines){document.getElementById('read-view').innerHTML=lines.map((ln,li)=>{const chars=[...ln.jp].map((ch,ci)=>'<span class="rc" data-ci="'+ci+'">'+esc(ch)+'</span>').join('');const who=ln.role==='B'?'B':'A';const cls=ln.role==='B'?'b':'a';return '<div class="rvline" data-li="'+li+'"><span class="rvwho '+cls+'">'+who+'</span><span class="rvtx">'+chars+'</span></div>';}).join('');}
-function setPast(li){document.querySelectorAll('.rvline').forEach(el=>{const i=+el.dataset.li;el.classList.toggle('cur',i===li);el.querySelectorAll('.rc').forEach(c=>{if(i<li)c.classList.add('lit');else if(i>li)c.classList.remove('lit');});});}
-function litUpto(li,ci){const line=document.querySelector('.rvline[data-li="'+li+'"]');if(line)line.querySelectorAll('.rc').forEach(c=>{if(+c.dataset.ci<ci)c.classList.add('lit');});}
-function litAll(li){const line=document.querySelector('.rvline[data-li="'+li+'"]');if(line)line.querySelectorAll('.rc').forEach(c=>c.classList.add('lit'));}
-function lightLine(li,dur){clearReadTimer();const line=document.querySelector('.rvline[data-li="'+li+'"]');if(!line)return;const cs=line.querySelectorAll('.rc');let idx=0;const step=Math.max(28,dur/Math.max(1,cs.length));readTimer=setInterval(()=>{if(idx<cs.length){cs[idx].classList.add('lit');idx++;}else clearReadTimer();},step);}
+function buildReadView(lines){const _rv=rvRoot();if(!_rv)return;_rv.innerHTML=lines.map((ln,li)=>{const chars=[...ln.jp].map((ch,ci)=>'<span class="rc" data-ci="'+ci+'">'+esc(ch)+'</span>').join('');const who=ln.role==='B'?'B':'A';const cls=ln.role==='B'?'b':'a';return '<div class="rvline" data-li="'+li+'"><span class="rvwho '+cls+'">'+who+'</span><span class="rvtx">'+chars+'</span></div>';}).join('');}
+function setPast(li){rvRoot().querySelectorAll('.rvline').forEach(el=>{const i=+el.dataset.li;el.classList.toggle('cur',i===li);el.querySelectorAll('.rc').forEach(c=>{if(i<li)c.classList.add('lit');else if(i>li)c.classList.remove('lit');});});}
+function litUpto(li,ci){const line=rvRoot().querySelector('.rvline[data-li="'+li+'"]');if(line)line.querySelectorAll('.rc').forEach(c=>{if(+c.dataset.ci<ci)c.classList.add('lit');});}
+function litAll(li){const line=rvRoot().querySelector('.rvline[data-li="'+li+'"]');if(line)line.querySelectorAll('.rc').forEach(c=>c.classList.add('lit'));}
+function lightLine(li,dur){clearReadTimer();const line=rvRoot().querySelector('.rvline[data-li="'+li+'"]');if(!line)return;const cs=line.querySelectorAll('.rc');let idx=0;const step=Math.max(28,dur/Math.max(1,cs.length));readTimer=setInterval(()=>{if(idx<cs.length){cs[idx].classList.add('lit');idx++;}else clearReadTimer();},step);}
 let playLesson=1,readAllLines=[],playIdx=-1,readState='idle',gapTimer=null;
 function clearGap(){if(gapTimer){clearTimeout(gapTimer);gapTimer=null;}}
 function showPlayView(){document.getElementById('read-text').style.display='none';document.getElementById('read-view').style.display='block';}
-function scrollLine(i){const line=document.querySelector('.rvline[data-li="'+i+'"]');if(line)line.scrollIntoView({block:'center',behavior:'smooth'});}
+function scrollLine(i){const line=rvRoot().querySelector('.rvline[data-li="'+i+'"]');if(line)line.scrollIntoView({block:'center',behavior:'smooth'});}
 function updatePlayIcon(){const b=document.getElementById('rp-play');if(b)b.innerHTML=readState==='playing'?'<svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 5h4v14H6zm8 0h4v14h-4z" fill="currentColor"/></svg>':'<svg viewBox="0 0 24 24" width="21" height="21"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';}
-function litCountL(i){const line=document.querySelector('.rvline[data-li="'+i+'"]');return line?line.querySelectorAll('.rc.lit').length:0;}
-function charCountL(i){const line=document.querySelector('.rvline[data-li="'+i+'"]');if(line)return line.querySelectorAll('.rc').length;return readAllLines[i]?[...readAllLines[i].jp].length:0;}
-function lightLineFrom(li,dur,startIdx){clearReadTimer();const line=document.querySelector('.rvline[data-li="'+li+'"]');if(!line)return;const cs=line.querySelectorAll('.rc');let idx=startIdx||0;const step=Math.max(28,dur/Math.max(1,cs.length-idx));readTimer=setInterval(()=>{if(idx<cs.length){cs[idx].classList.add('lit');idx++;updateProgress();}else clearReadTimer();},step);}
-function readingTextFor(n){const s=workbook.reading[n];return (s!=null&&s!=='')?s:genReadingText(n);}
+function litCountL(i){const line=rvRoot().querySelector('.rvline[data-li="'+i+'"]');return line?line.querySelectorAll('.rc.lit').length:0;}
+function charCountL(i){const line=rvRoot().querySelector('.rvline[data-li="'+i+'"]');if(line)return line.querySelectorAll('.rc').length;return readAllLines[i]?[...readAllLines[i].jp].length:0;}
+function lightLineFrom(li,dur,startIdx){clearReadTimer();const line=rvRoot().querySelector('.rvline[data-li="'+li+'"]');if(!line)return;const cs=line.querySelectorAll('.rc');let idx=startIdx||0;const step=Math.max(28,dur/Math.max(1,cs.length-idx));readTimer=setInterval(()=>{if(idx<cs.length){cs[idx].classList.add('lit');idx++;updateProgress();}else clearReadTimer();},step);}
+function readingTextFor(n){if(n===99)return workbook.reading['99']||genTotalReading();const s=workbook.reading[n];return (s!=null&&s!=='')?s:genReadingText(n);}
 function hasReading(n){return n>=1&&n<=12&&!!readingTextFor(n).trim();}
 function estDur(ln){return [...ln.jp].length/(6*(+ttsCfg.rate||0.9));}
 function gapAfter(ln){return (ttsCfg.mode==='shadow')?(estDur(ln)*1.15+0.6):0.13;}
 function totalDur(){let t=0;readAllLines.forEach(ln=>{t+=estDur(ln)+gapAfter(ln);});return t;}
 function fmtTime(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+((s%60)<10?'0':'')+(s%60);}
-function onPlayPage(){return section==='read'&&lesson===playLesson;}
+function onPlayPage(){return (section==='read'&&lesson===playLesson)||(section==='allread'&&playLesson===99);}
 function updatePlayerLabel(){const t=document.getElementById('rp-title');if(t)t.textContent=lessonName(playLesson).replace(/\n/g,'　');}
 function updateProgress(){const total=readAllLines.length,fill=document.getElementById('rp-fill'),cur=document.getElementById('rp-cur'),tot=document.getElementById('rp-total');if(!total){if(fill)fill.style.width='0%';if(cur)cur.textContent='0:00';if(tot)tot.textContent='0:00';return;}let frac=playIdx>=total?1:(playIdx<0?0:(playIdx+(charCountL(playIdx)?litCountL(playIdx)/charCountL(playIdx):0))/total);frac=Math.max(0,Math.min(1,frac));if(fill)fill.style.width=(frac*100)+'%';const td=totalDur();if(cur)cur.textContent=fmtTime(td*frac);if(tot)tot.textContent=fmtTime(td);}
 function setPlayLesson(n){playLesson=n;localStorage.setItem('jp_playlesson',n);readAllLines=parseRead(readingTextFor(n));playIdx=-1;updatePlayerLabel();updateProgress();}
@@ -3514,8 +3530,8 @@ function togglePlay(){
 function seekRead(e){if(!readAllLines.length)return;const bar=document.getElementById('rp-bar'),rect=bar.getBoundingClientRect();const frac=Math.max(0,Math.min(0.999,(e.clientX-rect.left)/rect.width));const target=Math.floor(frac*readAllLines.length);if('speechSynthesis' in window)speechSynthesis.cancel();clearGap();if(onPlayPage()){buildReadView(readAllLines);showPlayView();for(let k=0;k<target;k++)litAll(k);}readState='playing';updatePlayIcon();speakLine(target);}
 function stopPlay(){readState='idle';playIdx=-1;if('speechSynthesis' in window)speechSynthesis.cancel();clearGap();clearReadTimer();updatePlayIcon();updateProgress();}
 function siblingLesson(dir){let m=playLesson;for(let k=0;k<=LESSONS;k++){m+=dir;if(m<1)m=LESSONS;if(m>LESSONS)m=1;if(hasReading(m))return m;}return playLesson;}
-function gotoPlayerLesson(m){stopPlay();setPlayLesson(m);startPlay(0);}
-function toggleQueue(){const box=document.getElementById('rp-qlist');if(box.style.display==='block'){box.style.display='none';return;}let html='';for(let n=1;n<=LESSONS;n++){if(hasReading(n))html+='<div class="ql-item'+(n===playLesson?' on':'')+'" data-n="'+n+'">'+esc(lessonName(n).replace(/\n/g,' '))+'</div>';}box.innerHTML=html||'<div class="ql-empty">還沒有可播放的課（先在各課朗讀頁產生內容）</div>';box.style.display='block';}
+function gotoPlayerLesson(m){stopPlay();if(m===99)jumpTo(14,'allread');setPlayLesson(m);startPlay(0);}
+function toggleQueue(){const box=document.getElementById('rp-qlist');if(box.style.display==='block'){box.style.display='none';return;}let html='';for(let n=1;n<=LESSONS;n++){if(hasReading(n))html+='<div class="ql-item'+(n===playLesson?' on':'')+'" data-n="'+n+'">'+esc(lessonName(n).replace(/\n/g,' '))+'</div>';}html+='<div class="ql-item'+(playLesson===99?' on':'')+'" data-n="99">📻 朗讀總表</div>';box.innerHTML=html;box.style.display='block';}
 document.getElementById('rp-play').addEventListener('click',togglePlay);
 document.getElementById('rp-toggle').addEventListener('click',()=>{const p=document.getElementById('readplayer');p.classList.toggle('collapsed');localStorage.setItem('jp_player_collapsed',p.classList.contains('collapsed')?'1':'0');});
 if(localStorage.getItem('jp_player_collapsed')==='1')document.getElementById('readplayer').classList.add('collapsed');
@@ -3527,14 +3543,16 @@ if(localStorage.getItem('jp_zen')==='1'){document.body.classList.add('zen');docu
 document.getElementById('rp-prev').addEventListener('click',()=>gotoPlayerLesson(siblingLesson(-1)));
 document.getElementById('rp-next').addEventListener('click',()=>gotoPlayerLesson(siblingLesson(1)));
 document.getElementById('rp-bar').addEventListener('click',seekRead);
-document.getElementById('rp-title').addEventListener('click',()=>jumpTo(playLesson,'read',-1));
+document.getElementById('rp-title').addEventListener('click',()=>{if(playLesson===99)jumpTo(14,'allread');else jumpTo(playLesson,'read',-1);});
 document.getElementById('rp-voice').addEventListener('click',openVoiceModal);
 document.getElementById('rp-queue').addEventListener('click',e=>{e.stopPropagation();toggleQueue();});
 document.getElementById('rp-qlist').addEventListener('click',e=>{const it=e.target.closest('.ql-item');if(!it)return;document.getElementById('rp-qlist').style.display='none';gotoPlayerLesson(+it.dataset.n);});
 document.addEventListener('click',e=>{if(!e.target.closest('#rp-qlist')&&e.target.id!=='rp-queue'){const b=document.getElementById('rp-qlist');if(b)b.style.display='none';}});
 document.getElementById('read-text').addEventListener('input',function(){workbook.reading[lesson]=this.value;touch();if(lesson===playLesson)readAllLines=parseRead(this.value);});
 document.getElementById('read-view').addEventListener('click',()=>{stopPlay();readEdit();});
-document.getElementById('readnew').addEventListener('click',()=>{if(lesson===playLesson)stopPlay();readEdit();const t=genReadingText(lesson);if(!t){alert('這一課還沒有足夠的單字可以自動產生，先到「單字」補充。');return;}document.getElementById('read-text').value=t;workbook.reading[lesson]=t;touch();if(lesson===playLesson)setPlayLesson(lesson);document.getElementById('readhint').textContent='已重新產生 '+t.split('\n').length+' 句';});
+function doReadNew(source){stopPlay();readEdit();const t=genReadingText(lesson,source);if(!t){alert('可用的單字不足，先到「單字」補充一些。');return;}document.getElementById('read-text').value=t;workbook.reading[lesson]=t;touch();setPlayLesson(lesson);document.getElementById('readhint').textContent='已重新產生 '+t.split('\n').length+' 句（'+(source==='all'?'單字總表':'該課單字')+'，已載入播放器）';}
+document.getElementById('readnew-lesson').addEventListener('click',()=>doReadNew('lesson'));
+document.getElementById('readnew-all').addEventListener('click',()=>doReadNew('all'));
 
 /* ===== 測驗（自動用該課單字＋文法出題）===== */
 const QUIZ_GRAMMAR={
