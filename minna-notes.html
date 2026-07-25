@@ -152,7 +152,7 @@
   #tbody td.masked.revealed::after{display:none}
   #all-tbody td.spk-c{cursor:pointer}
   #all-tbody td.spk-c:hover{background:#fff7cc}
-  #all-quiz,#voc-quiz{position:sticky;top:var(--topbar-h,132px);z-index:17;background:#f7f9fb;border:1px solid var(--line);border-top:0;border-radius:0;padding:10px 12px;margin:0;box-shadow:0 4px 8px rgba(0,0,0,.08)}
+  #all-quiz,#voc-quiz{position:sticky;top:var(--topbar-h,132px);z-index:17;background:#f7f9fb;border:1px solid var(--line);border-top:0;border-radius:0;padding:10px 12px 8px;margin:0;box-shadow:0 4px 8px rgba(0,0,0,.08);display:flex;flex-direction:column}
   .aq-modes,.aq-body{max-width:900px}
   .aq-modes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
   .aq-mode{font-size:13px;padding:4px 11px;border:1px solid var(--line);background:#fff;border-radius:16px;cursor:pointer}
@@ -164,6 +164,12 @@
   .aq-a.masked{background:repeating-linear-gradient(45deg,#eef2f5,#eef2f5 7px,#e3e9ee 7px,#e3e9ee 14px);color:#8a95a1;font-size:14px}
   .aq-a.masked::before{content:'••••• 點一下看答案'}
   .aq-a.shown{background:#fffbe6;color:#1f2933}
+  .aq-collapse{align-self:center;order:9;margin-top:2px;width:28px;height:9px;border:1px solid var(--line);background:#fff;border-radius:5px;cursor:pointer;font-size:6px;line-height:1;color:#9aa5b1;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+  .aq-collapse:hover{background:#eef4f9}
+  .aq-mini-label{display:none;font-size:13px;color:#5a6b7a;font-weight:600;text-align:center;width:100%}
+  .aq-min{padding:0 10px 2px}
+  .aq-min .aq-modes,.aq-min .aq-body{display:none}
+  .aq-min .aq-collapse{transform:rotate(180deg)}
   .aq-play{font-size:15px;padding:6px 14px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
   .aq-play:hover{background:#eef4f9}
   .alltable thead th{top:calc(var(--topbar-h,132px) + var(--allquiz-h,0px));z-index:16;background:var(--head)}
@@ -295,13 +301,31 @@
     #panel-vocab .panote{font-size:10px}
     #panel-vocab th .sub{font-size:9px}
   }
-  /* ===== 發佈版（唯讀）===== */
-  #add,#save,#zen-add,#zen-save,#bulkbar,.hint,
-  th.col-drag,th.col-chk,td.drag,td.col-chk{display:none!important}
+  /* ===== 唯讀模式：由 <head> 偵測腳本在 <html> 加上 class="ro" ===== */
+  .ro #bulkbar,.ro .hint,
+  .ro th.col-drag,.ro th.col-chk,.ro td.drag,.ro td.col-chk{display:none!important}
+  .ro #grammar-body:empty::before{content:''}
+  /* 首頁連結（兩種模式都顯示） */
   .homelnk{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;
     border:1px solid var(--line);border-radius:16px;padding:4px 11px;white-space:nowrap}
   .homelnk:hover{border-color:var(--accent2);color:var(--accent2)}
 </style>
+<script>
+/* ===== 模式偵測 =====
+   本機（file:// 或 localhost）＝ 完整編輯模式
+   線上（github.io 等）＝ 唯讀模式
+   測試用：網址加 ?ro=1 強制唯讀、?edit=1 強制編輯 */
+(function(){
+  var qs = location.search || '';
+  var force = /[?&]edit=1/.test(qs) ? false : (/[?&]ro=1/.test(qs) ? true : null);
+  var h = location.hostname;
+  var local = (location.protocol === 'file:') || h === '' ||
+              h === 'localhost' || h === '127.0.0.1' || h === '[::1]';
+  var ro = (force === null) ? !local : force;
+  window.JP_READONLY = ro;
+  if (ro) document.documentElement.className += ' ro';
+})();
+</script>
 </head>
 <body class="">
 <button id="zen" title="專注模式：放大內容、隱藏上方資訊"><svg viewBox="0 0 24 24" width="18" height="18"><path id="zen-i" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
@@ -335,7 +359,7 @@
 </div>
 
 <div class="wrap" id="panel-vocab" style="display: none;">
-  <div id="voc-quiz"><div class="aq-modes"><button class="aq-mode on" data-mode="zh2jp">看中文→猜日文</button><button class="aq-mode" data-mode="jp2zh">看日文→猜中文</button><button class="aq-mode" data-mode="listen">只聽發音</button><button id="vq-next" title="換一題">🔀 換一題</button></div><div class="aq-body"><div class="aq-q" id="vq-q">—</div><div class="aq-a masked" id="vq-a" title="點一下看答案／再點發音"></div></div></div>
+  <div id="voc-quiz"><button class="aq-collapse" title="收合／展開小抽考">▲</button><span class="aq-mini-label">📝 小抽考（點右邊 ▼ 展開）</span><div class="aq-modes"><button class="aq-mode on" data-mode="zh2jp">看中文→猜日文</button><button class="aq-mode" data-mode="jp2zh">看日文→猜中文</button><button class="aq-mode" data-mode="listen">只聽發音</button><button id="vq-next" title="換一題">🔀 換一題</button></div><div class="aq-body"><div class="aq-q" id="vq-q">—</div><div class="aq-a masked" id="vq-a" title="點一下看答案／再點發音"></div></div></div>
   <table>
     <colgroup id="cg"></colgroup>
     <thead id="thd"></thead>
@@ -346,7 +370,7 @@
 
 <div id="panel-grammar" style="display: none;">
   <div class="ghint">📘 文法　·　點例句的 🔊 可聽發音。每一課各自獨立。</div>
-  <div id="grammar-body" contenteditable="false"></div>
+  <div id="grammar-body" contenteditable="true"></div>
 </div>
 
 <div id="panel-quiz" style="display: none;">
@@ -384,11 +408,10 @@ B: はい、学生です。
 
 <div id="panel-all" style="">
   <div class="wrap">
-    <div class="ghint">📋 <b>單字總表</b>：所有課＋生活單字的總整理（唯讀），目前共 <b id="all-count">328</b> 個單字。可拉欄寬、拖曳交換順序；不能新增／刪除／編輯。</div>
-    <div id="all-quiz"><div class="aq-modes"><button class="aq-mode on" data-mode="zh2jp">看中文→猜日文</button><button class="aq-mode" data-mode="jp2zh">看日文→猜中文</button><button class="aq-mode" data-mode="listen">只聽發音</button><button id="aq-next" title="換一題">🔀 換一題</button></div><div class="aq-body"><div class="aq-q" id="aq-q">領帶</div><div class="aq-a masked" id="aq-a" title="點一下看答案／再點發音"></div></div></div>
+    <div id="all-quiz"><button class="aq-collapse" title="收合／展開小抽考">▲</button><span class="aq-mini-label">📝 小抽考（點右邊 ▼ 展開）</span><div class="aq-modes"><button class="aq-mode on" data-mode="zh2jp">看中文→猜日文</button><button class="aq-mode" data-mode="jp2zh">看日文→猜中文</button><button class="aq-mode" data-mode="listen">只聽發音</button><button id="aq-next" title="換一題">🔀 換一題</button></div><div class="aq-body"><div class="aq-q" id="aq-q">領帶</div><div class="aq-a masked" id="aq-a" title="點一下看答案／再點發音"></div></div></div>
     <table class="alltable">
-      <colgroup id="allcg"><col style="width: 97px;"><col style="width: 173px;"><col style="width: 214px;"><col style="width: 209px;"><col style="width: 156px;"></colgroup>
-      <thead id="allthd"><tr><th>單詞</th><th>假名</th><th>音調圖</th><th>詞義</th><th>備註</th></tr></thead>
+      <colgroup id="allcg"><col style="width:26px"><col style="width: 97px;"><col style="width: 173px;"><col style="width: 214px;"><col style="width: 209px;"><col style="width: 156px;"></colgroup>
+      <thead id="allthd"><tr><th></th><th>單詞</th><th>假名</th><th>音調圖</th><th>詞義</th><th>備註</th></tr></thead>
       <tbody id="all-tbody"></tbody>
     </table>
   </div>
@@ -3666,6 +3689,9 @@ function aqReveal(){const a=document.getElementById('aq-a');if(!a||!aqRow)return
 function setAllQuizH(){const q=document.getElementById('all-quiz');if(q)document.documentElement.style.setProperty('--allquiz-h',q.offsetHeight+'px');}
 window.addEventListener('resize',setAllQuizH);
 if(window.ResizeObserver){const _aqel=document.getElementById('all-quiz');if(_aqel)new ResizeObserver(setAllQuizH).observe(_aqel);}
+function applyAqMin(on){document.querySelectorAll('#voc-quiz,#all-quiz').forEach(el=>el.classList.toggle('aq-min',on));if(typeof setVocQuizH==='function')setVocQuizH();if(typeof setAllQuizH==='function')setAllQuizH();}
+document.addEventListener('click',function(e){const b=e.target.closest&&e.target.closest('.aq-collapse');if(!b)return;const on=localStorage.getItem('jp_aqmin')!=='1';localStorage.setItem('jp_aqmin',on?'1':'0');applyAqMin(on);});
+if(localStorage.getItem('jp_aqmin')==='1')applyAqMin(true);
 let vqMode='zh2jp',vqRow=null,vqLesson=null;
 function vqPool(){return (rows||[]).filter(r=>(r.mean||'').trim()&&(r.word||r.kana||'').trim());}
 function vqPick(){const q=document.getElementById('vq-q'),a=document.getElementById('vq-a');if(!q||!a)return;const p=vqPool();vqLesson=lesson;if(!p.length){vqRow=null;q.textContent='（這一課還沒有可出題的單字）';a.className='aq-a';a.innerHTML='';return;}vqRow=p[Math.floor(Math.random()*p.length)];vqRender();}
@@ -3782,30 +3808,52 @@ setTopbarH();
 setDirty(false);
 </script>
 <script>
-/* ===== 發佈版（唯讀）補丁：停用所有編輯功能 ===== */
+/* ===== 唯讀模式：停用所有編輯功能（只在 JP_READONLY 為 true 時生效） ===== */
 (function(){
   'use strict';
+  if (!window.JP_READONLY) return;
+
   // 阻止 contenteditable 區域輸入（搜尋框等一般輸入框不受影響）
   document.addEventListener('beforeinput', function(e){
-    if(e.target && e.target.isContentEditable) e.preventDefault();
+    if (e.target && e.target.isContentEditable) e.preventDefault();
   }, true);
   document.addEventListener('paste', function(e){
-    if(e.target && e.target.isContentEditable) e.preventDefault();
+    if (e.target && e.target.isContentEditable) e.preventDefault();
   }, true);
   // 阻止雙擊進入編輯（儲存格編輯、課名改名）
   document.addEventListener('dblclick', function(e){
     e.preventDefault(); e.stopPropagation();
   }, true);
-  // 主表：移除「拖曳／勾選」兩個欄寬設定，讓隱藏欄位後的欄寬正確對齊
-  function stripCols(){
-    var cg=document.getElementById('cg'), thd=document.getElementById('thd');
-    if(!cg || !thd) return;
-    var visible=thd.querySelectorAll('th.colh').length;
-    while(visible>0 && cg.children.length>visible){ cg.removeChild(cg.firstElementChild); }
+
+  function noEdit(){
+    var els = document.querySelectorAll('[contenteditable="true"]');
+    for (var i = 0; i < els.length; i++) els[i].setAttribute('contenteditable','false');
   }
-  stripCols();
-  var cg=document.getElementById('cg');
-  if(cg && window.MutationObserver) new MutationObserver(stripCols).observe(cg,{childList:true});
+  // 主表：隱藏拖曳／勾選欄後，移除多餘的 <col> 讓欄寬對齊
+  function stripCols(){
+    var cg = document.getElementById('cg'), thd = document.getElementById('thd');
+    if (!cg || !thd) return;
+    var visible = thd.querySelectorAll('th.colh').length;
+    while (visible > 0 && cg.children.length > visible) cg.removeChild(cg.firstElementChild);
+  }
+  // 單字總表：移除拖曳欄的 <col> 與 <th>
+  function stripAll(){
+    var cg = document.getElementById('allcg'), thd = document.getElementById('allthd');
+    if (!cg || !thd) return;
+    var tr = thd.querySelector('tr');
+    if (!tr) return;
+    if (cg.children.length === 6 && tr.children.length === 6) {
+      cg.removeChild(cg.firstElementChild);
+      tr.removeChild(tr.firstElementChild);
+    }
+  }
+  function run(){ noEdit(); stripCols(); stripAll(); }
+  run();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  window.addEventListener('load', run);
+
+  var cg = document.getElementById('cg');
+  if (cg && window.MutationObserver) new MutationObserver(stripCols).observe(cg, {childList:true});
 })();
 </script>
 </body>
