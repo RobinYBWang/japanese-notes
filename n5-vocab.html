@@ -69,6 +69,9 @@
     justify-content:center;background:#eceae2;border-radius:6px;color:#b6b1a4;font-size:12px;cursor:pointer}
   .empty{display:none;text-align:center;color:var(--sub);padding:50px 0}
   footer{max-width:1150px;margin:0 auto;padding:10px 20px 40px;color:var(--sub);font-size:12.5px}
+  .homelnk{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;
+    border:1px solid var(--line);border-radius:16px;padding:4px 11px;white-space:nowrap}
+  .homelnk:hover{border-color:var(--accent2);color:var(--accent2)}
   @media(max-width:700px){
     .ex{display:none}
     th:last-child{display:none}
@@ -81,6 +84,7 @@
 <header>
   <div class="htop">
     <h1>N5 總單字</h1>
+    <a class="homelnk" href="index.html" title="回到目錄首頁">🏠 首頁</a>
     <div class="progwrap">
       <div class="progbar"><div class="progfill" id="fill"></div></div>
       <div class="progtxt" id="ptxt"></div>

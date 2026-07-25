@@ -277,6 +277,12 @@
   #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#2b3a42;color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:200}
   #toast.show{opacity:1}
   @media(max-width:600px){h1{font-size:15px}.wrap{overflow-x:auto}}
+  /* ===== 發佈版（唯讀）===== */
+  #add,#save,#zen-add,#zen-save,#bulkbar,.hint,
+  th.col-drag,th.col-chk,td.drag,td.col-chk{display:none!important}
+  .homelnk{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;
+    border:1px solid var(--line);border-radius:16px;padding:4px 11px;white-space:nowrap}
+  .homelnk:hover{border-color:var(--accent2);color:var(--accent2)}
 </style>
 </head>
 <body class="">
@@ -287,6 +293,7 @@
 <header>
   <div class="bar">
     <h1>📖 大家的日本語初級筆記</h1>
+    <a class="homelnk" href="index.html" title="回到目錄首頁">🏠 首頁</a>
     <span class="stat clk" id="stat" title="點一下看單字總表">共 328 筆單字</span>
     <input class="search" id="search" placeholder="🔍 搜尋單詞 / 假名 / 詞義…" style="">
     <button class="btn-primary" id="add" style="display: none;">＋ 新增單字</button>
@@ -320,8 +327,8 @@
 </div>
 
 <div id="panel-grammar" style="display: none;">
-  <div class="ghint">📘 文法　·　可直接點擊內容編輯；編輯後記得按「💾 儲存」。每一課各自獨立。</div>
-  <div id="grammar-body" contenteditable="true"></div>
+  <div class="ghint">📘 文法　·　每一課各自獨立。</div>
+  <div id="grammar-body" contenteditable="false"></div>
 </div>
 
 <div id="panel-quiz" style="display: none;">
@@ -362,8 +369,8 @@ B: はい、学生です。
     <div class="ghint">📋 <b>單字總表</b>：所有課＋生活單字的總整理（唯讀），目前共 <b id="all-count">328</b> 個單字。可拉欄寬、拖曳交換順序；不能新增／刪除／編輯。</div>
     <div id="all-quiz"><div class="aq-modes"><button class="aq-mode on" data-mode="zh2jp">看中文→猜日文</button><button class="aq-mode" data-mode="jp2zh">看日文→猜中文</button><button class="aq-mode" data-mode="listen">只聽發音</button><button id="aq-next" title="換一題">🔀 換一題</button></div><div class="aq-body"><div class="aq-q" id="aq-q">領帶</div><div class="aq-a masked" id="aq-a" title="點一下看答案／再點發音"></div></div></div>
     <table class="alltable">
-      <colgroup id="allcg"><col style="width:26px"><col style="width: 97px;"><col style="width: 173px;"><col style="width: 214px;"><col style="width: 209px;"><col style="width: 156px;"></colgroup>
-      <thead id="allthd"><tr><th></th><th>單詞</th><th>假名</th><th>音調圖</th><th>詞義</th><th>備註</th></tr></thead>
+      <colgroup id="allcg"><col style="width: 97px;"><col style="width: 173px;"><col style="width: 214px;"><col style="width: 209px;"><col style="width: 156px;"></colgroup>
+      <thead id="allthd"><tr><th>單詞</th><th>假名</th><th>音調圖</th><th>詞義</th><th>備註</th></tr></thead>
       <tbody id="all-tbody"></tbody>
     </table>
   </div>
@@ -3748,6 +3755,33 @@ renderHead();renderTabs();renderSubtabs();if(lesson>0)render();applySection();
 (function(){let pl=parseInt(localStorage.getItem('jp_playlesson'));if(!(pl>=1&&pl<=12))pl=(lesson>=1&&lesson<=12)?lesson:1;setPlayLesson(pl);})();
 setTopbarH();
 setDirty(false);
+</script>
+<script>
+/* ===== 發佈版（唯讀）補丁：停用所有編輯功能 ===== */
+(function(){
+  'use strict';
+  // 阻止 contenteditable 區域輸入（搜尋框等一般輸入框不受影響）
+  document.addEventListener('beforeinput', function(e){
+    if(e.target && e.target.isContentEditable) e.preventDefault();
+  }, true);
+  document.addEventListener('paste', function(e){
+    if(e.target && e.target.isContentEditable) e.preventDefault();
+  }, true);
+  // 阻止雙擊進入編輯（儲存格編輯、課名改名）
+  document.addEventListener('dblclick', function(e){
+    e.preventDefault(); e.stopPropagation();
+  }, true);
+  // 主表：移除「拖曳／勾選」兩個欄寬設定，讓隱藏欄位後的欄寬正確對齊
+  function stripCols(){
+    var cg=document.getElementById('cg'), thd=document.getElementById('thd');
+    if(!cg || !thd) return;
+    var visible=thd.querySelectorAll('th.colh').length;
+    while(visible>0 && cg.children.length>visible){ cg.removeChild(cg.firstElementChild); }
+  }
+  stripCols();
+  var cg=document.getElementById('cg');
+  if(cg && window.MutationObserver) new MutationObserver(stripCols).observe(cg,{childList:true});
+})();
 </script>
 </body>
 </html>
