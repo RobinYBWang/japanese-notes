@@ -56,7 +56,7 @@
   td[contenteditable]{outline:none}
   td[contenteditable]:focus{background:#fffbe6;box-shadow:inset 0 0 0 2px #ffe08a}
   td.word{font-weight:700;font-size:15px}
-  td.kana{color:#555}
+  td.kana{color:#555;white-space:pre-line}
   td.cho{text-align:center;color:var(--accent2);font-weight:600}
   .panote{overflow-x:auto;white-space:nowrap}
   .pa2{display:inline-flex;align-items:flex-end}
@@ -396,7 +396,7 @@
 
 <div id="panel-read" style="display:none">
   <div class="rtop">
-    <button id="readnew-lesson">🔄 從該課單字產生</button> <button id="readnew-all">🔄 從單字總表產生</button>
+    <button id="read-play">▶️ 播放</button> <button id="readnew-lesson">🔄 從該課單字產生</button> <button id="readnew-all">🔄 從單字總表產生</button>
     <span class="rhint" id="readhint"></span>
   </div>
   <div class="ghint">用 <b>A:</b> / <b>B:</b> 開頭代表兩個人對話（A 用聲音A、B 用聲音B）；沒有標 A:／B: 的行就用聲音A念。按上方「重新產生」可換一篇。</div>
@@ -440,7 +440,7 @@ B: はい、学生です。
   <div class="wrap"><div class="ghint">⏰ <b>時間</b>：內容尚未建立，之後再一起補上。</div></div>
 </div>
 <div id="panel-allread" style="display:none">
-  <div class="rtop"><button id="allread-new">🔄 重新產生</button> <span class="rhint" id="allread-hint"></span></div>
+  <div class="rtop"><button id="allread-play">▶️ 播放</button> <button id="allread-new">🔄 重新產生</button> <span class="rhint" id="allread-hint"></span></div>
   <div class="ghint">📻 <b>朗讀總表</b>：依目前所有單字＋文法隨機產生（約100句、順序打亂）。用下方播放器播放。</div>
   <div id="allread-view"></div>
 </div>
@@ -481,7 +481,8 @@ B: はい、学生です。
 {
   "names": {
     "1": "第1課\n初めまして",
-    "2": "第2課\nこれから お世話に　なります"
+    "2": "第2課\nこれから お世話に　なります",
+    "3": "第3課\nこれを ください"
   },
   "grammar": {},
   "lessons": {
@@ -1811,7 +1812,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：America",
         "pos": "country"
       },
       {
@@ -1823,7 +1824,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：England／UK（源自葡語 Inglês）",
         "pos": "country"
       },
       {
@@ -1835,7 +1836,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：India",
         "pos": "country"
       },
       {
@@ -1847,7 +1848,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：Indonesia",
         "pos": "country"
       },
       {
@@ -1871,7 +1872,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：Thailand",
         "pos": "country"
       },
       {
@@ -1895,7 +1896,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：Germany（源自德語 Deutsch）",
         "pos": "country"
       },
       {
@@ -1919,7 +1920,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：Brazil",
         "pos": "country"
       },
       {
@@ -1931,7 +1932,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：model",
         "pos": "x"
       },
       {
@@ -2125,7 +2126,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：notebook",
         "pos": "n"
       },
       {
@@ -2161,7 +2162,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：card",
         "pos": "n"
       },
       {
@@ -2185,7 +2186,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：ball-point pen",
         "pos": "n"
       },
       {
@@ -2197,7 +2198,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：mechanical pencil（和製英語 sharp pencil）",
         "pos": "n"
       },
       {
@@ -2257,7 +2258,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：CD",
         "pos": "n"
       },
       {
@@ -2269,7 +2270,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：television",
         "pos": "n"
       },
       {
@@ -2281,7 +2282,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：radio",
         "pos": "n"
       },
       {
@@ -2293,7 +2294,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：camera",
         "pos": "n"
       },
       {
@@ -2305,7 +2306,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：computer",
         "pos": "n"
       },
       {
@@ -2353,7 +2354,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：chocolate",
         "pos": "n"
       },
       {
@@ -2365,7 +2366,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：coffee（源自荷語 koffie）",
         "pos": "n"
       },
       {
@@ -2509,7 +2510,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：tomato",
         "pos": "n"
       },
       {
@@ -2557,7 +2558,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：lemon",
         "pos": "n"
       },
       {
@@ -2569,7 +2570,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：necktie",
         "pos": "n"
       },
       {
@@ -2581,7 +2582,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：lighter",
         "pos": "n"
       },
       {
@@ -2593,7 +2594,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：cake",
         "pos": "n"
       },
       {
@@ -2629,7 +2630,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：bread（源自葡語 pão）",
         "pos": "n"
       },
       {
@@ -2653,7 +2654,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：salad",
         "pos": "n"
       },
       {
@@ -2665,7 +2666,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：tape",
         "pos": "n"
       },
       {
@@ -2701,7 +2702,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：passport",
         "pos": "n"
       },
       {
@@ -2737,7 +2738,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "魯夫招式:\nゴムゴムの...",
+        "note": "魯夫招式:\nゴムゴムの... ｜ 源自：rubber／gum（源自荷語 gom）",
         "pos": "n"
       },
       {
@@ -2761,7 +2762,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "現在說手機基本上都用這個:\nスマホを忘れた!(手機忘了帶!)",
+        "note": "現在說手機基本上都用這個:\nスマホを忘れた!(手機忘了帶!) ｜ 源自：smartphone 的縮寫",
         "pos": "n"
       },
       {
@@ -2821,7 +2822,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：motorcycle（和製英語 auto+bike）",
         "pos": "n"
       },
       {
@@ -2845,7 +2846,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：stroller（和製英語 baby+car）",
         "pos": "n"
       },
       {
@@ -2857,7 +2858,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：ice cream",
         "pos": "n"
       },
       {
@@ -2941,7 +2942,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：sofa",
         "pos": "n"
       },
       {
@@ -2953,7 +2954,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：belt",
         "pos": "n"
       },
       {
@@ -2965,7 +2966,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：door",
         "pos": "n"
       },
       {
@@ -3001,7 +3002,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：Apple",
         "pos": "n"
       },
       {
@@ -3013,7 +3014,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：Louis Vuitton（正確片假名應為 ルイ・ヴィトン）",
         "pos": "n"
       },
       {
@@ -3025,7 +3026,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：fashion",
         "pos": "x"
       },
       {
@@ -3049,7 +3050,7 @@ B: はい、学生です。
         "jp": "",
         "hkana": "",
         "zh": "",
-        "note": "",
+        "note": "源自：zero",
         "pos": "x"
       },
       {
@@ -3077,7 +3078,1136 @@ B: はい、学生です。
         "pos": "x"
       }
     ],
-    "3": [],
+    "3": [
+      {
+        "done": 0,
+        "word": "ここ",
+        "kana": "ここ",
+        "cho": "0",
+        "mean": "這裡（離說話者近的場所）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指地點",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "そこ",
+        "kana": "そこ",
+        "cho": "0",
+        "mean": "那裡（離聽話者近的場所）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指地點",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "あそこ",
+        "kana": "あそこ",
+        "cho": "0",
+        "mean": "那裡（離說話者、聽者都遠的場所）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指地點",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "どこ",
+        "kana": "どこ",
+        "cho": "1",
+        "mean": "哪裡",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指地點",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "こちら",
+        "kana": "こちら",
+        "cho": "0",
+        "mean": "這邊（「ここ」的禮貌說法）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指方向",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "そちら",
+        "kana": "そちら",
+        "cho": "0",
+        "mean": "那邊（「そこ」的禮貌說法）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指方向",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "あちら",
+        "kana": "あちら",
+        "cho": "0",
+        "mean": "那邊（「あそこ」的禮貌說法）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指方向",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "どちら",
+        "kana": "どちら",
+        "cho": "1",
+        "mean": "哪邊（「どこ」的禮貌說法）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "指方向",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "教室",
+        "kana": "きょうしつ",
+        "cho": "0",
+        "mean": "教室",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "食堂",
+        "kana": "しょくどう",
+        "cho": "0",
+        "mean": "食堂、餐廳、公司餐廳",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "事務所",
+        "kana": "じむしょ",
+        "cho": "1",
+        "mean": "辦事處、事務所",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "会議室",
+        "kana": "かいぎしつ",
+        "cho": "3",
+        "mean": "會議室",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "受付",
+        "kana": "うけつけ",
+        "cho": "0",
+        "mean": "接待處、服務台",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "ロビー",
+        "kana": "ロビー",
+        "cho": "1",
+        "mean": "大廳、休息室",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：lobby",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "部屋",
+        "kana": "へや",
+        "cho": "2",
+        "mean": "房間",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "トイレ",
+        "kana": "トイレ",
+        "cho": "1",
+        "mean": "廁所（お手洗い）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：toilet",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "階段",
+        "kana": "かいだん",
+        "cho": "0",
+        "mean": "樓梯",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "エレベーター",
+        "kana": "エレベーター",
+        "cho": "3",
+        "mean": "電梯",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：elevator",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "エスカレーター",
+        "kana": "エスカレーター",
+        "cho": "4",
+        "mean": "電扶梯",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：escalator",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "自動販売機",
+        "kana": "じどうはんばいき",
+        "cho": "6",
+        "mean": "自動販賣機",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "電話",
+        "kana": "でんわ",
+        "cho": "0",
+        "mean": "電話",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "[お]国",
+        "kana": "[お]くに",
+        "cho": "0",
+        "mean": "國家、故鄉",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "会社",
+        "kana": "かいしゃ",
+        "cho": "0",
+        "mean": "公司",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "家",
+        "kana": "うち\nいえ",
+        "cho": "0\n2",
+        "mean": "家、房子",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "「いえ」＝房子這個建築物本身（客觀的房屋，任何一棟房子都可以）；「うち」＝自己的家／家裡，帶歸屬感，也可指「自己這一方」（我們、我家、我公司）。回家說「うちへ帰る」；指著一棟建築物說「あれは大きいいえですね」。",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "靴",
+        "kana": "くつ",
+        "cho": "2",
+        "mean": "鞋子",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "ネクタイ",
+        "kana": "ネクタイ",
+        "cho": "1",
+        "mean": "領帶",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：necktie",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "ワイン",
+        "kana": "ワイン",
+        "cho": "1",
+        "mean": "葡萄酒",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：wine",
+        "pos": "n"
+      },
+      {
+        "done": 0,
+        "word": "売り場",
+        "kana": "うりば",
+        "cho": "0",
+        "mean": "賣場、專櫃",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "地下",
+        "kana": "ちか",
+        "cho": "1",
+        "mean": "地下",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "〜階",
+        "kana": "〜かい",
+        "cho": "",
+        "mean": "〜樓（〜がい）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "何階",
+        "kana": "なんがい",
+        "cho": "1",
+        "mean": "幾樓",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "〜円",
+        "kana": "〜えん",
+        "cho": "",
+        "mean": "〜日圓",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "いくら",
+        "kana": "いくら",
+        "cho": "1",
+        "mean": "多少錢",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "百",
+        "kana": "ひゃく",
+        "cho": "2",
+        "mean": "百",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "千",
+        "kana": "せん",
+        "cho": "1",
+        "mean": "千",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "万",
+        "kana": "まん",
+        "cho": "1",
+        "mean": "萬",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "いらっしゃいませ",
+        "kana": "いらっしゃいませ",
+        "cho": "",
+        "mean": "歡迎光臨（招呼來店的客人）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "[〜を]見せてください",
+        "kana": "〜をみせてください",
+        "cho": "",
+        "mean": "請讓我看一下〜。",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "じゃ",
+        "kana": "じゃ",
+        "cho": "",
+        "mean": "那麼",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "[〜を]ください",
+        "kana": "〜をください",
+        "cho": "",
+        "mean": "請給我〜。",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "すみません",
+        "kana": "すみません",
+        "cho": "",
+        "mean": "對不起、抱歉；不好意思",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "どうも",
+        "kana": "どうも",
+        "cho": "",
+        "mean": "謝謝（口語）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "イタリア",
+        "kana": "イタリア",
+        "cho": "0",
+        "mean": "義大利",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Italy",
+        "pos": "country"
+      },
+      {
+        "done": 0,
+        "word": "スイス",
+        "kana": "スイス",
+        "cho": "1",
+        "mean": "瑞士",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Switzerland（源自法語 Suisse）",
+        "pos": "country"
+      },
+      {
+        "done": 0,
+        "word": "フランス",
+        "kana": "フランス",
+        "cho": "0",
+        "mean": "法國",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：France",
+        "pos": "country"
+      },
+      {
+        "done": 0,
+        "word": "ジャカルタ",
+        "kana": "ジャカルタ",
+        "cho": "3",
+        "mean": "雅加達",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Jakarta",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "バンコク",
+        "kana": "バンコク",
+        "cho": "1",
+        "mean": "曼谷",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Bangkok",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ベルリン",
+        "kana": "ベルリン",
+        "cho": "0",
+        "mean": "柏林",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Berlin",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "新大阪",
+        "kana": "しんおおさか",
+        "cho": "3",
+        "mean": "新大阪（大阪的車站名）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "レストラン",
+        "kana": "レストラン",
+        "cho": "1",
+        "mean": "餐廳",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：restaurant",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "本屋",
+        "kana": "ほんや",
+        "cho": "1",
+        "mean": "書店",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "〜屋",
+        "kana": "〜や",
+        "cho": "",
+        "mean": "〜店（店鋪的接尾詞，例：本屋＝書店）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "洗います",
+        "kana": "あらいます",
+        "cho": "",
+        "mean": "洗（洗う的禮貌形）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "お〜／ご〜",
+        "kana": "お〜／ご〜",
+        "cho": "",
+        "mean": "尊敬的接頭辭：お＋和語、ご＋漢語",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ドル",
+        "kana": "ドル",
+        "cho": "1",
+        "mean": "美金（美元）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：dollar",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "元",
+        "kana": "げん",
+        "cho": "1",
+        "mean": "元（人民幣）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ホテル",
+        "kana": "ホテル",
+        "cho": "1",
+        "mean": "飯店",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：hotel",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "グランドホテル",
+        "kana": "グランドホテル",
+        "cho": "",
+        "mean": "圓山大飯店（Grand Hotel）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Grand Hotel",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "東京タワー",
+        "kana": "とうきょうタワー",
+        "cho": "",
+        "mean": "東京鐵塔",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Tokyo Tower",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "別荘",
+        "kana": "べっそう",
+        "cho": "0",
+        "mean": "別墅",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "郵便局",
+        "kana": "ゆうびんきょく",
+        "cho": "3",
+        "mean": "郵局",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "テレビ局",
+        "kana": "テレビきょく",
+        "cho": "3",
+        "mean": "電視台",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：TV station",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "交番",
+        "kana": "こうばん",
+        "cho": "0",
+        "mean": "派出所、警察崗亭",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "美容院",
+        "kana": "びよういん",
+        "cho": "2",
+        "mean": "美容院、美髮沙龍",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "動物園",
+        "kana": "どうぶつえん",
+        "cho": "4",
+        "mean": "動物園",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "喫茶店",
+        "kana": "きっさてん",
+        "cho": "0",
+        "mean": "咖啡店",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "プール",
+        "kana": "プール",
+        "cho": "1",
+        "mean": "游泳池",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：pool",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "デパート",
+        "kana": "デパート",
+        "cho": "2",
+        "mean": "百貨公司",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：department store",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "空港",
+        "kana": "くうこう",
+        "cho": "0",
+        "mean": "機場（エアポート）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "エアポート",
+        "kana": "エアポート",
+        "cho": "",
+        "mean": "機場（airport）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：airport",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "空気",
+        "kana": "くうき",
+        "cho": "1",
+        "mean": "空氣",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "体育館",
+        "kana": "たいいくかん",
+        "cho": "4",
+        "mean": "體育館",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "水族館",
+        "kana": "すいぞくかん",
+        "cho": "3",
+        "mean": "水族館",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "図書館",
+        "kana": "としょかん",
+        "cho": "2",
+        "mean": "圖書館",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "映画館",
+        "kana": "えいがかん",
+        "cho": "3",
+        "mean": "電影院",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "公園",
+        "kana": "こうえん",
+        "cho": "0",
+        "mean": "公園",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "ナイトマーケット",
+        "kana": "ナイトマーケット",
+        "cho": "",
+        "mean": "夜市（night market）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：night market",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "夜市",
+        "kana": "よいち",
+        "cho": "",
+        "mean": "夜市",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "スーパー",
+        "kana": "スーパー",
+        "cho": "1",
+        "mean": "超市、超級市場",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：supermarket",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "スーパーマン",
+        "kana": "スーパーマン",
+        "cho": "4",
+        "mean": "超人",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Superman",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "駅",
+        "kana": "えき",
+        "cho": "1",
+        "mean": "車站",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "庭",
+        "kana": "にわ",
+        "cho": "0",
+        "mean": "庭院、院子",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "医院",
+        "kana": "いいん",
+        "cho": "1",
+        "mean": "醫院、診所",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "運動場",
+        "kana": "うんどうじょう",
+        "cho": "0",
+        "mean": "運動場",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "居酒屋",
+        "kana": "いざかや",
+        "cho": "0",
+        "mean": "居酒屋",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "101",
+        "kana": "いちまるいち",
+        "cho": "0",
+        "mean": "101（台北101）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "把 101 一個一個數字唸：1(いち)・0(まる)・1(いち)。日文唸門牌號、電話、大樓名等時，0 常唸成「まる（丸）」＝圈圈／零，所以 101＝いちまるいち（也可唸 ゼロ 或 れい）。",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "美術館",
+        "kana": "びじゅつかん",
+        "cho": "3",
+        "mean": "美術館",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "芸術",
+        "kana": "げいじゅつ",
+        "cho": "0",
+        "mean": "藝術",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "海",
+        "kana": "うみ",
+        "cho": "1",
+        "mean": "海",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "川",
+        "kana": "かわ",
+        "cho": "2",
+        "mean": "河、河川",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "可愛い",
+        "kana": "かわいい",
+        "cho": "3",
+        "mean": "可愛的",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "塾",
+        "kana": "じゅく",
+        "cho": "1",
+        "mean": "補習班",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "お菓子売り場",
+        "kana": "おかしうりば",
+        "cho": "",
+        "mean": "零食賣場",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "ジム",
+        "kana": "ジム",
+        "cho": "1",
+        "mean": "健身房",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：gym",
+        "pos": "place"
+      }
+    ],
     "4": [],
     "5": [],
     "6": [],
@@ -3135,7 +4265,12 @@ const GRAMMAR_DEFAULT={
 <div class="gp"><div class="gp-label">④「〜ですか」的 はい／いいえ 回答</div><div class="gp-form">はい、〜です／そうです。｜いいえ、〜じゃ ありません／ちがいます。</div><div class="gp-note"><b>そうです</b>＝「是的、沒錯」；<b>ちがいます</b>＝「不對、不是」，是比「〜じゃ ありません」更口語的否定。</div><div class="gp-ex">A：これは <ruby>本<rt>ほん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは ほんですか" title="播放發音">🔊</button>（這是書嗎？）<br>B：はい、<ruby>本<rt>ほん</rt></ruby>です。／ はい、そうです。<button class="spk gspk" contenteditable="false" data-say="はい、ほんです。はい、そうです" title="播放發音">🔊</button>（是，是書／是的）<br>B：いいえ、<ruby>本<rt>ほん</rt></ruby>じゃ ありません。／ いいえ、ちがいます。<button class="spk gspk" contenteditable="false" data-say="いいえ、ほんじゃ ありません。いいえ、ちがいます" title="播放發音">🔊</button>（不，不是書／不對）</div></div>
 <div class="gp"><div class="gp-label">⑤ 選擇疑問：Aですか、（それとも）Bですか</div><div class="gp-form">〜は 名詞A ですか、（それとも）名詞B ですか</div><div class="gp-note"><b>それとも</b>＝「或者」，<b>可加可不加</b>，用來問「是 A 還是 B」；回答時直接說是哪一個。</div><div class="gp-ex">A：それは <ruby>辞書<rt>じしょ</rt></ruby>ですか、（それとも）<ruby>雑誌<rt>ざっし</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="それは じしょですか、それとも ざっしですか" title="播放發音">🔊</button>（那是字典還是雜誌？）<br>B：<ruby>辞書<rt>じしょ</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="じしょです" title="播放發音">🔊</button>（是字典）</div></div>
 <div class="gp"><div class="gp-label">⑥ 誰〈だれ〉の 〜：這是誰的～</div><div class="gp-form">これ／それ／あれ ＋ は ＋ 誰の ＋ 名詞 ＋ ですか</div><div class="gp-note">問「東西是誰的」。回答用「〜は［人］の 名詞です」。<b>名詞前面提過就可省略</b>：この本は 誰のですか。</div><div class="gp-ex">A：これは <ruby>誰<rt>だれ</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは だれの ほんですか" title="播放發音">🔊</button>（這是誰的書？）<br>B：それは <ruby>私<rt>わたし</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="それは わたしの ほんです" title="播放發音">🔊</button>（那是我的書）<br>▶ 省略名詞：この<ruby>本<rt>ほん</rt></ruby>は <ruby>誰<rt>だれ</rt></ruby>のですか。<button class="spk gspk" contenteditable="false" data-say="このほんは だれのですか" title="播放發音">🔊</button>（這本書是誰的？）</div></div>
-<div class="gp"><div class="gp-label">⑦ 何〈なん〉の 〜：什麼樣的／關於什麼的～</div><div class="gp-form">これ／それ／あれ ＋ は ＋ 何の ＋ 名詞 ＋ ですか</div><div class="gp-note"><b>何の＋名詞</b>＝問「哪一種、關於什麼的」。跟「これは 何ですか（這是什麼）」不同：<b>何の 後面一定接名詞</b>。</div><div class="gp-ex">A：これは <ruby>何<rt>なん</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは なんの ほんですか" title="播放發音">🔊</button>（這是什麼書？關於什麼的書？）<br>B：<ruby>日本語<rt>にほんご</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="にほんごの ほんです" title="播放發音">🔊</button>（是日文書）</div></div>`
+<div class="gp"><div class="gp-label">⑦ 何〈なん〉の 〜：什麼樣的／關於什麼的～</div><div class="gp-form">これ／それ／あれ ＋ は ＋ 何の ＋ 名詞 ＋ ですか</div><div class="gp-note"><b>何の＋名詞</b>＝問「哪一種、關於什麼的」。跟「これは 何ですか（這是什麼）」不同：<b>何の 後面一定接名詞</b>。</div><div class="gp-ex">A：これは <ruby>何<rt>なん</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは なんの ほんですか" title="播放發音">🔊</button>（這是什麼書？關於什麼的書？）<br>B：<ruby>日本語<rt>にほんご</rt></ruby>の <ruby>本<rt>ほん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="にほんごの ほんです" title="播放發音">🔊</button>（是日文書）</div></div>`,
+3:`<h3>第三課　場所指示詞「ここ・そこ・あそこ」</h3>
+<div class="gp"><div class="gp-label">① ここ／そこ／あそこ／どこ：場所代名詞</div><div class="gp-form">ここ／そこ／あそこ／どこ ＋ は …</div><div class="gp-note">指「地點」。<b>ここ</b>＝這裡（離自己近）；<b>そこ</b>＝那裡（離對方近）；<b>あそこ</b>＝那裡（離雙方都遠）；<b>どこ</b>＝哪裡（問句用）。</div><div class="gp-ex">ここは <ruby>教室<rt>きょうしつ</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="ここは きょうしつです" title="播放發音">🔊</button>（這裡是教室）<br>トイレは <b>どこ</b>ですか。<button class="spk gspk" contenteditable="false" data-say="トイレは どこですか" title="播放發音">🔊</button>（廁所在哪裡？）</div></div>
+<div class="gp"><div class="gp-label">②「ここ／そこ／あそこ は 何〈なん〉ですか」→「〜は ［場所］です」</div><div class="gp-form">ここ／そこ／あそこ ＋ は ＋ <ruby>何<rt>なん</rt></ruby>ですか　→　ここ／そこ／あそこ ＋ は ＋ ［場所］です</div><div class="gp-note">問某個地點「是什麼地方」，回答時把空格填入<b>場所名詞</b>。（＝你這次筆記的重點）</div><div class="gp-ex">A：ここは <ruby>何<rt>なん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="ここは なんですか" title="播放發音">🔊</button>（這裡是什麼地方？）<br>B：ここは <ruby>食堂<rt>しょくどう</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="ここは しょくどうです" title="播放發音">🔊</button>（這裡是餐廳）<br>A：あそこは <ruby>何<rt>なん</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="あそこは なんですか" title="播放發音">🔊</button><br>B：あそこは <ruby>郵便局<rt>ゆうびんきょく</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="あそこは ゆうびんきょくです" title="播放發音">🔊</button>（那裡是郵局）</div></div>
+<div class="gp"><div class="gp-label">③ ［名詞］は どこですか：問人／東西／場所在哪裡</div><div class="gp-form">名詞 ＋ は ＋ どこ ＋ ですか</div><div class="gp-note">用 <b>どこ</b> 問「在哪裡」，回答用「〜は ［場所］です」。</div><div class="gp-ex">A：<ruby>受付<rt>うけつけ</rt></ruby>は どこですか。<button class="spk gspk" contenteditable="false" data-say="うけつけは どこですか" title="播放發音">🔊</button>（櫃台在哪裡？）<br>B：<ruby>受付<rt>うけつけ</rt></ruby>は あそこです。<button class="spk gspk" contenteditable="false" data-say="うけつけは あそこです" title="播放發音">🔊</button>（櫃台在那裡）</div></div>
+<div class="gp"><div class="gp-label">④ こちら／そちら／あちら／どちら：方向・場所（禮貌說法）</div><div class="gp-form">こちら＝這邊　そちら＝那邊　あちら＝那邊(遠)　どちら＝哪邊／哪裡（也可問哪位）</div><div class="gp-note">比 ここ／そこ／あそこ／どこ <b>更客氣</b>，也用來指方向。<b>お国は どちらですか</b>＝客氣地問「您是哪裡人」。</div><div class="gp-ex">エレベーターは <b>あちら</b>です。<button class="spk gspk" contenteditable="false" data-say="エレベーターは あちらです" title="播放發音">🔊</button>（電梯在那邊）<br>A：お<ruby>国<rt>くに</rt></ruby>は <b>どちら</b>ですか。<button class="spk gspk" contenteditable="false" data-say="おくには どちらですか" title="播放發音">🔊</button>（您是哪國人？）<br>B：<ruby>台湾<rt>たいわん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="たいわんです" title="播放發音">🔊</button>（台灣）</div></div>`
 };
 
 /* ===== 未儲存提醒 ===== */
@@ -3156,8 +4291,8 @@ function jaVoices(){return ('speechSynthesis' in window)?speechSynthesis.getVoic
 function voiceFor(which){const vs=jaVoices();const want=which==='B'?ttsCfg.voiceB:ttsCfg.voiceA;if(want){const v=vs.find(x=>x.name===want);if(v)return v;}return vs[0]||null;}
 function speakWith(text,which,btn){text=(text||'').replace(/[～~]/g,'').trim();if(!text)return;if(!('speechSynthesis' in window)){alert('這個瀏覽器不支援語音朗讀，建議改用 Chrome、Edge 或 Safari。');return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ja-JP';u.rate=+ttsCfg.rate||0.9;u.pitch=+ttsCfg.pitch||1;const v=voiceFor(which||'A');if(v)u.voice=v;if(btn){u.onstart=()=>btn.classList.add('playing');u.onend=u.onerror=()=>btn.classList.remove('playing');}speechSynthesis.speak(u);}
 function speak(text,btn){speakWith(text,'A',btn);}
-const sayForceKana=new Set(['車','何','薬']);
-function sayText(r){if(!r)return '';let w=(r.word||'').replace(/[～~［］\[\]]/g,'').trim();if(w&&!sayForceKana.has(w))return w;return (r.kana||'').replace(/[～~]/g,'').trim();}
+const sayForceKana=new Set(['車','何','薬','家','百','千','101','眼鏡','梅酒','夜市','元','何階','木','鈴']);
+function sayText(r){if(!r)return '';let w=(r.word||'').replace(/[～~［］\[\]]/g,'').trim();if(w&&!sayForceKana.has(w))return w;return (r.kana||'').replace(/[～~]/g,'').replace(/\s*\n\s*/g,'、').trim();}
 function fillVoiceSel(sel,cur){const vs=jaVoices().slice().sort((a,b)=>(a.localService?1:0)-(b.localService?1:0));sel.innerHTML=vs.length?vs.map(v=>'<option value="'+v.name.replace(/"/g,'')+'">'+v.name+'（'+v.lang+'）'+(v.localService?'':' ⭐線上·較自然')+'</option>').join(''):'<option value="">（系統沒有日語語音，請安裝日語語音包）</option>';if(cur&&vs.some(v=>v.name===cur))sel.value=cur;}
 function populateVoices(){const a=document.getElementById('voicesel'),b=document.getElementById('voicesB');if(a)fillVoiceSel(a,ttsCfg.voiceA);if(b)fillVoiceSel(b,ttsCfg.voiceB);if(!ttsCfg.voiceA){const vs=jaVoices();if(vs.length)ttsCfg.voiceA=vs[0].name;}}
 if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=populateVoices;}
@@ -3177,7 +4312,8 @@ const tbody=document.getElementById('tbody');
 const empty=document.getElementById('empty');
 
 function splitMora(kana){const small='ゃゅょぁぃぅぇぉゎャュョァィゥェォヮ';const res=[];for(const ch of (kana||'').replace(/[～~\s]/g,'')){if(small.indexOf(ch)>=0&&res.length)res[res.length-1]+=ch;else res.push(ch);}return res;}
-function pitchNotes(kana,cho){const m=splitMora(kana);const N=m.length;let a=parseInt(cho,10);if(!N||isNaN(a)||a<0)return '';if(a>N)a=N;const hi=i=>{if(a===0)return i!==1;if(a===1)return i===1;return i!==1&&i<=a;};let s='<span class="pa2">';for(let i=1;i<=N;i++){s+='<span class="pm"><span class="nb"><span class="note '+(hi(i)?'hi':'lo')+'">♪</span></span><span class="mk">'+esc(m[i-1])+'</span></span>';}return s+'</span>';}
+function pitchNotes(kana,cho){if((kana||'').indexOf('\n')>=0){const ks=kana.split('\n');const cs=String(cho==null?'':cho).split('\n');return ks.map((k,i)=>pitchNotes1(k.trim(),cs[i]!==undefined?cs[i]:cs[cs.length-1])).filter(Boolean).join('<br>');}return pitchNotes1(kana,cho);}
+function pitchNotes1(kana,cho){const m=splitMora(kana);const N=m.length;let a=parseInt(cho,10);if(!N||isNaN(a)||a<0)return '';if(a>N)a=N;const hi=i=>{if(a===0)return i!==1;if(a===1)return i===1;return i!==1&&i<=a;};let s='<span class="pa2">';for(let i=1;i<=N;i++){s+='<span class="pm"><span class="nb"><span class="note '+(hi(i)?'hi':'lo')+'">♪</span></span><span class="mk">'+esc(m[i-1])+'</span></span>';}return s+'</span>';}
 function render(){
   tbody.innerHTML='';let shown=0;
   rows.forEach((r,i)=>{
@@ -3496,8 +4632,29 @@ function rtmpl2(rs){
 }
 function buildReading1(rs){const T=rtmpl1(rs);if(!T.length)return '';const L=['A: はじめまして。','B: はじめまして。どうぞ よろしく お願いします。'].concat(cycleTemplates(T,50));L.push('A: いろいろ ありがとう ございました。','B: いいえ、どういたしまして。');return L.join('\n');}
 function buildReading2(rs){const T=rtmpl2(rs);if(!T.length)return '';return cycleTemplates(T,52).join('\n');}
-function genTotalReading(){const rs=allVocabRows();const T=rtmpl1(rs).concat(rtmpl2(rs));if(!T.length)return '';const ex=[];let g=0;while(ex.length<50&&g<400){const pr=rpick(T)();if(pr&&pr.length)ex.push(pr);g++;}shuffle(ex);const L=[];ex.forEach(pr=>pr.forEach(x=>L.push(x)));return L.join('\n');}
-function genReadingText(n,source){const rs=(source==='all')?allVocabRows():(workbook.lessons[n]||[]);if(n===1)return buildReading1(rs);return buildReading2(rs);}
+function rtmpl3(rs){
+  const bad=/[〜～\[\]［］]/;
+  const P=[...new Set(posWords(rs,'place').filter(w=>w&&!bad.test(w)))];
+  const C=[...new Set(posWords(rs,'country').filter(w=>w&&!bad.test(w)))];
+  if(P.length<2)return [];
+  const demP=()=>rpick(['ここ','そこ','あそこ']),flipP={'ここ':'そこ','そこ':'ここ','あそこ':'あそこ'};
+  const here=()=>rpick(['ここ','そこ','あそこ']);
+  const rp=()=>rpick(P),rp2=e=>{let x=rpick(P),g=0;while(e&&x===e&&g<6){x=rpick(P);g++;}return x;};
+  const rc=()=>C.length?rpick(C):'台湾';
+  const T=[
+    ()=>{const d=demP(),p=rp();return ['A: '+d+'は 何ですか。','B: '+flipP[d]+'は '+p+'です。'];},
+    ()=>{const p=rp();return ['A: '+p+'は どこですか。','B: '+here()+'です。'];},
+    ()=>{const p=rp();return ['A: すみません、'+p+'は どこですか。','B: '+here()+'です。'];},
+    ()=>{const d=demP(),p=rp();return ['A: '+d+'は '+p+'ですか。','B: はい、そうです。'+p+'です。'];},
+    ()=>{const d=demP(),p=rp(),p2=rp2(p);return ['A: '+d+'は '+p+'ですか。','B: いいえ、違います。'+p2+'です。'];},
+    ()=>{const p=rp();return ['A: '+p+'は どちらですか。','B: あちらです。'];}
+  ];
+  if(C.length)T.push(()=>{const c=rc();return ['A: お国は どちらですか。','B: '+c+'です。'];});
+  return T;
+}
+function buildReading3(rs){const T=rtmpl3(rs);if(!T.length)return '';return cycleTemplates(T,52).join('\n');}
+function genTotalReading(){const rs=allVocabRows();const T=rtmpl1(rs).concat(rtmpl2(rs)).concat(rtmpl3(rs));if(!T.length)return '';const ex=[];let g=0;while(ex.length<50&&g<400){const pr=rpick(T)();if(pr&&pr.length)ex.push(pr);g++;}shuffle(ex);const L=[];ex.forEach(pr=>pr.forEach(x=>L.push(x)));return L.join('\n');}
+function genReadingText(n,source){const rs=(source==='all')?allVocabRows():(workbook.lessons[n]||[]);if(n===1)return buildReading1(rs);if(n===3)return buildReading3(rs);return buildReading2(rs);}
 function loadReading(){
   if(lesson===playLesson&&readState!=='idle'){buildReadView(readAllLines);showPlayView();for(let k=0;k<playIdx;k++)litAll(k);if(playIdx>=0&&playIdx<readAllLines.length){setPast(playIdx);litUpto(playIdx,litCountL(playIdx));}return;}
   readEdit();const t=document.getElementById('read-text');const s=workbook.reading[lesson];t.value=(s!=null&&s!=='')?s:genReadingText(lesson);document.getElementById('readhint').textContent='';
@@ -3576,6 +4733,8 @@ document.getElementById('read-view').addEventListener('click',()=>{stopPlay();re
 function doReadNew(source){stopPlay();readEdit();const t=genReadingText(lesson,source);if(!t){alert('可用的單字不足，先到「單字」補充一些。');return;}document.getElementById('read-text').value=t;workbook.reading[lesson]=t;touch();setPlayLesson(lesson);document.getElementById('readhint').textContent='已重新產生 '+t.split('\n').length+' 句（'+(source==='all'?'單字總表':'該課單字')+'，已載入播放器）';}
 document.getElementById('readnew-lesson').addEventListener('click',()=>doReadNew('lesson'));
 document.getElementById('readnew-all').addEventListener('click',()=>doReadNew('all'));
+document.getElementById('read-play').addEventListener('click',()=>{const p=document.getElementById('readplayer');if(p.classList.contains('collapsed')){p.classList.remove('collapsed');localStorage.setItem('jp_player_collapsed','0');}gotoPlayerLesson(lesson);});
+document.getElementById('allread-play').addEventListener('click',()=>{const p=document.getElementById('readplayer');if(p.classList.contains('collapsed')){p.classList.remove('collapsed');localStorage.setItem('jp_player_collapsed','0');}gotoPlayerLesson(99);});
 
 /* ===== 測驗（自動用該課單字＋文法出題）===== */
 const QUIZ_GRAMMAR={
@@ -3588,6 +4747,12 @@ const QUIZ_GRAMMAR={
  {q:'これは 日本語（　）本です。',opts:['の','は','も','を'],ans:0,exp:'名詞＋の＋名詞，「の」＝的。'},
  {q:'A：あなたも 学生ですか。 B：はい、わたし（　）学生です。',opts:['も','は','を','の'],ans:0,exp:'「も」＝也。'},
  {q:'A：あなたも 学生ですか。 B：いいえ、わたし（　）学生じゃ ありません。',opts:['は','も','が','の'],ans:0,exp:'否定回答時用「は」，不用「も」。'}
+],
+3:[
+ {q:'A：ここは 何ですか。 B：ここは（　）です。',opts:['しょくどう','しょくどうか','どこ','なん'],ans:0,exp:'回答地點填場所名詞：しょくどう（食堂）。'},
+ {q:'トイレは（　）ですか。（問「在哪裡」）',opts:['どこ','なん','だれ','いくら'],ans:0,exp:'問場所「在哪裡」用「どこ」。'},
+ {q:'（更客氣）お国は（　）ですか。',opts:['どちら','どこ','なに','いくら'],ans:0,exp:'客氣地問哪裡／出身用「どちら」。'},
+ {q:'エレベーターは（　）です。（「那邊」，客氣說法）',opts:['あちら','ここ','どちら','そちら'],ans:0,exp:'客氣指較遠的方向用「あちら」。'}
 ]
 };
 let quiz=[],quizPrefix='',quizEmptyMsg='',kanaScope=null;
@@ -3678,7 +4843,7 @@ document.getElementById('newquiz').addEventListener('click',()=>{if(lesson===0)b
 /* ===== 單字總表（唯讀，可拉欄寬、拖曳排序）===== */
 const GOJUON_META={"あさ": [1, "早上"], "アイス": [1, "冰、冰淇淋"], "いぬ": [2, "狗"], "インク": [0, "墨水"], "うみ": [1, "海"], "ウール": [1, "羊毛"], "えき": [1, "車站"], "エアコン": [0, "冷氣"], "おかね": [0, "錢"], "オレンジ": [2, "柳橙"], "かさ": [1, "傘"], "カメラ": [1, "相機"], "きって": [0, "郵票"], "キロ": [1, "公斤"], "くつ": [2, "鞋子"], "クラス": [1, "班級"], "けさ": [1, "今早"], "ケーキ": [1, "蛋糕"], "こども": [0, "小孩"], "コーヒー": [3, "咖啡"], "さかな": [0, "魚"], "サラダ": [1, "沙拉"], "しま": [2, "島"], "シャツ": [1, "襯衫"], "すし": [2, "壽司"], "スープ": [1, "湯"], "せかい": [1, "世界"], "セーター": [1, "毛衣"], "そら": [1, "天空"], "ソファ": [1, "沙發"], "たまご": [2, "蛋"], "タクシー": [1, "計程車"], "ちず": [1, "地圖"], "チーズ": [1, "起司"], "つくえ": [0, "桌子"], "ツアー": [1, "旅行團"], "てがみ": [0, "信"], "テレビ": [1, "電視"], "とけい": [0, "時鐘"], "トマト": [1, "番茄"], "なつ": [2, "夏天"], "ナイフ": [1, "刀子"], "にく": [2, "肉"], "ニュース": [1, "新聞"], "ぬの": [0, "布"], "ヌードル": [1, "麵"], "ねこ": [1, "貓"], "ネクタイ": [1, "領帶"], "のみもの": [3, "飲料"], "ノート": [1, "筆記本"], "はな": [2, "花"], "ハンカチ": [0, "手帕"], "ひと": [0, "人"], "ヒント": [1, "提示"], "ふね": [1, "船"], "フォーク": [1, "叉子"], "へや": [2, "房間"], "ヘア": [1, "頭髮"], "ほし": [0, "星星"], "ホテル": [1, "飯店"], "まど": [1, "窗戶"], "マスク": [1, "口罩"], "みず": [0, "水"], "ミルク": [1, "牛奶"], "むし": [0, "蟲"], "ムード": [1, "氣氛"], "め": [1, "眼睛"], "メニュー": [1, "菜單"], "もも": [0, "桃子"], "モデル": [0, "模特兒"], "やま": [2, "山"], "ヤシ": [0, "椰子"], "ゆき": [2, "雪"], "ユーモア": [1, "幽默"], "よる": [1, "晚上"], "ヨガ": [1, "瑜伽"], "らいねん": [0, "明年"], "ラジオ": [1, "收音機"], "りんご": [0, "蘋果"], "リボン": [1, "緞帶"], "るす": [1, "不在家"], "ルール": [1, "規則"], "れきし": [0, "歷史"], "レモン": [1, "檸檬"], "ろく": [2, "六"], "ロボット": [0, "機器人"], "わたし": [0, "我"], "ワイン": [1, "葡萄酒"], "ほん": [1, "書"], "パン": [1, "麵包"], "がっこう": [0, "學校"], "ガム": [1, "口香糖"], "ぎんこう": [0, "銀行"], "ギター": [1, "吉他"], "ぐあい": [0, "狀況"], "グラム": [1, "公克"], "げんき": [1, "有精神"], "ゲーム": [1, "遊戲"], "ごご": [1, "下午"], "ゴルフ": [1, "高爾夫"], "ざっし": [0, "雜誌"], "ピザ": [1, "披薩"], "じかん": [0, "時間"], "ジュース": [1, "果汁"], "ずつう": [0, "頭痛"], "サイズ": [1, "尺寸"], "ぜんぶ": [1, "全部"], "ゼロ": [1, "零"], "ぞう": [1, "大象"], "リゾート": [2, "度假勝地"], "だいがく": [0, "大學"], "ダンス": [1, "跳舞"], "はなぢ": [0, "鼻血"], "つづく": [0, "繼續"], "でんわ": [0, "電話"], "デザート": [2, "甜點"], "どようび": [2, "星期六"], "ドア": [1, "門"], "ばん": [0, "晚上"], "バス": [1, "公車"], "びょういん": [0, "醫院"], "ビール": [1, "啤酒"], "ぶた": [0, "豬"], "ブラシ": [1, "刷子"], "べんきょう": [0, "讀書"], "ベッド": [1, "床"], "ぼうし": [0, "帽子"], "ボタン": [0, "鈕扣、按鈕"], "いっぱい": [0, "滿滿、一杯"], "えんぴつ": [0, "鉛筆"], "ピアノ": [0, "鋼琴"], "てんぷら": [0, "天婦羅"], "プール": [1, "游泳池"], "ぺらぺら": [0, "流利貌"], "ペン": [1, "筆"], "さんぽ": [0, "散步"], "ポスト": [1, "郵筒"], "おきゃくさん": [0, "客人"], "キャンプ": [1, "露營"], "きゅう": [1, "九"], "バーベキュー": [3, "烤肉"], "きょう": [1, "今天"], "トーキョー": [0, "東京"], "しゃしん": [0, "照片"], "しゅくだい": [0, "作業"], "シュート": [1, "射門"], "しょくじ": [0, "用餐"], "ショー": [1, "表演"], "ちゃいろ": [0, "茶色"], "チャンス": [1, "機會"], "ちゅうい": [1, "注意"], "チューリップ": [1, "鬱金香"], "ちょっと": [1, "稍微、一下"], "チョコ": [1, "巧克力"], "こんにゃく": [3, "蒟蒻"], "にゅうがく": [0, "入學"], "にょうぼう": [1, "妻子"], "ひゃく": [2, "一百"], "ひゅうひゅう": [1, "呼呼（風聲）"], "ヒューズ": [1, "保險絲"], "ひょう": [0, "表格"], "みゃく": [2, "脈搏"], "みゅうじっく": [1, "音樂"], "ミュージック": [1, "音樂"], "みょうじ": [1, "姓氏"], "りゃく": [1, "省略"], "りゅう": [1, "龍"], "リュック": [1, "背包"], "りょこう": [0, "旅行"], "ぎゃく": [0, "相反"], "ギャング": [1, "幫派"], "ぎゅうにゅう": [0, "牛奶"], "ぎょうざ": [0, "餃子"], "じゃがいも": [0, "馬鈴薯"], "ジャム": [1, "果醬"], "じゅぎょう": [1, "上課"], "じょせい": [0, "女性"], "ジョギング": [0, "慢跑"], "びゃくや": [1, "永晝、白夜"], "びゅうびゅう": [1, "呼呼（強風）"], "インタビュー": [1, "訪問"], "びょうき": [0, "生病"], "ぴょんぴょん": [1, "蹦蹦跳"], "ぴゅうぴゅう": [1, "咻咻（風聲）"], "コンピュータ": [3, "電腦"]};
 function allSig(n,r){return n+'|'+(r.word||'')+'|'+(r.kana||'');}
-function allWords(){const arr=[];const seen={};(workbook.lessons[0]||[]).forEach(g=>{[g.hiraex,g.kataex].forEach(v=>{v=(v||'').trim();if(!v||v.indexOf(' ')>=0)return;const kn=v.split('（')[0].split('(')[0].trim();if(!kn||seen[kn])return;seen[kn]=1;const pm=(v.match(/[（(]([^）)]*)[）)]/)||[])[1]||'';const mt=GOJUON_META[kn]||['',''];arr.push({n:0,r:{word:kn,kana:kn,cho:mt[0],mean:pm||mt[1],note:''},sig:'0|'+kn});});});for(let n=1;n<=LESSONS;n++){if(n===13)continue;(workbook.lessons[n]||[]).forEach(r=>arr.push({n:n,r:r,sig:allSig(n,r)}));}const order=workbook.allorder||[];const idx=s=>{const i=order.indexOf(s);return i<0?1e9:i;};arr.sort((a,b)=>idx(a.sig)-idx(b.sig));return arr;}
+function allWords(){const arr=[];const seen={};(workbook.lessons[0]||[]).forEach(g=>{[g.hiraex,g.kataex].forEach(v=>{v=(v||'').trim();if(!v||v.indexOf(' ')>=0)return;const kn=v.split('（')[0].split('(')[0].trim();if(!kn||seen[kn])return;seen[kn]=1;const pm=(v.match(/[（(]([^）)]*)[）)]/)||[])[1]||'';const mt=GOJUON_META[kn]||['',''];arr.push({n:0,r:{word:kn,kana:kn,cho:mt[0],mean:pm||mt[1],note:''},sig:'0|'+kn});});});for(let n=1;n<=LESSONS;n++){if(n===13)continue;(workbook.lessons[n]||[]).forEach(r=>arr.push({n:n,r:r,sig:allSig(n,r)}));}const order=workbook.allorder||[];const idx=s=>{const i=order.indexOf(s);return i<0?1e9:i;};arr.sort((a,b)=>idx(a.sig)-idx(b.sig));const seen2=new Set();const dedup=[];for(const it of arr){const k=(it.r.word||'')+''+(it.r.kana||'');if(seen2.has(k))continue;seen2.add(k);dedup.push(it);}return dedup;}
 function renderAll(){const tb=document.getElementById('all-tbody');if(!tb)return;const list=allWords();tb.innerHTML=list.map(it=>{const r=it.r;return '<tr data-sig="'+encodeURIComponent(it.sig)+'" draggable="true"><td class="drag" title="拖曳交換順序">⠿</td><td class="word spk-c" data-say="'+esc(sayText(r))+'">'+esc(r.word||'')+'</td><td class="kana spk-c" data-say="'+esc(sayText(r))+'">'+esc(r.kana||'')+'</td><td class="panote spk-c" data-say="'+esc(sayText(r))+'">'+pitchNotes(r.kana,r.cho)+'</td><td class="spk-c" data-say="'+esc(sayText(r))+'">'+esc(r.mean||'')+'</td><td>'+esc(r.note||'')+'</td></tr>';}).join('');const ac=document.getElementById('all-count');if(ac)ac.textContent=list.length;updateStat();if(!aqRow)aqPick();setAllQuizH();}
 let aqMode='zh2jp',aqRow=null;
 function aqPool(){return allWords().map(x=>x.r).filter(r=>(r.mean||'').trim()&&(r.word||r.kana||'').trim());}
