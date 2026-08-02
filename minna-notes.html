@@ -305,6 +305,13 @@
   .ro #bulkbar,.ro .hint,
   .ro th.col-drag,.ro th.col-chk,.ro td.drag,.ro td.col-chk{display:none!important}
   .ro #grammar-body:empty::before{content:''}
+  /* 單字總表：唯讀模式仍開放拖曳排序（順序存在訪客自己的瀏覽器） */
+  .ro #all-tbody td.drag{display:table-cell!important}
+  /* 訪客自己的備註欄 */
+  .ro td.usernote{background:#fffdf5;cursor:text;white-space:normal}
+  .ro td.usernote:focus{outline:none;background:#fffbe6;box-shadow:inset 0 0 0 2px #ffe08a}
+  .ro td.usernote.has{box-shadow:inset 3px 0 0 var(--accent2)}
+  .ro td.usernote.has:focus{box-shadow:inset 3px 0 0 var(--accent2),inset 0 0 0 2px #ffe08a}
   /* 首頁連結（兩種模式都顯示） */
   .homelnk{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;
     border:1px solid var(--line);border-radius:16px;padding:4px 11px;white-space:nowrap}
@@ -4973,26 +4980,155 @@ setTopbarH();
 setDirty(false);
 </script>
 <script>
-/* ===== 唯讀模式：停用所有編輯功能（只在 JP_READONLY 為 true 時生效） ===== */
+/* ===== 唯讀模式：停用編輯功能，但開放「備註」與「單字總表排序」 =====
+   兩者都只存在訪客自己的瀏覽器（localStorage），不會寫回檔案，
+   也不會因為網站更新（重新 push 新版 HTML）而消失。
+   對應鍵：jp_user_notes / jp_user_allorder
+   資料以 allSig() 的「課號|漢字|假名」當索引，所以改動單字的漢字或假名
+   會讓該列的訪客備註對不上（資料還在，只是接不回來）。 */
 (function(){
   'use strict';
   if (!window.JP_READONLY) return;
 
-  // 阻止 contenteditable 區域輸入（搜尋框等一般輸入框不受影響）
+  var NKEY = 'jp_user_notes', OKEY = 'jp_user_allorder';
+  function loadJS(k, d){
+    try { var v = JSON.parse(localStorage.getItem(k)); return (v === null || v === undefined) ? d : v; }
+    catch(e){ return d; }
+  }
+  function saveJS(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  var userNotes = loadJS(NKEY, {});
+  if (!userNotes || typeof userNotes !== 'object' || userNotes.constructor === Array) userNotes = {};
+
+  /* 線上版不需要「尚未儲存」狀態，順便關掉離開頁面的提醒 */
+  if (typeof window.touch === 'function') window.touch = function(){};
+
+  function isNote(t){ return !!(t && t.closest && t.closest('td.usernote')); }
+
+  /* ---- 輸入封鎖（備註欄例外） ---- */
   document.addEventListener('beforeinput', function(e){
-    if (e.target && e.target.isContentEditable) e.preventDefault();
+    if (e.target && e.target.isContentEditable && !isNote(e.target)) e.preventDefault();
   }, true);
   document.addEventListener('paste', function(e){
-    if (e.target && e.target.isContentEditable) e.preventDefault();
+    if (e.target && e.target.isContentEditable && !isNote(e.target)) e.preventDefault();
   }, true);
   // 阻止雙擊進入編輯（儲存格編輯、課名改名）
   document.addEventListener('dblclick', function(e){
+    if (isNote(e.target)) return;
     e.preventDefault(); e.stopPropagation();
   }, true);
+  // 備註欄：貼上只取純文字、Enter 直接結束編輯
+  document.addEventListener('paste', function(e){
+    if (!isNote(e.target)) return;
+    e.preventDefault();
+    var dt = e.clipboardData || window.clipboardData;
+    var t = dt ? (dt.getData('text') || '') : '';
+    document.execCommand('insertText', false, t.replace(/\s+/g, ' '));
+  }, false);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && isNote(e.target)) { e.preventDefault(); e.stopPropagation(); e.target.blur(); }
+  }, true);
+  // 擋掉原本 tbody 的 focusout（它會把 td.ed 的 contenteditable 拿掉）
+  document.addEventListener('focusout', function(e){
+    if (isNote(e.target)) e.stopPropagation();
+  }, true);
+  // 存備註；capture + stopPropagation 讓原本的 input 監聽器不會去改 workbook
+  document.addEventListener('input', function(e){
+    var td = (e.target && e.target.closest) ? e.target.closest('td.usernote') : null;
+    if (!td) return;
+    e.stopPropagation();
+    var sig = td.getAttribute('data-usig');
+    if (!sig) return;
+    userNotes[sig] = td.innerText.replace(/\u00a0/g, ' ').replace(/\s+$/, '');
+    td.classList.toggle('has', !!userNotes[sig].trim());
+    saveJS(NKEY, userNotes);
+  }, true);
 
+  /* ---- 備註欄套用 ---- */
+  function sigAllRow(tr){
+    var s = tr.getAttribute('data-sig') || '';
+    try { return decodeURIComponent(s); } catch(e){ return s; }
+  }
+  function sigLessonRow(tr){
+    var i = +tr.getAttribute('data-i');
+    var r = null;
+    try { r = (typeof rows !== 'undefined' && rows) ? rows[i] : null; } catch(e){ return ''; }
+    if (!r) return '';
+    return lesson + '|' + (r.word || '') + '|' + (r.kana || '');
+  }
+  function markNote(td, sig){
+    if (!td || !sig) return;
+    td.className = (td.className ? td.className + ' ' : '') + 'usernote';
+    td.classList.add('usernote');
+    td.setAttribute('contenteditable', 'true');
+    td.setAttribute('spellcheck', 'false');
+    td.setAttribute('data-usig', sig);
+    td.setAttribute('title', '你的備註只會存在這台電腦的這個瀏覽器裡');
+    var v = userNotes[sig];
+    if (v !== undefined && td.innerText !== v) td.textContent = v;
+    td.classList.toggle('has', !!((userNotes[sig] || '').trim()));
+  }
+  function applyAllNotes(){
+    var tb = document.getElementById('all-tbody');
+    if (!tb) return;
+    var trs = tb.querySelectorAll('tr');
+    for (var i = 0; i < trs.length; i++) markNote(trs[i].lastElementChild, sigAllRow(trs[i]));
+  }
+  function applyLessonNotes(){
+    var tb = document.getElementById('tbody');
+    if (!tb) return;
+    var trs = tb.querySelectorAll('tr');
+    for (var i = 0; i < trs.length; i++) markNote(trs[i].querySelector('td[data-col="note"]'), sigLessonRow(trs[i]));
+  }
+
+  /* ---- 單字總表排序：拖曳後存起來 ---- */
+  function wireOrder(){
+    var tb = document.getElementById('all-tbody');
+    if (!tb || tb.getAttribute('data-uord')) return;
+    tb.setAttribute('data-uord', '1');
+    tb.addEventListener('drop', function(){
+      setTimeout(function(){
+        try { if (workbook && workbook.allorder) saveJS(OKEY, workbook.allorder); } catch(e){}
+      }, 0);
+    }, false);
+  }
+  /* 載入時套用訪客自己的順序；你日後新增的單字會插回它原本的鄰居後面 */
+  var orderDone = false;
+  function applyOrder(){
+    if (orderDone) return;
+    var saved = loadJS(OKEY, null);
+    if (!saved || !saved.length || typeof allWords !== 'function') return;
+    var natural;
+    try { natural = allWords().map(function(x){ return x.sig; }); } catch(e){ return; }
+    if (!natural.length) return;
+    orderDone = true;
+    var exists = {}, k;
+    for (k = 0; k < natural.length; k++) exists[natural[k]] = 1;
+    var out = [], seen = {};
+    for (k = 0; k < saved.length; k++) {
+      if (exists[saved[k]] && !seen[saved[k]]) { out.push(saved[k]); seen[saved[k]] = 1; }
+    }
+    for (k = 0; k < natural.length; k++) {
+      var s = natural[k];
+      if (seen[s]) continue;
+      var pos = 0;
+      for (var p = k - 1; p >= 0; p--) {
+        var q = out.indexOf(natural[p]);
+        if (q >= 0) { pos = q + 1; break; }
+      }
+      out.splice(pos, 0, s);
+      seen[s] = 1;
+    }
+    try { workbook.allorder = out; } catch(e){ return; }
+    if (typeof renderAll === 'function') renderAll();
+  }
+
+  /* ---- 原有的唯讀處理 ---- */
   function noEdit(){
     var els = document.querySelectorAll('[contenteditable="true"]');
-    for (var i = 0; i < els.length; i++) els[i].setAttribute('contenteditable','false');
+    for (var i = 0; i < els.length; i++) {
+      if (els[i].classList.contains('usernote')) continue;
+      els[i].setAttribute('contenteditable','false');
+    }
   }
   // 主表：隱藏拖曳／勾選欄後，移除多餘的 <col> 讓欄寬對齊
   function stripCols(){
@@ -5001,21 +5137,30 @@ setDirty(false);
     var visible = thd.querySelectorAll('th.colh').length;
     while (visible > 0 && cg.children.length > visible) cg.removeChild(cg.firstElementChild);
   }
-  // 單字總表：移除拖曳欄的 <col> 與 <th>
-  function stripAll(){
-    var cg = document.getElementById('allcg'), thd = document.getElementById('allthd');
-    if (!cg || !thd) return;
-    var tr = thd.querySelector('tr');
-    if (!tr) return;
-    if (cg.children.length === 6 && tr.children.length === 6) {
-      cg.removeChild(cg.firstElementChild);
-      tr.removeChild(tr.firstElementChild);
-    }
+
+  /* ---- 掛在原本的 render 之後 ---- */
+  function wrap(name, after){
+    var f = window[name];
+    if (typeof f !== 'function') return;
+    window[name] = function(){
+      var r = f.apply(this, arguments);
+      try { after(); } catch(e){}
+      return r;
+    };
   }
-  function run(){ noEdit(); stripCols(); stripAll(); }
+  wrap('renderAll', function(){ applyAllNotes(); wireOrder(); });
+  wrap('render', function(){ applyLessonNotes(); });
+
+  function run(){
+    noEdit(); stripCols();
+    applyAllNotes(); applyLessonNotes(); wireOrder();
+  }
+  applyOrder();
   run();
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-  window.addEventListener('load', run);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ applyOrder(); run(); });
+  }
+  window.addEventListener('load', function(){ applyOrder(); run(); });
 
   var cg = document.getElementById('cg');
   if (cg && window.MutationObserver) new MutationObserver(stripCols).observe(cg, {childList:true});
