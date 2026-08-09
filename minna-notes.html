@@ -118,6 +118,7 @@
   #panel-gram .gsec h3{color:var(--accent2);font-size:16px;margin:0 0 4px;border-bottom:2px solid var(--accent2);padding-bottom:6px}
   #panel-gram .gdesc{font-size:13px;color:var(--sub);margin:6px 0 12px}
   #panel-num,#panel-counter,#panel-time{padding:14px}
+  #panel-num{padding:0}
   .numtable,.cnttable{border-collapse:collapse;background:#fff;margin:0 auto;font-size:15px}
   .numtable td,.numtable th,.cnttable td,.cnttable th{border:1px solid var(--line);padding:7px 14px;vertical-align:middle}
   .numtable thead th,.cnttable thead th{background:var(--head);color:#3a4750;font-size:13px}
@@ -154,7 +155,7 @@
   #all-tbody td.spk-c:hover{background:#fff7cc}
   #all-quiz,#voc-quiz{position:sticky;top:var(--topbar-h,132px);z-index:17;background:#f7f9fb;border:1px solid var(--line);border-top:0;border-radius:0;padding:10px 12px 8px;margin:0;box-shadow:0 4px 8px rgba(0,0,0,.08);display:flex;flex-direction:column}
   .aq-modes,.aq-body{max-width:900px}
-  .aq-modes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+  .aq-modes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;padding-right:54px}
   .aq-mode{font-size:13px;padding:4px 11px;border:1px solid var(--line);background:#fff;border-radius:16px;cursor:pointer}
   .aq-mode.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
   #aq-next,#vq-next,#aq-restart,#vq-restart{font-size:13px;padding:4px 11px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;margin-left:6px}
@@ -172,6 +173,21 @@
   .aq-min .aq-modes,.aq-min .aq-body{display:none}
   .aq-min .aq-collapse{transform:rotate(180deg)}
   .aq-play{font-size:15px;padding:6px 14px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  #num-quiz{background:#f7f9fb;border:1px solid var(--line);border-radius:12px;padding:10px 12px 8px;margin:0 0 14px;display:flex;flex-direction:column;align-items:center}
+  .nq-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin-bottom:4px;font-size:13px;color:#5a6b7a}
+  #num-quiz .aq-body{min-height:0;align-items:center;justify-content:center;gap:0;margin:0}
+  #num-quiz #nq-q{min-width:0;line-height:1.2}
+  .nq-bar input{width:74px;padding:5px 7px;border:1px solid var(--line);border-radius:8px;font-size:14px;text-align:right}
+  #nq-next,#nq-say{font-size:13px;padding:5px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  #nq-say{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #nq-q{font-size:20px;font-weight:700;letter-spacing:1px;color:#1f2933}
+  .nq-collapse{align-self:center;order:9;margin-top:6px;width:28px;height:9px;border:1px solid var(--line);background:#fff;border-radius:5px;cursor:pointer;font-size:6px;line-height:1;color:#9aa5b1;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+  .nq-collapse:hover{background:#eef4f9}
+  .nq-mini-label{display:none;font-size:13px;color:#5a6b7a;font-weight:600;text-align:center;width:100%}
+  #num-quiz.nq-min{padding:2px 10px}
+  #num-quiz.nq-min .nq-bar,#num-quiz.nq-min .aq-body{display:none}
+  #num-quiz.nq-min .nq-mini-label{display:block}
+  #num-quiz.nq-min .nq-collapse{transform:rotate(180deg)}
   .aq-play:hover{background:#eef4f9}
   .alltable thead th{top:calc(var(--topbar-h,132px) + var(--allquiz-h,0px));z-index:16;background:var(--head)}
   #thd th{top:calc(var(--topbar-h,132px) + var(--vocquiz-h,0px));z-index:16;background:var(--head)}
@@ -441,6 +457,19 @@ B: はい、学生です。
 </div></div>
 <div id="panel-num" style="display:none">
   <div class="wrap">
+    <div id="num-quiz">
+      <div class="nq-bar">
+        <span>範圍</span>
+        <input id="nq-min" type="number" inputmode="numeric" value="0" min="0" max="99999">
+        <span>～</span>
+        <input id="nq-max" type="number" inputmode="numeric" value="99999" min="0" max="99999">
+        <button id="nq-next">下一題</button>
+        <button id="nq-say">🔊 發音</button>
+      </div>
+      <div class="aq-body"><div class="aq-q" id="nq-q">—</div></div>
+      <span class="nq-mini-label">🔢 數字小考（點 ▼ 展開）</span>
+      <button id="nq-collapse" class="nq-collapse" title="收合／展開">▲</button>
+    </div>
     <div class="ghint">🔢 <b>數字</b>（唯讀參考）。點假名可聽發音。</div>
     <table class="numtable"><thead><tr><th>數字</th><th>假名</th><th>數字</th><th>假名</th></tr></thead><tbody id="num-tbody"></tbody></table>
   </div>
@@ -4945,6 +4974,22 @@ document.getElementById('stat').addEventListener('click',()=>jumpTo(14,'all'));
 const NUM_LEFT=[["0","ゼロ・れい"],["1","いち"],["2","に"],["3","さん"],["4","よん・し"],["5","ご"],["6","ろく"],["7","なな・しち"],["8","はち"],["9","きゅう・く"],["10","じゅう"],["11","じゅういち"],["12","じゅうに"],["13","じゅうさん"],["14","じゅうよん・じゅうし"],["15","じゅうご"],["16","じゅうろく"],["17","じゅうなな・じゅうしち"],["18","じゅうはち"],["19","じゅうきゅう・じゅうく"],["20","にじゅう"],["30","さんじゅう"],["40","よんじゅう"],["50","ごじゅう"],["60","ろくじゅう"],["70","ななじゅう・しちじゅう"],["80","はちじゅう"],["90","きゅうじゅう"]];
 const NUM_RIGHT=[["100","ひゃく"],["200","にひゃく"],["300","さんびゃく"],["400","よんひゃく"],["500","ごひゃく"],["600","ろっぴゃく"],["700","ななひゃく"],["800","はっぴゃく"],["900","きゅうひゃく"],["1,000","せん"],["2,000","にせん"],["3,000","さんぜん"],["4,000","よんせん"],["5,000","ごせん"],["6,000","ろくせん"],["7,000","ななせん"],["8,000","はっせん"],["9,000","きゅうせん"],["10,000","いちまん"],["100,000","じゅうまん"],["1,000,000","ひゃくまん"],["10,000,000","せんまん"],["100,000,000","いちおく"],["17.5","じゅうななてんご"],["0.83","れいてんはちさん"],["1/2","にぶんの いち"],["3/4","よんぶんの さん"]];
 function sayOf(k){return (k||'').split('・')[0];}
+function numReadingKana(num){
+  num=Math.floor(num);if(num===0)return 'ゼロ';
+  const ones=['','いち','に','さん','よん','ご','ろく','なな','はち','きゅう'];
+  const hyaku=['','ひゃく','にひゃく','さんびゃく','よんひゃく','ごひゃく','ろっぴゃく','ななひゃく','はっぴゃく','きゅうひゃく'];
+  const juu=['','じゅう','にじゅう','さんじゅう','よんじゅう','ごじゅう','ろくじゅう','ななじゅう','はちじゅう','きゅうじゅう'];
+  const sen=['','せん','にせん','さんぜん','よんせん','ごせん','ろくせん','ななせん','はっせん','きゅうせん'];
+  function under1000(n){let s='';s+=hyaku[Math.floor(n/100)];s+=juu[Math.floor((n%100)/10)];s+=ones[n%10];return s;}
+  let s='';const man=Math.floor(num/10000),rest=num%10000;
+  if(man)s+=ones[man]+'まん';
+  s+=sen[Math.floor(rest/1000)];
+  s+=under1000(rest%1000);
+  return s;
+}
+let nqNum=0;
+function nqPick(){let lo=parseInt(document.getElementById('nq-min').value,10),hi=parseInt(document.getElementById('nq-max').value,10);if(isNaN(lo))lo=0;if(isNaN(hi))hi=99999;lo=Math.max(0,Math.min(99999,lo));hi=Math.max(0,Math.min(99999,hi));if(lo>hi){const t=lo;lo=hi;hi=t;}nqNum=lo+Math.floor(Math.random()*(hi-lo+1));const q=document.getElementById('nq-q');if(q)q.textContent=nqNum.toLocaleString('en-US');}
+(function(){const n=document.getElementById('nq-next');if(n)n.addEventListener('click',nqPick);const s=document.getElementById('nq-say');if(s)s.addEventListener('click',()=>speak(numReadingKana(nqNum),s));const box=document.getElementById('num-quiz'),c=document.getElementById('nq-collapse');if(c)c.addEventListener('click',()=>{const on=!box.classList.contains('nq-min');box.classList.toggle('nq-min',on);localStorage.setItem('jp_nqmin',on?'1':'0');});if(box&&localStorage.getItem('jp_nqmin')==='1')box.classList.add('nq-min');nqPick();})();
 function renderNum(){const tb=document.getElementById('num-tbody');if(!tb)return;const n=Math.max(NUM_LEFT.length,NUM_RIGHT.length);const cell=x=>x?('<td class="num">'+esc(x[0])+'</td><td class="kana" data-say="'+esc(sayOf(x[1]))+'">'+esc(x[1])+' 🔊</td>'):'<td></td><td></td>';let html='';for(let i=0;i<n;i++){html+='<tr>'+cell(NUM_LEFT[i])+cell(NUM_RIGHT[i])+'</tr>';}tb.innerHTML=html;}
 const COUNTER_DATA=[
 {name:"物品（…つ）",rows:[["1つ","ひとつ"],["2つ","ふたつ"],["3つ","みっつ"],["4つ","よっつ"],["5つ","いつつ"],["6つ","むっつ"],["7つ","ななつ"],["8つ","やっつ"],["9つ","ここのつ"],["10","とお"],["？","いくつ"]]},
