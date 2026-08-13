@@ -31,6 +31,12 @@
   .chip.active{background:var(--accent2);color:#fff;border-color:var(--accent2)}
   .resetbtn{margin-left:auto;padding:5px 13px;border:1px solid var(--accent);color:var(--accent);
     background:#fff;border-radius:18px;font-size:13px;cursor:pointer}
+  /* 收合 */
+  header.collapsed .filters{display:none}
+  header.collapsed .progtxt{display:none}
+  header.collapsed h1{font-size:16px}
+  #togglebtn{transition:transform .2s}
+  header.collapsed #togglebtn{transform:rotate(180deg)}
   main{max-width:1100px;margin:0 auto;padding:20px}
   .sec{margin-bottom:34px;scroll-margin-top:120px}
   .sechead{display:flex;align-items:baseline;gap:10px;border-bottom:2px solid var(--accent);
@@ -87,10 +93,18 @@
   .mrow button{padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:14px}
   .mrow .btn-primary{background:var(--accent2);color:#fff;border-color:var(--accent2)}
   .mhint{font-size:12px;color:var(--sub);line-height:1.6}
+  @media(max-width:600px){
+    h1{font-size:18px}.htop{gap:8px}body{font-size:15px}
+    header{padding:10px 14px}
+    header.collapsed{padding:7px 14px}
+    .voicebtn{width:36px;height:36px;font-size:15px}
+    .search{min-width:130px;padding:7px 12px;font-size:14px}
+    .progwrap{min-width:120px}
+    main{padding:14px}
+  }
   .homelnk{font-size:13px;text-decoration:none;color:var(--ink);background:#fff;
     border:1px solid var(--line);border-radius:16px;padding:4px 11px;white-space:nowrap}
   .homelnk:hover{border-color:var(--accent2);color:var(--accent2)}
-  @media(max-width:600px){h1{font-size:18px}.htop{gap:8px}body{font-size:15px}}
 </style>
 </head>
 <body>
@@ -104,6 +118,7 @@
     </div>
     <input type="text" class="search" id="search" placeholder="🔍 搜尋文法（中文 / 日文 / 形式）...">
     <button class="voicebtn" id="voicebtn" title="語音設定">🔊</button>
+    <button class="voicebtn" id="togglebtn" title="收合／展開分類列">▴</button>
   </div>
   <div class="filters" id="filters"></div>
 </header>
@@ -539,7 +554,22 @@ filters.addEventListener('click',e=>{
   document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   chip.classList.add('active');
   activeCat=chip.dataset.cat;applyFilter();
+  // 手機：選完分類自動收合，讓內容區露出來
+  if(window.innerWidth<=600)setHeader(true);
 });
+
+/* ============ 標題列收合 ============ */
+const hdr=document.querySelector('header');
+const HKEY='n5_header_collapsed';
+function setHeader(collapsed){
+  hdr.classList.toggle('collapsed',collapsed);
+  localStorage.setItem(HKEY,collapsed?'1':'0');
+}
+(function initHeader(){
+  const saved=localStorage.getItem(HKEY);
+  setHeader(saved===null?window.innerWidth<=600:saved==='1');
+})();
+document.getElementById('togglebtn').addEventListener('click',()=>setHeader(!hdr.classList.contains('collapsed')));
 
 /* ============ 發音（Web Speech API）============ */
 const TKEY='n5_tts';
