@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N5 模擬考</title>
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --ink:#2b2b2b; --sub:#6b6b6b;
+    --accent:#c0392b; --accent2:#2e7d6b; --line:#e6e2d8;
+    --jp:#1a3a5c; --shadow:0 1px 3px rgba(0,0,0,.07);
+    --ok:#2e7d6b; --ng:#c0392b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Hiragino Sans","Noto Sans TC","Microsoft JhengHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;font-size:16px}
+  .wrap{max-width:720px;margin:0 auto;padding:32px 20px 120px}
+  h1{font-size:26px;margin:0 0 4px;color:var(--accent);letter-spacing:2px}
+  .sub{color:var(--sub);font-size:14px;margin-bottom:24px}
+  .homelnk{display:inline-block;font-size:13px;color:var(--sub);text-decoration:none;margin-bottom:16px}
+  .homelnk:hover{color:var(--accent)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow);padding:20px 22px;margin-bottom:16px}
+  .card h2{margin:0 0 8px;font-size:19px;color:var(--jp)}
+  .card p{margin:0 0 8px;font-size:14px;color:var(--sub)}
+  .btn{display:inline-block;background:var(--accent);color:#fff;border:none;border-radius:8px;
+    padding:10px 22px;font-size:16px;font-family:inherit;cursor:pointer}
+  .btn:hover{opacity:.88}
+  .btn.ghost{background:transparent;color:var(--jp);border:1px solid var(--line)}
+  .btn:disabled{opacity:.45;cursor:default}
+  .opts label{display:block;font-size:14px;color:var(--sub);margin-top:8px;cursor:pointer}
+  .opts input{margin-right:6px}
+
+  #tabs{position:sticky;top:0;z-index:4;display:flex;gap:8px;background:var(--bg);
+    padding:10px 0 8px;margin-bottom:4px;border-bottom:2px solid var(--line)}
+  .tab{flex:1;background:#fff;border:1px solid var(--line);border-bottom:none;
+    border-radius:8px 8px 0 0;padding:9px 10px;font-size:14px;font-family:inherit;
+    color:var(--sub);cursor:pointer;line-height:1.4}
+  .tab:hover{color:var(--jp)}
+  .tab.on{background:var(--jp);border-color:var(--jp);color:#fff;font-weight:700}
+  .tab .cnt{display:block;font-size:12px;opacity:.85;font-weight:400}
+  .qnum{display:inline-block;background:var(--jp);color:#fff;border-radius:6px;
+    font-size:13px;padding:1px 9px;margin-right:8px;vertical-align:2px}
+  .qtext{font-size:17px;margin:0 0 12px;line-height:1.9}
+  .qtext .ul{text-decoration:underline;text-underline-offset:3px}
+  .qtext .bk{display:inline-block;min-width:60px;border-bottom:1px solid var(--ink);text-align:center}
+  .passage{background:#fbf9f4;border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;margin-bottom:16px;font-size:16px;line-height:2}
+  .scene{background:#f2f6fa;border:1px solid #d8e3ec;border-radius:10px;
+    padding:12px 16px;margin-bottom:12px;font-size:15px;line-height:1.8}
+  .scene .emo{font-size:26px;margin-right:8px;vertical-align:-3px}
+  .audio{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+  .play{background:var(--accent2);color:#fff;border:none;border-radius:20px;
+    padding:8px 20px;font-size:15px;font-family:inherit;cursor:pointer}
+  .play:hover{opacity:.88}
+  .play.on{background:var(--accent)}
+  .audio .tip{font-size:13px;color:var(--sub)}
+  .script{background:#fbf9f4;border:1px dashed var(--line);border-radius:8px;
+    padding:10px 14px;margin-bottom:12px;font-size:14px;line-height:1.9;color:var(--ink)}
+  .script b{color:var(--jp);font-weight:700;margin-right:4px}
+  .card:not(.showscript) .script{display:none}
+  .done .card .script{display:block}
+  #novoice{display:none;background:#fdf3ef;border:1px solid #f0cfc4;border-radius:10px;
+    padding:12px 16px;margin-bottom:14px;font-size:14px;color:var(--accent);line-height:1.7}
+  .choices{list-style:none;margin:0;padding:0}
+  .choices li{margin:6px 0}
+  .ch{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 14px;
+    font-size:16px;font-family:inherit;color:var(--ink);cursor:pointer;line-height:1.6}
+  .ch:hover{border-color:var(--jp)}
+  .ch .no{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);
+    font-size:12px;line-height:20px;text-align:center;color:var(--sub)}
+  .ch.sel{border-color:var(--jp);background:#f2f6fa}
+  .ch.sel .no{background:var(--jp);color:#fff;border-color:var(--jp)}
+  .done .ch{cursor:default}
+  .done .ch.ans{border-color:var(--ok);background:#f0f7f5}
+  .done .ch.ans .no{background:var(--ok);color:#fff;border-color:var(--ok)}
+  .done .ch.wrong{border-color:var(--ng);background:#fbf1f0}
+  .done .ch.wrong .no{background:var(--ng);color:#fff;border-color:var(--ng)}
+  .exp{display:none;margin-top:10px;font-size:14px;color:var(--sub);
+    background:#fbf9f4;border-left:3px solid var(--accent2);padding:8px 12px;border-radius:0 6px 6px 0}
+  .done .exp{display:block}
+  .mark{float:right;font-size:14px;font-weight:700}
+  .mark.ok{color:var(--ok)} .mark.ng{color:var(--ng)}
+
+  #bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+    box-shadow:0 -1px 6px rgba(0,0,0,.06);padding:10px 16px;z-index:5}
+  #bar .inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px;font-size:14px}
+  #bar .grow{flex:1;color:var(--sub)}
+  #timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--jp)}
+  #timer.warn{color:var(--accent)}
+  .score{font-size:34px;color:var(--accent);font-weight:700;letter-spacing:1px}
+  .score small{font-size:15px;color:var(--sub);font-weight:400;letter-spacing:0}
+  .brk{font-size:14px;color:var(--sub);margin-top:6px}
+  .hide{display:none!important}
+  footer{margin-top:36px;font-size:12px;color:var(--sub);text-align:center}
+  @media(max-width:600px){
+    .wrap{padding:20px 14px 110px}
+    h1{font-size:21px}
+    .qtext{font-size:16px}
+    .ch{font-size:15px;padding:9px 12px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="homelnk" href="index.html">🏠 首頁</a>
+  <h1>📝 N5 模擬考</h1>
+  <div class="sub">簡易版 ‧ 30 題 ‧ 文字語彙 + 文法讀解 + 聽解</div>
+
+  <!-- ===== 開始畫面 ===== -->
+  <div id="start">
+    <div class="card">
+      <h2>考試說明</h2>
+      <p>共 30 題：文字・語彙 8 題、文法・讀解 10 題、聽解 12 題。上方分頁可切換三科，全部作答後按「交卷」，會顯示分數與每題解說。</p>
+      <p>聽解題用瀏覽器內建的日文語音朗讀，按「▶ 播放」聽，可以重複播放。交卷後會顯示聽力原文。</p>
+      <div class="opts">
+        <label><input type="checkbox" id="opt-timer" checked> 開啟計時（30 分鐘，時間到自動交卷）</label>
+      </div>
+      <p id="best" class="hide" style="margin-top:14px"></p>
+      <p style="margin-top:16px"><button class="btn" id="go">開始作答</button></p>
+    </div>
+  </div>
+
+  <!-- ===== 作答區 ===== -->
+  <div id="novoice">⚠️ 這台裝置（或這個瀏覽器）沒有日文語音，聽解題無法朗讀，已直接顯示原文讓你用讀的。<br>
+    Windows：設定 → 時間與語言 → 語言與地區 → 新增「日本語」語言套件，重開瀏覽器即可。</div>
+  <div id="quiz" class="hide"></div>
+
+  <!-- ===== 結果 ===== -->
+  <div id="result" class="hide"></div>
+
+  <footer>成績存在這台裝置的瀏覽器中</footer>
+</div>
+
+<div id="bar" class="hide">
+  <div class="inner">
+    <span id="timer">30:00</span>
+    <span class="grow" id="prog">已答 0 / 30</span>
+    <button class="btn" id="submit">交卷</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ---------- 題庫 ----------
+   sec  : 科目（1=文字語彙 2=文法讀解）
+   type : 題型標題（同 type 連續時只顯示一次）
+   pass : 讀解短文（有值才顯示，同一段連續題只顯示一次）
+   q    : 題目 HTML（可用 <span class="ul"> 底線、<span class="bk"> 空格）
+   c    : 四個選項
+   a    : 正解索引（0 起算）
+   e    : 解說
+------------------------------------------------ */
+var BANK = [
+  { sec:1, type:"問題1　＿＿の ことばは ひらがなで どう 書きますか。",
+    q:'きょうは いい <span class="ul">天気</span>ですね。',
+    c:["てんき","でんき","てんぎ","でんぎ"], a:0,
+    e:"天気（てんき）＝天氣。「でんき」是「電気」（電燈、電力），常考的對比。" },
+  { sec:1, type:"問題1　＿＿の ことばは ひらがなで どう 書きますか。",
+    q:'わたしの <span class="ul">兄</span>は 大学生です。',
+    c:["あね","あに","ちち","はは"], a:1,
+    e:"兄（あに）＝哥哥。あね＝姉（姊姊）、ちち＝父、はは＝母。" },
+  { sec:1, type:"問題1　＿＿の ことばは ひらがなで どう 書きますか。",
+    q:'この 本は <span class="ul">五百</span>円です。',
+    c:["ごひゃく","ごびゃく","ごぴゃく","こひゃく"], a:0,
+    e:"五百＝ごひゃく。要注意的是三百（さんびゃく）、六百（ろっぴゃく）、八百（はっぴゃく）才會變音。" },
+  { sec:1, type:"問題1　＿＿の ことばは ひらがなで どう 書きますか。",
+    q:'まいあさ <span class="ul">六時</span>に おきます。',
+    c:["ろくじ","ろくし","むいじ","りくじ"], a:0,
+    e:"六時＝ろくじ。時間的「時」一律唸 じ；「六日」才唸 むいか。" },
+  { sec:1, type:"問題2　＿＿の ことばは どう 書きますか。",
+    q:'まいあさ ぎゅうにゅうを <span class="ul">のみます</span>。',
+    c:["飯みます","飲みます","食みます","欲みます"], a:1,
+    e:"飲みます＝喝。「食」是たべます、「飯」是ごはん的飯，不能當動詞用。" },
+  { sec:1, type:"問題2　＿＿の ことばは どう 書きますか。",
+    q:'<span class="ul">でんしゃ</span>で 学校へ 行きます。',
+    c:["電車","雷車","電東","雷東"], a:0,
+    e:"電車（でんしゃ）。「雷」是かみなり（雷），字形相近要看清楚。" },
+  { sec:1, type:"問題3　（　）に 何を 入れますか。",
+    q:'わたしは まいばん 十二時に <span class="bk">　　</span>。',
+    c:["ねます","おきます","たべます","あるきます"], a:0,
+    e:"まいばん（每晚）十二時 → ねます（睡覺）。おきます是起床，時間對不上。" },
+  { sec:1, type:"問題4　＿＿と だいたい 同じ いみの 文は どれですか。",
+    q:'この もんだいは <span class="ul">かんたんです</span>。',
+    c:["この もんだいは やさしいです。","この もんだいは むずかしいです。","この もんだいは たかいです。","この もんだいは ひろいです。"], a:0,
+    e:"かんたん（簡單）≒ やさしい（容易）。むずかしい是相反詞。" },
+
+  { sec:2, type:"問題1　（　）に 何を 入れますか。",
+    q:'わたしは 学生<span class="bk">　　</span>ありません。',
+    c:["では","には","とは","かは"], a:0,
+    e:"名詞的否定是「〜では ありません」（口語じゃ ありません）。" },
+  { sec:2, type:"問題1　（　）に 何を 入れますか。",
+    q:'きのう 友だち<span class="bk">　　</span>えいがを 見ました。',
+    c:["と","を","へ","が"], a:0,
+    e:"「〜と」表示一起做動作的對象：友だちと 見ました（和朋友一起看）。" },
+  { sec:2, type:"問題1　（　）に 何を 入れますか。",
+    q:'この かばんは だれ<span class="bk">　　</span>ですか。',
+    c:["の","に","で","は"], a:0,
+    e:"だれの＝誰的。「の」後面的名詞（かばん）省略了。" },
+  { sec:2, type:"問題1　（　）に 何を 入れますか。",
+    q:'まいあさ 七時<span class="bk">　　</span>おきます。',
+    c:["に","で","を","へ"], a:0,
+    e:"有數字的時間點用「に」。ただし「けさ・きょう・あした」這種沒有數字的時間詞不加に。" },
+  { sec:2, type:"問題1　（　）に 何を 入れますか。",
+    q:'きのうは あまり さむく<span class="bk">　　</span>でした。',
+    c:["ない","なかった","ありません","じゃない"], a:2,
+    e:"い形容詞的過去否定：さむい → さむく ありませんでした。「あまり」後面一定接否定。" },
+  { sec:2, type:"問題1　（　）に 何を 入れますか。",
+    q:'へやに つくえが 二つ <span class="bk">　　</span>。',
+    c:["あります","います","です","します"], a:0,
+    e:"つくえ（桌子）是無生命的東西 → あります。人和動物才用います。" },
+  { sec:2, type:"問題2　ただしい 文は どれですか。",
+    q:'「我會說一點日語」',
+    c:["わたしは 日本語を すこし 話します。","わたしは 日本語が すこし 話します。","わたしは 日本語に すこし 話します。","わたしは 日本語で すこし 話します。"], a:0,
+    e:"話します 的受詞用「を」：日本語を 話します。「日本語で」是「用日語（說別的事）」，意思不同。" },
+  { sec:2, type:"問題3　つぎの 文を 読んで、しつもんに こたえて ください。",
+    pass:'わたしは リンです。台湾から 来ました。いま 日本の 大学で 日本語を べんきょうして います。<br>まいにち じてんしゃで 学校へ 行きます。でも、あめの 日は バスで 行きます。<br>土よう日と 日よう日は 学校へ 行きません。うちで 日本語の しゅくだいを します。',
+    q:'リンさんは あめの 日、どうやって 学校へ 行きますか。',
+    c:["じてんしゃで 行きます。","バスで 行きます。","でんしゃで 行きます。","あるいて 行きます。"], a:1,
+    e:"「でも、あめの 日は バスで 行きます」。「でも」表示轉折，後面才是雨天的做法。" },
+  { sec:2, type:"問題3　つぎの 文を 読んで、しつもんに こたえて ください。",
+    pass:'わたしは リンです。台湾から 来ました。いま 日本の 大学で 日本語を べんきょうして います。<br>まいにち じてんしゃで 学校へ 行きます。でも、あめの 日は バスで 行きます。<br>土よう日と 日よう日は 学校へ 行きません。うちで 日本語の しゅくだいを します。',
+    q:'土よう日、リンさんは 何を しますか。',
+    c:["学校で べんきょうします。","うちで しゅくだいを します。","バスに のります。","台湾へ かえります。"], a:1,
+    e:"週末不去學校，在家寫日文作業（うちで 日本語の しゅくだいを します）。" },
+  { sec:2, type:"問題3　つぎの 文を 読んで、しつもんに こたえて ください。",
+    pass:'わたしは リンです。台湾から 来ました。いま 日本の 大学で 日本語を べんきょうして います。<br>まいにち じてんしゃで 学校へ 行きます。でも、あめの 日は バスで 行きます。<br>土よう日と 日よう日は 学校へ 行きません。うちで 日本語の しゅくだいを します。',
+    q:'リンさんに ついて、ただしいのは どれですか。',
+    c:["日本人です。","大学の 先生です。","台湾から 来た 学生です。","まいにち バスで 学校へ 行きます。"], a:2,
+    e:"「台湾から 来ました」＋「大学で べんきょうして います」→ 是從台灣來的學生。" },
+
+  { sec:3, type:"問題1　課題理解　会話を 聞いて、こたえを えらんで ください。",
+    audio:[{r:"F",t:"山田さん、あしたの パーティーは 何時からですか。"},
+           {r:"M",t:"六時からです。でも、五時半に 来て ください。いすを ならべますから。"},
+           {r:"F",t:"わかりました。"}],
+    q:'女の人は あした 何時に 行きますか。',
+    c:["五時","五時半","六時","六時半"], a:1,
+    e:"男の人が「五時半に 来て ください」と 言いました。派對是六點開始，但要提早半小時去排椅子。" },
+  { sec:3, type:"問題1　課題理解　会話を 聞いて、こたえを えらんで ください。",
+    audio:[{r:"M",t:"すみません、この 本を かりたいんですが。"},
+           {r:"F",t:"じゃ、この かみに 名前と でんわばんごうを 書いて ください。"},
+           {r:"M",t:"はい、わかりました。"}],
+    q:'男の人は これから 何を しますか。',
+    c:["本を 読みます","かみに 名前を 書きます","でんわを かけます","お金を はらいます"], a:1,
+    e:"「〜て ください」是對方要求你做的事＝接下來要做的動作：かみに 名前と でんわばんごうを 書きます。" },
+  { sec:3, type:"問題1　課題理解　会話を 聞いて、こたえを えらんで ください。",
+    audio:[{r:"F",t:"もしもし、いま どこですか。"},
+           {r:"M",t:"いま えきです。これから バスに のります。"},
+           {r:"F",t:"じゃ、コンビニの まえで まって います。"}],
+    q:'男の人は これから 何を しますか。',
+    c:["でんしゃに のります","バスに のります","コンビニで 買いものを します","うちへ かえります"], a:1,
+    e:"男の人が「これから バスに のります」。他人在車站，但接下來搭的是公車。" },
+
+  { sec:3, type:"問題2　ポイント理解　会話を 聞いて、こたえを えらんで ください。",
+    audio:[{r:"M",t:"すみません、この シャツは いくらですか。"},
+           {r:"F",t:"三千円です。でも、きょうは やすいですから、二千五百円です。"}],
+    q:'シャツは きょう いくらですか。',
+    c:["二千円","二千五百円","三千円","三千五百円"], a:1,
+    e:"原價 3,000 円，但「きょうは …二千五百円です」。聽到「でも」之後的數字才是答案。" },
+  { sec:3, type:"問題2　ポイント理解　会話を 聞いて、こたえを えらんで ください。",
+    audio:[{r:"F",t:"田中さんの かばんは どれですか。"},
+           {r:"M",t:"あの 大きくて、黒い かばんです。"}],
+    q:'田中さんの かばんは どれですか。',
+    c:["小さくて 白い かばん","大きくて 白い かばん","小さくて 黒い かばん","大きくて 黒い かばん"], a:3,
+    e:"「大きくて、黒い」＝又大又黑。い形容詞連接要變成「〜くて」。" },
+  { sec:3, type:"問題2　ポイント理解　会話を 聞いて、こたえを えらんで ください。",
+    audio:[{r:"M",t:"あしたは 何曜日ですか。"},
+           {r:"F",t:"木曜日です。金曜日から やすみですよ。"}],
+    q:'やすみは 何曜日からですか。',
+    c:["木曜日","金曜日","土曜日","日曜日"], a:1,
+    e:"明天是星期四，但「金曜日から やすみ」＝星期五開始放假。問的是假期，不是明天。" },
+
+  { sec:3, type:"問題3　発話表現　絵を 見て、正しい ことばを えらんで ください。",
+    scene:{ emo:"🌅", t:"朝、学校で 先生に 会いました。何と 言いますか。" },
+    audio:[{r:"N",t:"朝、学校で 先生に 会いました。何と 言いますか。"}], readChoices:true,
+    q:'何と 言いますか。',
+    c:["おはよう ございます。","こんばんは。","おやすみなさい。"], a:0,
+    e:"早上的招呼是「おはよう ございます」。こんばんは是晚上見面、おやすみなさい是睡前。" },
+  { sec:3, type:"問題3　発話表現　絵を 見て、正しい ことばを えらんで ください。",
+    scene:{ emo:"🚪", t:"ともだちの うちに 入ります。何と 言いますか。" },
+    audio:[{r:"N",t:"ともだちの うちに 入ります。何と 言いますか。"}], readChoices:true,
+    q:'何と 言いますか。',
+    c:["いって きます。","おじゃまします。","ごちそうさまでした。"], a:1,
+    e:"進別人家門說「おじゃまします」。いってきます是自己出門、ごちそうさまでした是吃完飯。" },
+  { sec:3, type:"問題3　発話表現　絵を 見て、正しい ことばを えらんで ください。",
+    scene:{ emo:"🧃", t:"お店で ジュースを 買いたいです。店の 人に 何と 言いますか。" },
+    audio:[{r:"N",t:"お店で ジュースを 買いたいです。店の 人に 何と 言いますか。"}], readChoices:true,
+    q:'何と 言いますか。',
+    c:["これを ください。","これを どうぞ。","これは わたしのです。"], a:0,
+    e:"要買東西說「これを ください」。「どうぞ」是把東西遞給別人時說的。" },
+
+  { sec:3, type:"問題4　即時応答　文を 聞いて、いちばん いい へんじを えらんで ください。",
+    audio:[{r:"F",t:"お名前は？"}], readChoices:true,
+    q:'（へんじを えらんで ください）',
+    c:["はい、そうです。","田中です。","じゃ、また。"], a:1,
+    e:"問名字就回答名字。「はい、そうです」是回答是非問句用的。" },
+  { sec:3, type:"問題4　即時応答　文を 聞いて、いちばん いい へんじを えらんで ください。",
+    audio:[{r:"M",t:"この ペン、かりても いいですか。"}], readChoices:true,
+    q:'（へんじを えらんで ください）',
+    c:["ええ、どうぞ。","ええ、かりました。","いいえ、ちがいます。"], a:0,
+    e:"「〜ても いいですか」是請求許可，答應時說「ええ、どうぞ」。" },
+  { sec:3, type:"問題4　即時応答　文を 聞いて、いちばん いい へんじを えらんで ください。",
+    audio:[{r:"F",t:"ありがとう ございました。"}], readChoices:true,
+    q:'（へんじを えらんで ください）',
+    c:["いいえ、どういたしまして。","はい、おねがいします。","すみません、わかりません。"], a:0,
+    e:"被道謝時回「どういたしまして」。" }
+];
+
+var SEC_NAME = { 1:"文字・語彙", 2:"文法・読解", 3:"聴解" };
+var SECS = [1, 2, 3];
+var LIMIT_SEC = 30 * 60;
+var BEST_KEY = "jp_n5mock_best";
+
+var qs = [];        // 本次題目（可能被打亂）
+var picked = [];    // 使用者選的索引，null = 未答
+var submitted = false;
+var timerOn = true;
+var left = LIMIT_SEC;
+var tid = null;
+
+var $ = function(id){ return document.getElementById(id); };
+
+function shuffle(arr){
+  for (var i = arr.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+  }
+  return arr;
+}
+
+/* 選項每次都重排，避免正解固定在同一個位置（選項數 3 或 4 都適用） */
+function shuffleChoices(q){
+  var idx = shuffle(q.c.map(function(_, i){ return i; }));
+  return {
+    sec:q.sec, type:q.type, pass:q.pass, scene:q.scene,
+    audio:q.audio, readChoices:q.readChoices, q:q.q, e:q.e,
+    c: idx.map(function(i){ return q.c[i]; }),
+    a: idx.indexOf(q.a)
+  };
+}
+
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function render(){
+  var pane = {}, lastType = {}, lastPass = {}, no = {};
+  SECS.forEach(function(s){ pane[s] = ""; lastType[s] = null; lastPass[s] = null; no[s] = 0; });
+  qs.forEach(function(q, i){
+    var s = q.sec, h = "";
+    no[s]++;
+    if (q.type !== lastType[s]){
+      h += '<p style="font-size:14px;color:#6b6b6b;margin:18px 0 6px">' + q.type + '</p>';
+      lastType[s] = q.type;
+    }
+    h += '<div class="card" id="c' + i + '">';
+    if (q.pass && q.pass !== lastPass[s]){
+      h += '<div class="passage">' + q.pass + '</div>';
+      lastPass[s] = q.pass;
+    }
+    if (q.scene){
+      h += '<div class="scene"><span class="emo">' + q.scene.emo + '</span>' + q.scene.t + '</div>';
+    }
+    if (q.audio){
+      h += '<div class="audio">' +
+             '<button type="button" class="play" data-play="' + i + '">▶ 播放</button>' +
+             '<span class="tip">可以重複播放</span>' +
+             '<button type="button" class="btn ghost" data-script="' + i + '" ' +
+               'style="padding:4px 12px;font-size:13px">看原文</button>' +
+           '</div>';
+      h += '<div class="script">' + scriptHtml(q) + '</div>';
+    }
+    h += '<p class="qtext"><span class="qnum">' + no[s] + '</span>' + q.q +
+         '<span class="mark hide" id="m' + i + '"></span></p>';
+    h += '<ul class="choices">';
+    q.c.forEach(function(c, j){
+      h += '<li><button type="button" class="ch" data-q="' + i + '" data-c="' + j + '">' +
+           '<span class="no">' + (j + 1) + '</span><span>' + esc(c) + '</span></button></li>';
+    });
+    h += '</ul><div class="exp">💡 ' + q.e + '</div></div>';
+    pane[s] += h;
+  });
+
+  var tabs = '<div id="tabs">';
+  SECS.forEach(function(s){
+    tabs += '<button type="button" class="tab" data-sec="' + s + '">' + SEC_NAME[s] +
+            '<span class="cnt" id="tc' + s + '"></span></button>';
+  });
+  tabs += '</div>';
+
+  var panes = SECS.map(function(s){
+    return '<div class="pane" data-sec="' + s + '">' + pane[s] + '</div>';
+  }).join("");
+  $("quiz").innerHTML = tabs + panes;
+}
+
+/* 聽力原文（交卷後自動顯示，作答中可按「看原文」自己打開） */
+function scriptHtml(q){
+  var ROLE = { F:"女", M:"男", N:"" };
+  var h = q.audio.map(function(l){
+    return (ROLE[l.r] ? "<b>" + ROLE[l.r] + "：</b>" : "") + esc(l.t);
+  }).join("<br>");
+  if (q.readChoices){
+    h += "<br>" + q.c.map(function(c, j){ return (j + 1) + "　" + esc(c); }).join("<br>");
+  }
+  return h;
+}
+
+function switchTab(sec){
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function(t){
+    t.classList.toggle("on", +t.dataset.sec === sec);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".pane"), function(p){
+    p.classList.toggle("hide", +p.dataset.sec !== sec);
+  });
+}
+
+/* ---------- 聽力朗讀（瀏覽器內建語音） ---------- */
+var synth = window.speechSynthesis || null;
+var jaVoices = [];
+var playing = null;
+
+function loadVoices(){
+  if (!synth) return;
+  jaVoices = synth.getVoices().filter(function(v){ return /^ja/i.test(v.lang); });
+}
+
+/* 沒有日文語音時：顯示提示，並把聽力原文全部攤開，題目照樣能作答 */
+function checkVoice(){
+  loadVoices();
+  var ok = !!synth && jaVoices.length > 0;
+  $("novoice").style.display = ok ? "none" : "block";
+  if (!ok){
+    Array.prototype.forEach.call(document.querySelectorAll(".card"), function(c){
+      if (c.querySelector(".script")) c.classList.add("showscript");
+    });
+  }
+  return ok;
+}
+
+function voiceFor(role){
+  if (!jaVoices.length) return null;
+  if (role === "M" && jaVoices.length > 1) return jaVoices[1];
+  return jaVoices[0];
+}
+
+function stopPlay(){
+  playing = null;
+  if (synth) synth.cancel();
+  Array.prototype.forEach.call(document.querySelectorAll(".play"), function(b){
+    b.classList.remove("on");
+    b.textContent = "▶ 播放";
+  });
+}
+
+function playQ(i){
+  var q = qs[i];
+  if (!q || !q.audio) return;
+  var same = (playing === i);
+  stopPlay();
+  if (same) return;                 // 再按一次＝停止
+  if (!checkVoice()) return;        // 沒有日文語音就只攤開原文
+
+  var lines = q.audio.map(function(l){ return { v:voiceFor(l.r), t:l.t }; });
+  if (q.readChoices){
+    q.c.forEach(function(c, j){ lines.push({ v:voiceFor("N"), t:(j + 1) + "ばん。" + c }); });
+  }
+  var btn = document.querySelector('.play[data-play="' + i + '"]');
+  if (btn){ btn.classList.add("on"); btn.textContent = "■ 停止"; }
+  playing = i;
+
+  var k = 0;
+  (function next(){
+    if (playing !== i) return;
+    if (k >= lines.length){ stopPlay(); return; }
+    var u = new SpeechSynthesisUtterance(lines[k].t);
+    u.lang = "ja-JP";
+    if (lines[k].v) u.voice = lines[k].v;
+    u.rate = 0.9;
+    u.onend = function(){ k++; next(); };
+    u.onerror = function(){ k++; next(); };
+    synth.speak(u);
+  })();
+}
+
+if (synth) synth.onvoiceschanged = loadVoices;
+
+function onPick(e){
+  var tab = e.target.closest(".tab");
+  if (tab){ stopPlay(); switchTab(+tab.dataset.sec); return; }
+
+  var pb = e.target.closest("[data-play]");
+  if (pb){ playQ(+pb.dataset.play); return; }
+
+  var sb = e.target.closest("[data-script]");
+  if (sb){
+    var card = $("c" + sb.dataset.script);
+    card.classList.toggle("showscript");
+    sb.textContent = card.classList.contains("showscript") ? "收起原文" : "看原文";
+    return;
+  }
+  if (submitted) return;
+  var btn = e.target.closest(".ch");
+  if (!btn) return;
+  var qi = +btn.dataset.q, ci = +btn.dataset.c;
+  picked[qi] = ci;
+  var box = $("c" + qi);
+  Array.prototype.forEach.call(box.querySelectorAll(".ch"), function(b){ b.classList.remove("sel"); });
+  btn.classList.add("sel");
+  updateProg();
+}
+
+function updateProg(){
+  var per = {};
+  SECS.forEach(function(s){ per[s] = { d:0, t:0 }; });
+  var n = 0;
+  qs.forEach(function(q, i){
+    per[q.sec].t++;
+    if (picked[i] !== null){ per[q.sec].d++; n++; }
+  });
+  $("prog").textContent = "已答 " + n + " / " + qs.length;
+  if (!submitted){
+    SECS.forEach(function(s){
+      $("tc" + s).textContent = "已答 " + per[s].d + " / " + per[s].t;
+    });
+  }
+}
+
+function fmt(s){
+  var m = Math.floor(s / 60), r = s % 60;
+  return m + ":" + (r < 10 ? "0" : "") + r;
+}
+
+function tick(){
+  left--;
+  $("timer").textContent = fmt(Math.max(left, 0));
+  if (left <= 60) $("timer").classList.add("warn");
+  if (left <= 0) submit(true);
+}
+
+function start(){
+  timerOn = $("opt-timer").checked;
+  qs = BANK.map(shuffleChoices);
+  picked = qs.map(function(){ return null; });
+  submitted = false;
+  left = LIMIT_SEC;
+  render();
+  $("start").classList.add("hide");
+  $("result").classList.add("hide");
+  $("quiz").classList.remove("hide");
+  $("bar").classList.remove("hide");
+  $("submit").disabled = false;
+  $("timer").classList.remove("warn");
+  switchTab(1);
+  checkVoice();
+  updateProg();
+  if (timerOn){
+    $("timer").classList.remove("hide");
+    $("timer").textContent = fmt(left);
+    tid = setInterval(tick, 1000);
+  } else {
+    $("timer").classList.add("hide");
+  }
+  window.scrollTo(0, 0);
+}
+
+function submit(auto){
+  if (submitted) return;
+  var unanswered = picked.filter(function(v){ return v === null; }).length;
+  if (!auto && unanswered > 0){
+    if (!confirm("還有 " + unanswered + " 題沒作答，確定要交卷嗎？")) return;
+  }
+  submitted = true;
+  stopPlay();
+  if (tid){ clearInterval(tid); tid = null; }
+  $("quiz").classList.add("done");
+  $("submit").disabled = true;
+
+  var got = {}, tot = {};
+  SECS.forEach(function(s){ got[s] = 0; tot[s] = 0; });
+  qs.forEach(function(q, i){
+    tot[q.sec]++;
+    var right = picked[i] === q.a;
+    if (right) got[q.sec]++;
+    var box = $("c" + i);
+    var btns = box.querySelectorAll(".ch");
+    btns[q.a].classList.add("ans");
+    if (picked[i] !== null && !right) btns[picked[i]].classList.add("wrong");
+    var m = $("m" + i);
+    m.textContent = right ? "✓ 正解" : (picked[i] === null ? "－ 未答" : "✗ 錯");
+    m.className = "mark " + (right ? "ok" : "ng");
+  });
+
+  var all = 0, allTot = 0;
+  SECS.forEach(function(s){
+    $("tc" + s).textContent = "得分 " + got[s] + " / " + tot[s];
+    all += got[s]; allTot += tot[s];
+  });
+  var pct = Math.round(all / allTot * 100);
+  var best = +(localStorage.getItem(BEST_KEY) || 0);
+  var isBest = pct > best;
+  if (isBest) localStorage.setItem(BEST_KEY, String(pct));
+
+  $("result").innerHTML =
+    '<div class="card" style="text-align:center">' +
+      (auto ? '<p style="color:#c0392b">⏰ 時間到，自動交卷</p>' : '') +
+      '<div class="score">' + all + ' <small>/ ' + allTot + '　（' + pct + '%）</small></div>' +
+      '<div class="brk">' + SECS.map(function(s){
+        return SEC_NAME[s] + ' ' + got[s] + '/' + tot[s];
+      }).join('　｜　') + '</div>' +
+      '<div class="brk">' + (isBest ? "🎉 刷新最佳紀錄！" : "最佳紀錄：" + Math.max(best, pct) + "%") + '</div>' +
+      '<p style="margin-top:18px">' +
+        '<button class="btn" id="again">再考一次</button> ' +
+        '<button class="btn ghost" id="wrongonly">只看錯題</button>' +
+      '</p>' +
+    '</div>';
+  $("result").classList.remove("hide");
+  $("result").scrollIntoView({ behavior:"smooth", block:"start" });
+
+  $("again").addEventListener("click", function(){
+    $("quiz").classList.remove("done");
+    $("quiz").classList.add("hide");
+    $("result").classList.add("hide");
+    $("bar").classList.add("hide");
+    $("start").classList.remove("hide");
+    showBest();
+    window.scrollTo(0, 0);
+  });
+  $("wrongonly").addEventListener("click", function(){
+    var on = $("wrongonly").dataset.on === "1";
+    qs.forEach(function(q, i){
+      if (picked[i] !== q.a) return;
+      $("c" + i).classList.toggle("hide", !on);
+    });
+    $("wrongonly").dataset.on = on ? "" : "1";
+    $("wrongonly").textContent = on ? "只看錯題" : "顯示全部";
+  });
+}
+
+function showBest(){
+  var best = localStorage.getItem(BEST_KEY);
+  if (best){
+    $("best").textContent = "上次最佳成績：" + best + "%";
+    $("best").classList.remove("hide");
+  }
+}
+
+$("go").addEventListener("click", start);
+$("submit").addEventListener("click", function(){ submit(false); });
+$("quiz").addEventListener("click", onPick);
+showBest();
+</script>
+</body>
+</html>
