@@ -102,6 +102,33 @@
   .panel-empty{margin:12px;min-height:220px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--sub);font-size:14px;line-height:1.9;background:#fff;border:1px dashed var(--line);border-radius:12px}
   .pe-title{font-size:20px;color:var(--ink);margin-bottom:6px;font-weight:700}
   #panel-grammar{padding:14px}
+  #panel-verb{padding:14px}
+  #time-quiz{background:#f7f9fb;border:1px solid var(--line);border-radius:12px;padding:10px 12px 8px;margin:0 0 14px;display:flex;flex-direction:column;align-items:center}
+  #time-quiz .nq-bar{justify-content:center}
+  #time-quiz .aq-body{min-height:0;align-items:center;justify-content:center;gap:0;margin:0}
+  #tq-q{font-size:24px;font-weight:700;color:#1f2933;text-align:center}
+  .tq-lb{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:#3a4750;cursor:pointer;margin-right:14px}
+  .tq-lb input{cursor:pointer;margin:0;width:16px;height:16px;accent-color:var(--accent2)}
+  #tq-next,#tq-say{font-size:13px;padding:5px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  #tq-say{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #time-quiz.nq-min{padding:2px 10px}
+  #time-quiz.nq-min .nq-bar,#time-quiz.nq-min .aq-body{display:none}
+  #time-quiz.nq-min .nq-mini-label{display:block}
+  #time-quiz.nq-min .nq-collapse{transform:rotate(180deg)}
+  .timewrap{display:flex;flex-wrap:wrap;gap:18px}
+  .timecol h4{margin:0 0 6px;font-size:14px;color:var(--accent)}
+  .conjtable{border-collapse:collapse;margin:8px 0}
+  .conjtable th,.conjtable td{border:1px solid var(--line);padding:8px 14px;text-align:center;font-size:15px}
+  .conjtable th{background:var(--head);font-weight:600;color:#3a4750}
+  .conjlist{border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:8px 0;max-width:560px}
+  .conjrow{display:flex;align-items:stretch;border-top:1px solid var(--line)}
+  .conjrow:first-child{border-top:0}
+  .conjlabel{flex:0 0 100px;background:#f3efe6;color:#b23a2f;font-weight:700;padding:10px 14px;display:flex;align-items:center;font-size:14px}
+  .conjval{padding:10px 14px;font-size:16px;color:#1f3a5f;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+  .conjzh{color:#8a95a1;font-size:14px;font-weight:400}
+  .vex{display:flex;gap:10px;align-items:flex-start;padding:10px 2px;border-bottom:1px dashed var(--line)}
+  .vex-jp{font-weight:700;color:#1f3a5f;font-size:16px}
+  .vex-zh{color:#8a95a1;font-size:14px;margin-top:2px}
   .ghint{font-size:12px;color:var(--sub);margin:0 auto 12px;max-width:900px}
   #grammar-body{outline:none;max-width:900px;margin:0 auto}
   #grammar-body:empty::before{content:'此頁可直接打字新增文法，或把內容交給我幫你排版。';color:var(--sub)}
@@ -153,7 +180,8 @@
   #tbody td.masked.revealed::after{display:none}
   #all-tbody td.spk-c{cursor:pointer}
   #all-tbody td.spk-c:hover{background:#fff7cc}
-  #all-quiz,#voc-quiz{position:sticky;top:var(--topbar-h,132px);z-index:17;background:#f7f9fb;border:1px solid var(--line);border-top:0;border-radius:0;padding:10px 12px 8px;margin:0;box-shadow:0 4px 8px rgba(0,0,0,.08);display:flex;flex-direction:column}
+  #all-quiz,#voc-quiz,#verb-quiz{position:sticky;top:var(--topbar-h,132px);z-index:17;background:#f7f9fb;border:1px solid var(--line);border-top:0;border-radius:0;padding:10px 12px 8px;margin:0;box-shadow:0 4px 8px rgba(0,0,0,.08);display:flex;flex-direction:column}
+  #verb-quiz{margin-bottom:12px}
   .aq-modes,.aq-body{max-width:900px}
   .aq-modes{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px;padding-right:54px}
   .aq-mode{font-size:13px;padding:4px 11px;border:1px solid var(--line);background:#fff;border-radius:16px;cursor:pointer}
@@ -177,7 +205,7 @@
   .nq-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:7px;margin-bottom:4px;font-size:13px;color:#5a6b7a}
   #num-quiz .aq-body{min-height:0;align-items:center;justify-content:center;gap:0;margin:0}
   #num-quiz #nq-q{min-width:0;line-height:1.2}
-  .nq-bar input{width:74px;padding:5px 7px;border:1px solid var(--line);border-radius:8px;font-size:14px;text-align:right}
+  .nq-bar input[type=number]{width:74px;padding:5px 7px;border:1px solid var(--line);border-radius:8px;font-size:14px;text-align:right}
   #nq-next,#nq-say{font-size:13px;padding:5px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
   #nq-say{background:var(--accent);color:#fff;border-color:var(--accent)}
   #nq-q{font-size:20px;font-weight:700;letter-spacing:1px;color:#1f2933}
@@ -405,6 +433,10 @@
   <div class="ghint">📘 文法　·　點例句的 🔊 可聽發音。每一課各自獨立。</div>
   <div id="grammar-body" contenteditable="true"></div>
 </div>
+<div id="panel-verb" style="display: none;">
+  <div id="verb-quiz"><button class="aq-collapse" title="收合／展開小抽考">▲</button><span class="aq-mini-label">📝 小抽考（點右邊 ▼ 展開）</span><div class="aq-modes"><button class="aq-mode on" data-mode="zh2jp">看中文→猜日文</button><button class="aq-mode" data-mode="jp2zh">看日文→猜中文</button><button class="aq-mode" data-mode="listen">只聽發音</button><span class="aq-count" id="vb-count"></span><button id="vb-next" title="下一題">下一題 ▶</button><button id="vb-restart" title="全部重新出題，從第一題開始">🔁 重考</button></div><div class="aq-body"><div class="aq-q" id="vb-q">—</div><div class="aq-a masked" id="vb-a" title="點一下看答案／再點發音"></div></div></div>
+  <div id="verb-body"></div>
+</div>
 
 <div id="panel-quiz" style="display: none;">
   <div class="qtop">
@@ -483,7 +515,16 @@ B: はい、学生です。
   </div>
 </div>
 <div id="panel-time" style="display:none">
-  <div class="wrap"><div class="ghint">⏰ <b>時間</b>：內容尚未建立，之後再一起補上。</div></div>
+  <div class="wrap">
+    <div id="time-quiz">
+      <div class="nq-bar"><label class="tq-lb"><input type="checkbox" class="tq-opt" data-k="day" checked>星期</label><label class="tq-lb"><input type="checkbox" class="tq-opt" data-k="period" checked>時段</label><label class="tq-lb"><input type="checkbox" class="tq-opt" data-k="time" checked>時間</label><button id="tq-next">下一題</button> <button id="tq-say">🔊 發音</button></div>
+      <div class="aq-body"><div class="aq-q" id="tq-q">—</div></div>
+      <span class="nq-mini-label">🕐 時間小考（點 ▼ 展開）</span>
+      <button id="tq-collapse" class="nq-collapse" title="收合／展開">▲</button>
+    </div>
+    <div class="ghint">⏰ <b>時間</b>（唯讀參考）。點假名可聽發音。</div>
+    <div id="time-body"></div>
+  </div>
 </div>
 <div id="panel-allread" style="display:none">
   <div class="rtop"><button id="allread-play">▶️ 播放</button> <button id="allread-new">🔄 重新產生</button> <span class="rhint" id="allread-hint"></span></div>
@@ -528,7 +569,8 @@ B: はい、学生です。
   "names": {
     "1": "第1課\n初めまして",
     "2": "第2課\nこれから お世話に　なります",
-    "3": "第3課\nこれを ください"
+    "3": "第3課\nこれを ください",
+    "4": "第4課\nそちらは 何時までですか"
   },
   "grammar": {},
   "lessons": {
@@ -4290,7 +4332,668 @@ B: はい、学生です。
         "pos": "n"
       }
     ],
-    "4": [],
+    "4": [
+      {
+        "done": 0,
+        "word": "起きます",
+        "kana": "おきます",
+        "cho": "",
+        "mean": "起床",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "寝ます",
+        "kana": "ねます",
+        "cho": "",
+        "mean": "睡覺",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "働きます",
+        "kana": "はたらきます",
+        "cho": "",
+        "mean": "工作",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "休みます",
+        "kana": "やすみます",
+        "cho": "",
+        "mean": "休息",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "勉強します",
+        "kana": "べんきょうします",
+        "cho": "",
+        "mean": "唸書、學習",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "終わります",
+        "kana": "おわります",
+        "cho": "",
+        "mean": "結束",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "銀行",
+        "kana": "ぎんこう",
+        "cho": "0",
+        "mean": "銀行",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "place"
+      },
+      {
+        "done": 0,
+        "word": "今",
+        "kana": "いま",
+        "cho": "1",
+        "mean": "現在、目前",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "〜時",
+        "kana": "〜じ",
+        "cho": "",
+        "mean": "〜點（時刻）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "〜分",
+        "kana": "〜ふん",
+        "cho": "",
+        "mean": "〜分（〜ぷん）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "半",
+        "kana": "はん",
+        "cho": "1",
+        "mean": "半",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "何時",
+        "kana": "なんじ",
+        "cho": "1",
+        "mean": "幾點",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "何分",
+        "kana": "なんぷん",
+        "cho": "1",
+        "mean": "幾分",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "午前",
+        "kana": "ごぜん",
+        "cho": "1",
+        "mean": "上午",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "午後",
+        "kana": "ごご",
+        "cho": "1",
+        "mean": "下午",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "朝",
+        "kana": "あさ",
+        "cho": "1",
+        "mean": "早上",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "昼",
+        "kana": "ひる",
+        "cho": "2",
+        "mean": "中午、白天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "晩",
+        "kana": "ばん",
+        "cho": "0",
+        "mean": "晚上（＝夜／よる）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "おととい",
+        "kana": "おととい",
+        "cho": "",
+        "mean": "前天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "昨日",
+        "kana": "きのう",
+        "cho": "2",
+        "mean": "昨天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "今日",
+        "kana": "きょう",
+        "cho": "1",
+        "mean": "今天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "明日",
+        "kana": "あした",
+        "cho": "",
+        "mean": "明天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "あさって",
+        "kana": "あさって",
+        "cho": "",
+        "mean": "後天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "今朝",
+        "kana": "けさ",
+        "cho": "1",
+        "mean": "今天早上",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "今晩",
+        "kana": "こんばん",
+        "cho": "1",
+        "mean": "今晚",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "休み",
+        "kana": "やすみ",
+        "cho": "3",
+        "mean": "休息、休假",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "昼休み",
+        "kana": "ひるやすみ",
+        "cho": "3",
+        "mean": "午休",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "試験",
+        "kana": "しけん",
+        "cho": "2",
+        "mean": "考試",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "会議",
+        "kana": "かいぎ",
+        "cho": "",
+        "mean": "會議（〜を します＝開會）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "映画",
+        "kana": "えいが",
+        "cho": "1",
+        "mean": "電影",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "毎朝",
+        "kana": "まいあさ",
+        "cho": "1",
+        "mean": "每天早上",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "毎晩",
+        "kana": "まいばん",
+        "cho": "1",
+        "mean": "每天晚上",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "毎日",
+        "kana": "まいにち",
+        "cho": "1",
+        "mean": "每天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "月曜日",
+        "kana": "げつようび",
+        "cho": "3",
+        "mean": "星期一",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "火曜日",
+        "kana": "かようび",
+        "cho": "2",
+        "mean": "星期二",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "水曜日",
+        "kana": "すいようび",
+        "cho": "3",
+        "mean": "星期三",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "木曜日",
+        "kana": "もくようび",
+        "cho": "3",
+        "mean": "星期四",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "金曜日",
+        "kana": "きんようび",
+        "cho": "3",
+        "mean": "星期五",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "土曜日",
+        "kana": "どようび",
+        "cho": "2",
+        "mean": "星期六",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "日曜日",
+        "kana": "にちようび",
+        "cho": "3",
+        "mean": "星期天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "何曜日",
+        "kana": "なんようび",
+        "cho": "3",
+        "mean": "星期幾",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "〜から",
+        "kana": "〜から",
+        "cho": "",
+        "mean": "從〜（起點）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "〜まで",
+        "kana": "〜まで",
+        "cho": "",
+        "mean": "到〜（終點）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "〜と〜",
+        "kana": "〜と〜",
+        "cho": "",
+        "mean": "〜和〜",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "番号",
+        "kana": "ばんごう",
+        "cho": "3",
+        "mean": "號碼",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "何番",
+        "kana": "なんばん",
+        "cho": "1",
+        "mean": "幾號",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "大変ですね",
+        "kana": "たいへんですね",
+        "cho": "",
+        "mean": "真是辛苦啊（慰勞的話）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ニューヨーク",
+        "kana": "ニューヨーク",
+        "cho": "",
+        "mean": "紐約",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：New York",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ペキン",
+        "kana": "ペキン",
+        "cho": "",
+        "mean": "北京",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Beijing／Peking",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ロサンゼルス",
+        "kana": "ロサンゼルス",
+        "cho": "",
+        "mean": "洛杉磯",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：Los Angeles",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "ロンドン",
+        "kana": "ロンドン",
+        "cho": "",
+        "mean": "倫敦",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "源自：London",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "始めます",
+        "kana": "はじめます",
+        "cho": "",
+        "mean": "開始（及物：開始做～）",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "夏",
+        "kana": "なつ",
+        "cho": "2",
+        "mean": "夏天",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "夏休み",
+        "kana": "なつやすみ",
+        "cho": "3",
+        "mean": "暑假",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      },
+      {
+        "done": 0,
+        "word": "飲みます",
+        "kana": "のみます",
+        "cho": "",
+        "mean": "喝",
+        "jp": "",
+        "hkana": "",
+        "zh": "",
+        "note": "",
+        "pos": "x"
+      }
+    ],
     "5": [],
     "6": [],
     "7": [],
@@ -4354,7 +5057,13 @@ const GRAMMAR_DEFAULT={
 <div class="gp"><div class="gp-label">③ ［名詞］は どこですか／どちらですか（客氣）：問「在哪裡」</div><div class="gp-form">名詞 ＋ は ＋ どこ／どちら ＋ ですか　→　［場所／指示詞］です／〜の <ruby>近<rt>ちか</rt></ruby>くです／この 近くです</div><div class="gp-note"><b>どちら</b>比 どこ 客氣。回答除了「［場所］です／ここ・そこ・あそこ です」，也能講相對位置：<b>〜の 近くです</b>（在〜附近）、<b>この 近くです</b>（這附近）。<ruby>近<rt>ちか</rt></ruby>く＝附近。</div><div class="gp-ex">A：すみません、<ruby>駅<rt>えき</rt></ruby>は どこですか。<button class="spk gspk" contenteditable="false" data-say="すみません、えきは どこですか" title="播放發音">🔊</button><br>B：<ruby>駅<rt>えき</rt></ruby>は あそこです。<button class="spk gspk" contenteditable="false" data-say="えきは あそこです" title="播放發音">🔊</button><br>A：お<ruby>手洗<rt>てあら</rt></ruby>いは <b>どちら</b>ですか。<button class="spk gspk" contenteditable="false" data-say="おてあらいは どちらですか" title="播放發音">🔊</button>（較客氣）<br>B：<ruby>駅<rt>えき</rt></ruby>の <ruby>近<rt>ちか</rt></ruby>くです。<button class="spk gspk" contenteditable="false" data-say="えきの ちかくです" title="播放發音">🔊</button>（在車站附近）／ この <ruby>近<rt>ちか</rt></ruby>くです。<button class="spk gspk" contenteditable="false" data-say="この ちかくです" title="播放發音">🔊</button>（這附近）</div></div>
 <div class="gp"><div class="gp-label">④ こちら／そちら／あちら／どちら ＋ 会社／学校／お国 は どちらですか</div><div class="gp-form">こちら＝這邊　そちら＝那邊　あちら＝那邊(遠)　どちら＝哪邊／哪裡／哪位</div><div class="gp-note">比 ここ系 更<b>客氣</b>，也指方向。問對方的<b>公司／學校／國籍</b>都用「〜は どちらですか」。</div><div class="gp-ex">エレベーターは <b>あちら</b>です。<button class="spk gspk" contenteditable="false" data-say="エレベーターは あちらです" title="播放發音">🔊</button><br>A：お<ruby>国<rt>くに</rt></ruby>は <b>どちら</b>ですか。<button class="spk gspk" contenteditable="false" data-say="おくには どちらですか" title="播放發音">🔊</button>（您是哪國人？）B：<ruby>台湾<rt>たいわん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="たいわんです" title="播放發音">🔊</button><br>A：<ruby>会社<rt>かいしゃ</rt></ruby>は どちらですか。<button class="spk gspk" contenteditable="false" data-say="かいしゃは どちらですか" title="播放發音">🔊</button>（哪家公司？）<br>A：<ruby>学校<rt>がっこう</rt></ruby>は どちらですか。<button class="spk gspk" contenteditable="false" data-say="がっこうは どちらですか" title="播放發音">🔊</button>（哪間學校？）</div></div>
 <div class="gp"><div class="gp-label">⑤ どこの ＋ 名詞：問產地／品牌</div><div class="gp-form">これ／それ／あれ ＋ は ＋ どこの ＋ 名詞 ＋ ですか　→　［國家／品牌］の 名詞です</div><div class="gp-note"><b>どこの</b>＝哪裡的，問「哪一國／哪個牌子」做的。跟「どこ（在哪裡）」不同，<b>どこの 後面一定接名詞</b>。</div><div class="gp-ex">A：これは <b>どこの</b> <ruby>車<rt>くるま</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="これは どこの くるまですか" title="播放發音">🔊</button>（這是哪裡的車？）<br>B：<ruby>ドイツ</ruby>の <ruby>車<rt>くるま</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="ドイツの くるまです" title="播放發音">🔊</button>（德國車。通常回答國家或品牌）</div></div>
-<div class="gp"><div class="gp-label">⑥ 〜は いくらですか：問價格</div><div class="gp-form">名詞 ＋ は ＋ いくら ＋ ですか　→　〜は ［數字］<ruby>円<rt>えん</rt></ruby>です／［數字］円くらいです</div><div class="gp-note"><b>いくら</b>＝多少錢；<b>〜円〈えん〉</b>＝日圓；<b>〜くらい</b>＝大約（〜円くらい＝大約〜日圓）。</div><div class="gp-ex">A：この <ruby>靴<rt>くつ</rt></ruby>は いくらですか。<button class="spk gspk" contenteditable="false" data-say="このくつは いくらですか" title="播放發音">🔊</button><br>B：5,000<ruby>円<rt>えん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="ごせんえんです" title="播放發音">🔊</button><br>A：ワインは いくらですか。<button class="spk gspk" contenteditable="false" data-say="ワインは いくらですか" title="播放發音">🔊</button><br>B：3,000<ruby>円<rt>えん</rt></ruby>くらいです。<button class="spk gspk" contenteditable="false" data-say="さんぜんえんくらいです" title="播放發音">🔊</button>（大約3000日圓）</div></div>`
+<div class="gp"><div class="gp-label">⑥ 〜は いくらですか：問價格</div><div class="gp-form">名詞 ＋ は ＋ いくら ＋ ですか　→　〜は ［數字］<ruby>円<rt>えん</rt></ruby>です／［數字］円くらいです</div><div class="gp-note"><b>いくら</b>＝多少錢；<b>〜円〈えん〉</b>＝日圓；<b>〜くらい</b>＝大約（〜円くらい＝大約〜日圓）。</div><div class="gp-ex">A：この <ruby>靴<rt>くつ</rt></ruby>は いくらですか。<button class="spk gspk" contenteditable="false" data-say="このくつは いくらですか" title="播放發音">🔊</button><br>B：5,000<ruby>円<rt>えん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="ごせんえんです" title="播放發音">🔊</button><br>A：ワインは いくらですか。<button class="spk gspk" contenteditable="false" data-say="ワインは いくらですか" title="播放發音">🔊</button><br>B：3,000<ruby>円<rt>えん</rt></ruby>くらいです。<button class="spk gspk" contenteditable="false" data-say="さんぜんえんくらいです" title="播放發音">🔊</button>（大約3000日圓）</div></div>`,
+4:`<h3>第四課　時間・から〜まで・と・大変・ね／よ</h3>
+<div class="gp"><div class="gp-label">①「〜は 休みます」（動詞）／「〜は 休みです」（名詞）</div><div class="gp-form">主語 は ＋ 動詞ます（休みます＝做「休息」的動作）　｜　主語 は ＋ 名詞です（休みです＝「是休假」）</div><div class="gp-note">同一個「休み」：接<b>ます</b>是<b>動詞</b>（表動作/行為），直接＋<b>です</b>當<b>名詞</b>（表「休假」這件事）。</div><div class="gp-ex"><ruby>私<rt>わたし</rt></ruby>は <ruby>休<rt>やす</rt></ruby>みます。<button class="spk gspk" contenteditable="false" data-say="わたしは やすみます" title="播放發音">🔊</button>（我要休息）<br><ruby>日曜日<rt>にちようび</rt></ruby>は <ruby>休<rt>やす</rt></ruby>みです。<button class="spk gspk" contenteditable="false" data-say="にちようびは やすみです" title="播放發音">🔊</button>（週日是休假）</div></div>
+<div class="gp"><div class="gp-label">② 〜から 〜まで：從〜到〜</div><div class="gp-form">［起點］から　［終點］まで（＋です／動詞）</div><div class="gp-note"><b>から</b>＝從（起點）、<b>まで</b>＝到（終點）；也可只用其中一邊。</div><div class="gp-ex">7<ruby>時<rt>じ</rt></ruby>から 8<ruby>時<rt>じ</rt></ruby>までです。<button class="spk gspk" contenteditable="false" data-say="しちじから はちじまでです" title="播放發音">🔊</button>（從7點到8點）<br>9<ruby>時<rt>じ</rt></ruby>から <ruby>働<rt>はたら</rt></ruby>きます。<button class="spk gspk" contenteditable="false" data-say="くじから はたらきます" title="播放發音">🔊</button>（從9點開始工作）</div></div>
+<div class="gp"><div class="gp-label">③ 名詞 と 名詞：〜和〜</div><div class="gp-form">名詞 ＋ と ＋ 名詞</div><div class="gp-note"><b>と</b>＝和，把兩個名詞並列連接起來。列舉星期時，<b>「曜日」常可省略</b>：土曜日と日曜日→<b>土日〈どにち〉</b>、月・水・金→<b>月水金〈げつすいきん〉</b>。</div><div class="gp-ex"><ruby>休<rt>やす</rt></ruby>みは <ruby>土曜日<rt>どようび</rt></ruby>と <ruby>日曜日<rt>にちようび</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="やすみは どようびと にちようびです" title="播放發音">🔊</button>（假日是週六和週日）<br><ruby>休<rt>やす</rt></ruby>みは <ruby>土日<rt>どにち</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="やすみは どにちです" title="播放發音">🔊</button>（假日是週六日）<br><ruby>休<rt>やす</rt></ruby>みは <ruby>月水金<rt>げつすいきん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="やすみは げつすいきんです" title="播放發音">🔊</button>（休假是一、三、五）</div></div>
+<div class="gp"><div class="gp-label">④ 大変：形容詞「辛苦」／ 副詞「非常」</div><div class="gp-form">大変です（辛苦）　｜　大変 ＋ 形容詞（非常〜）</div><div class="gp-note"><b>大変</b>單獨＋です＝「辛苦、不得了」（な形容詞）；放在<b>形容詞前面</b>當<b>副詞</b>＝「非常」。</div><div class="gp-ex"><ruby>大変<rt>たいへん</rt></ruby>ですね。<button class="spk gspk" contenteditable="false" data-say="たいへんですね" title="播放發音">🔊</button>（真辛苦呀）<br><ruby>大変<rt>たいへん</rt></ruby> おいしいです。<button class="spk gspk" contenteditable="false" data-say="たいへん おいしいです" title="播放發音">🔊</button>（非常好吃）</div></div>
+<div class="gp"><div class="gp-label">⑤ 句尾助詞 ね／よ</div><div class="gp-form">〜です ＋ ね（徵求認同・確認）　｜　〜です ＋ よ（告知對方）</div><div class="gp-note"><b>ね</b>＝徵求同意或確認（…對吧／…呢）；<b>よ</b>＝告訴對方他還不知道的資訊（…喔）。</div><div class="gp-ex">おいしいです<b>ね</b>。<button class="spk gspk" contenteditable="false" data-say="おいしいですね" title="播放發音">🔊</button>（很好吃吧～徵求認同）<br>おいしいです<b>よ</b>。<button class="spk gspk" contenteditable="false" data-say="おいしいですよ" title="播放發音">🔊</button>（很好吃喔～告知對方）<br>ラーメンです<b>ね</b>。<button class="spk gspk" contenteditable="false" data-say="ラーメンですね" title="播放發音">🔊</button>（是拉麵吧）</div></div><div class="gp"><div class="gp-label">⑥ 問星期・時間：今日は 何曜日ですか／今 何時ですか</div><div class="gp-form">名詞 は <ruby>何曜日<rt>なんようび</rt></ruby>ですか（問星期）　｜　<ruby>今<rt>いま</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>（<ruby>何分<rt>なんぷん</rt></ruby>）ですか（問時間）</div><div class="gp-note"><b>何曜日〈なんようび〉</b>＝星期幾；<b>何時〈なんじ〉</b>＝幾點；<b>何分〈なんぷん〉</b>＝幾分；<ruby>半<rt>はん</rt></ruby>＝30分。回答用「〜です」。</div><div class="gp-ex">A：<ruby>今日<rt>きょう</rt></ruby>は <ruby>何曜日<rt>なんようび</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="きょうは なんようびですか" title="播放發音">🔊</button>（今天星期幾？）<br>B：<ruby>月曜日<rt>げつようび</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="げつようびです" title="播放發音">🔊</button><br>A：<ruby>今<rt>いま</rt></ruby> <ruby>何時<rt>なんじ</rt></ruby>ですか。<button class="spk gspk" contenteditable="false" data-say="いま なんじですか" title="播放發音">🔊</button>（現在幾點？）<br>B：<ruby>午前<rt>ごぜん</rt></ruby> <ruby>10時半<rt>じゅうじはん</rt></ruby>です。<button class="spk gspk" contenteditable="false" data-say="ごぜん じゅうじはんです" title="播放發音">🔊</button>（上午10點半）<br>A：テストは <ruby>何時<rt>なんじ</rt></ruby>からですか。<button class="spk gspk" contenteditable="false" data-say="テストは なんじからですか" title="播放發音">🔊</button>（考試幾點開始？）<br>B：9<ruby>時<rt>じ</rt></ruby>からです。<button class="spk gspk" contenteditable="false" data-say="くじからです" title="播放發音">🔊</button></div></div>`
 };
 
 /* ===== 未儲存提醒 ===== */
@@ -4375,8 +5084,8 @@ function jaVoices(){return ('speechSynthesis' in window)?speechSynthesis.getVoic
 function voiceFor(which){const vs=jaVoices();const want=which==='B'?ttsCfg.voiceB:ttsCfg.voiceA;if(want){const v=vs.find(x=>x.name===want);if(v)return v;}return vs[0]||null;}
 function speakWith(text,which,btn){text=(text||'').replace(/[～~]/g,'').trim();if(!text)return;if(!('speechSynthesis' in window)){alert('這個瀏覽器不支援語音朗讀，建議改用 Chrome、Edge 或 Safari。');return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ja-JP';u.rate=+ttsCfg.rate||0.9;u.pitch=+ttsCfg.pitch||1;const v=voiceFor(which||'A');if(v)u.voice=v;if(btn){u.onstart=()=>btn.classList.add('playing');u.onend=u.onerror=()=>btn.classList.remove('playing');}speechSynthesis.speak(u);}
 function speak(text,btn){speakWith(text,'A',btn);}
-const sayForceKana=new Set(['車','何','薬','家','百','千','101','眼鏡','梅酒','夜市','元','何階','木','鈴']);
-function sayText(r){if(!r)return '';let w=(r.word||'').replace(/[～~［］\[\]]/g,'').trim();if(w&&!sayForceKana.has(w))return w;return (r.kana||'').replace(/[～~]/g,'').replace(/\s*\n\s*/g,'、').trim();}
+const sayForceKana=new Set(['車','何','薬','家','百','千','101','眼鏡','梅酒','夜市','元','何階','木','鈴','時','分','今','昼','明日']);
+function sayText(r){if(!r)return '';let w=(r.word||'').replace(/[〜～~［］\[\]]/g,'').trim();if(w&&!sayForceKana.has(w))return w;return (r.kana||'').replace(/[〜～~]/g,'').replace(/\s*\n\s*/g,'、').trim();}
 function fillVoiceSel(sel,cur){const vs=jaVoices().slice().sort((a,b)=>(a.localService?1:0)-(b.localService?1:0));sel.innerHTML=vs.length?vs.map(v=>'<option value="'+v.name.replace(/"/g,'')+'">'+v.name+'（'+v.lang+'）'+(v.localService?'':' ⭐線上·較自然')+'</option>').join(''):'<option value="">（系統沒有日語語音，請安裝日語語音包）</option>';if(cur&&vs.some(v=>v.name===cur))sel.value=cur;}
 function populateVoices(){const a=document.getElementById('voicesel'),b=document.getElementById('voicesB');if(a)fillVoiceSel(a,ttsCfg.voiceA);if(b)fillVoiceSel(b,ttsCfg.voiceB);if(!ttsCfg.voiceA){const vs=jaVoices();if(vs.length)ttsCfg.voiceA=vs[0].name;}}
 if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=populateVoices;}
@@ -4594,7 +5303,7 @@ function switchLesson(n){
 
 /* ===== 子分頁：單字 / 文法 / 測驗 ===== */
 const subtabsEl=document.getElementById('subtabs');
-function subsFor(n){return n===0?[['gojuon','五十音'],['quiz','測驗']]:(n===13?[['num','數字'],['counter','量詞'],['time','時間']]:(n===14?[['vocab','其他單字'],['all','單字總表'],['gram','文法總表'],['allread','朗讀總表'],['quiz','測驗']]:[['vocab','單字'],['grammar','文法'],['read','朗讀'],['quiz','測驗']]));}
+function subsFor(n){return n===0?[['gojuon','五十音'],['quiz','測驗']]:(n===13?[['num','數字'],['counter','量詞'],['time','時間']]:(n===14?[['vocab','其他單字'],['all','單字總表'],['gram','文法總表'],['allread','朗讀總表'],['quiz','測驗']]:[['vocab','單字'],['verb','動詞'],['grammar','文法'],['read','朗讀'],['quiz','測驗']]));}
 if(!subsFor(lesson).some(s=>s[0]===section))section=subsFor(lesson)[0][0];
 function renderSubtabs(){
   subtabsEl.innerHTML='';
@@ -4607,6 +5316,7 @@ function switchSection(k){section=k;localStorage.setItem(SKEY,k);renderSubtabs()
 function applySection(){
   document.getElementById('panel-vocab').style.display=section==='vocab'?'':'none';
   document.getElementById('panel-grammar').style.display=section==='grammar'?'':'none';
+  document.getElementById('panel-verb').style.display=section==='verb'?'':'none';
   document.getElementById('panel-gojuon').style.display=section==='gojuon'?'':'none';
   document.getElementById('panel-read').style.display=section==='read'?'':'none';
   document.getElementById('panel-quiz').style.display=section==='quiz'?'':'none';
@@ -4619,12 +5329,14 @@ function applySection(){
   document.getElementById('add').style.display=(section==='vocab')?'':'none';
   document.getElementById('bulkbar').style.display=(section==='vocab'&&selected.size)?'flex':'none';
   if(section==='grammar')loadGrammar();
+  if(section==='verb'){loadVerb();if(vbLesson!==lesson||!vbRow)vbPick();}
   if(section==='gojuon')renderGojuon();
   if(section==='vocab')setVocQuizH();
   if(section==='all')renderAll();
   if(section==='gram')renderGram();
   if(section==='num')renderNum();
   if(section==='counter')renderCounter();
+  if(section==='time')renderTime();
   if(section==='allread'){if(playLesson===99&&readState!=='idle'){buildReadView(readAllLines);for(let k=0;k<playIdx;k++)litAll(k);if(playIdx>=0&&playIdx<readAllLines.length){setPast(playIdx);litUpto(playIdx,litCountL(playIdx));}}else{renderAllRead();if(readState==='idle')setPlayLesson(99);}}
   if(section==='read')loadReading();
   if(section==='quiz'){if(lesson===0){buildKanaQuiz();}else if(lesson===14){buildTotalQuiz();}else{buildQuiz();}}
@@ -4643,6 +5355,23 @@ function loadGrammar(){
 }
 document.getElementById('grammar-body').addEventListener('input',function(){workbook.grammar[gkey(lesson)]=this.innerHTML;touch();});
 document.getElementById('panel-grammar').addEventListener('click',function(e){const b=e.target.closest('.gspk');if(!b)return;e.preventDefault();speak(b.getAttribute('data-say')||b.textContent,b);});
+const VERB_DEFAULT={
+4:`<h3>第四課　動詞（ます形）與時態變化</h3>
+<div class="gp"><div class="gp-label">動詞的兩種意義</div><div class="gp-note"><b>動作・行為</b>：做某個動作（休みます＝休息、飲みます＝喝）。<br><b>状態〈じょうたい〉</b>：表存在或能力（あります＝有、できます＝會）。<br>「ます形」表示<b>未來</b>或<b>習慣</b>。</div></div>
+<div class="gp"><div class="gp-label">ます形的四種變化（以「<ruby>休<rt>やす</rt></ruby>みます」為例）</div><div class="conjlist"><div class="conjrow"><span class="conjlabel">現在肯定</span><span class="conjval"><b><ruby>休<rt>やす</rt></ruby>みます</b> <button class="spk gspk" contenteditable="false" data-say="やすみます" title="播放發音">🔊</button><span class="conjzh">休息</span></span></div><div class="conjrow"><span class="conjlabel">現在否定</span><span class="conjval"><b><ruby>休<rt>やす</rt></ruby>みません</b> <button class="spk gspk" contenteditable="false" data-say="やすみません" title="播放發音">🔊</button><span class="conjzh">不休息</span></span></div><div class="conjrow"><span class="conjlabel">過去肯定</span><span class="conjval"><b><ruby>休<rt>やす</rt></ruby>みました</b> <button class="spk gspk" contenteditable="false" data-say="やすみました" title="播放發音">🔊</button><span class="conjzh">休息了</span></span></div><div class="conjrow"><span class="conjlabel">過去否定</span><span class="conjval"><b><ruby>休<rt>やす</rt></ruby>みませんでした</b> <button class="spk gspk" contenteditable="false" data-say="やすみませんでした" title="播放發音">🔊</button><span class="conjzh">沒休息</span></span></div></div><div class="gp-note">否定＝ます→<b>ません</b>；過去＝ます→<b>ました</b>；過去否定＝<b>ませんでした</b>。</div></div>
+<div class="gp"><div class="gp-label">例句（第四課動詞）</div><div class="vex"><button class="spk gspk" contenteditable="false" data-say="まいあさ ろくじに おきます" title="播放發音">🔊</button><div><div class="vex-jp"><ruby>毎朝<rt>まいあさ</rt></ruby> 6<ruby>時<rt>じ</rt></ruby>に <ruby>起<rt>お</rt></ruby>きます。</div><div class="vex-zh">每天早上6點起床。</div></div></div><div class="vex"><button class="spk gspk" contenteditable="false" data-say="まいばん じゅういちじに ねます" title="播放發音">🔊</button><div><div class="vex-jp"><ruby>毎晩<rt>まいばん</rt></ruby> 11<ruby>時<rt>じ</rt></ruby>に <ruby>寝<rt>ね</rt></ruby>ます。</div><div class="vex-zh">每天晚上11點睡覺。</div></div></div><div class="vex"><button class="spk gspk" contenteditable="false" data-say="にちようびは はたらきません" title="播放發音">🔊</button><div><div class="vex-jp"><ruby>日曜日<rt>にちようび</rt></ruby>は <ruby>働<rt>はたら</rt></ruby>きません。</div><div class="vex-zh">星期天不工作。</div></div></div><div class="vex"><button class="spk gspk" contenteditable="false" data-say="きのう べんきょうしました" title="播放發音">🔊</button><div><div class="vex-jp"><ruby>昨日<rt>きのう</rt></ruby> <ruby>勉強<rt>べんきょう</rt></ruby>しました。</div><div class="vex-zh">昨天唸了書。</div></div></div><div class="vex"><button class="spk gspk" contenteditable="false" data-say="きのうは やすみませんでした" title="播放發音">🔊</button><div><div class="vex-jp"><ruby>昨日<rt>きのう</rt></ruby>は <ruby>休<rt>やす</rt></ruby>みませんでした。</div><div class="vex-zh">昨天沒有休息。</div></div></div><div class="vex"><button class="spk gspk" contenteditable="false" data-say="えいがは くじに おわります" title="播放發音">🔊</button><div><div class="vex-jp"><ruby>映画<rt>えいが</rt></ruby>は 9<ruby>時<rt>じ</rt></ruby>に <ruby>終<rt>お</rt></ruby>わります。</div><div class="vex-zh">電影9點結束。</div></div></div></div>`
+};
+function loadVerb(){const body=document.getElementById('verb-body');if(!body)return;const v=VERB_DEFAULT[lesson]||'';body.innerHTML=v||'<div class="ghint">這一課沒有動詞變化的內容。</div>';}
+document.getElementById('panel-verb').addEventListener('click',function(e){const b=e.target.closest('.gspk');if(!b)return;e.preventDefault();speak(b.getAttribute('data-say')||b.textContent,b);});
+/* ===== 動詞小考（該課動詞 × 四種型態）===== */
+let vbMode='zh2jp',vbRow=null,vbQueue=[],vbLesson=null;
+function vbZh(mean,suf){if(suf==='ます')return '會'+mean;if(suf==='ません')return '不會'+mean;if(suf==='ました')return mean+'了';return '沒有'+mean;}
+function vbPool(){const rows=(workbook.lessons[String(lesson)]||[]).filter(r=>(r.kana||'').endsWith('ます'));const sufs=['ます','ません','ました','ませんでした'];const out=[];rows.forEach(function(r){const wb=(r.word||'').replace(/ます$/,''),kb=(r.kana||'').replace(/ます$/,'');const mean=(r.mean||'').split('（')[0].split('、')[0].trim();sufs.forEach(function(suf){out.push({mean:mean,zh:vbZh(mean,suf),word:wb+suf,kana:kb+suf});});});return out;}
+function vbRender(){const q=document.getElementById('vb-q'),a=document.getElementById('vb-a');if(!q||!a||!vbRow)return;if(vbMode==='listen'){q.innerHTML='<button class="aq-play">🔊 再聽一次</button>';a.className='aq-a masked';a.innerHTML='';speak(vbRow.kana,q.querySelector('.aq-play')||q);}else if(vbMode==='jp2zh'){q.textContent=vbRow.word;a.className='aq-a masked';a.innerHTML='';}else{q.textContent=vbRow.zh;a.className='aq-a masked';a.innerHTML='';}}
+function vbPick(){const q=document.getElementById('vb-q'),a=document.getElementById('vb-a');if(!q||!a)return;const p=vbPool();const changed=(vbLesson!==lesson)||(vbQueue._n!==p.length);vbLesson=lesson;const c=document.getElementById('vb-count');if(!p.length){vbRow=null;vbQueue=[];q.textContent='（這一課沒有動詞可出題）';a.className='aq-a';a.innerHTML='';if(c)c.textContent='';return;}if(vbQueue.length===0||changed){vbQueue=shuffle(p.slice());vbQueue._n=p.length;if(vbRow&&vbQueue.length>1&&vbQueue[0].kana===vbRow.kana)vbQueue.push(vbQueue.shift());}vbRow=vbQueue.shift();if(c)c.textContent='('+(vbQueue._n-vbQueue.length)+'/'+vbQueue._n+')';vbRender();}
+function vbRestart(){vbQueue=[];vbRow=null;vbPick();}
+function vbReveal(){const a=document.getElementById('vb-a');if(!a||!vbRow)return;if(!a.classList.contains('shown')){const html=(vbMode==='jp2zh')?('<b>'+esc(vbRow.zh)+'</b>'):('<b>'+esc(vbRow.word)+'</b>　'+esc(vbRow.kana)+'　<span style="color:#8a95a1">'+esc(vbRow.zh)+'</span>');a.className='aq-a shown';a.innerHTML=html;}speak(vbRow.kana,a);}
+(function(){const a=document.getElementById('vb-a');if(a)a.addEventListener('click',vbReveal);const n=document.getElementById('vb-next');if(n)n.addEventListener('click',vbPick);const rs=document.getElementById('vb-restart');if(rs)rs.addEventListener('click',vbRestart);const qq=document.getElementById('vb-q');if(qq)qq.addEventListener('click',function(e){if(e.target.closest('.aq-play')&&vbRow)speak(vbRow.kana,e.target.closest('.aq-play'));});document.querySelectorAll('#verb-quiz .aq-mode').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('#verb-quiz .aq-mode').forEach(function(x){x.classList.remove('on');});b.classList.add('on');vbMode=b.dataset.mode;if(vbRow)vbRender();else vbPick();});});})();
 document.getElementById('panel-gram').addEventListener('click',function(e){const b=e.target.closest('.gspk');if(!b)return;e.preventDefault();speak(b.getAttribute('data-say')||b.textContent,b);});
 
 /* ===== 五十音（第0課）===== */
@@ -4740,8 +5469,27 @@ function rtmpl3(rs){
   return T;
 }
 function buildReading3(rs){const T=rtmpl3(rs);if(!T.length)return '';return cycleTemplates(T,52).join('\n');}
-function genTotalReading(){const rs=allVocabRows();const T=rtmpl1(rs).concat(rtmpl2(rs)).concat(rtmpl3(rs));if(!T.length)return '';const ex=[];let g=0;while(ex.length<50&&g<400){const pr=rpick(T)();if(pr&&pr.length)ex.push(pr);g++;}shuffle(ex);const L=[];ex.forEach(pr=>pr.forEach(x=>L.push(x)));return L.join('\n');}
-function genReadingText(n,source){const rs=(source==='all')?allVocabRows():(workbook.lessons[n]||[]);if(n===1)return buildReading1(rs);if(n===3)return buildReading3(rs);return buildReading2(rs);}
+function rtmpl4(rs){
+  const V=(rs||[]).filter(r=>(r.kana||'').endsWith('ます')&&(r.word||''));
+  if(V.length<2)return [];
+  const DAYS=[['月曜日','げつようび'],['火曜日','かようび'],['水曜日','すいようび'],['木曜日','もくようび'],['金曜日','きんようび'],['土曜日','どようび'],['日曜日','にちようび']];
+  const rv=()=>rpick(V),day=()=>rpick(DAYS),hr=()=>1+Math.floor(Math.random()*12);
+  const cj=(r,suf)=>(r.word||'').replace(/ます$/,'')+suf;
+  const T=[
+    ()=>{const h=hr(),m=Math.floor(Math.random()*60),ap=Math.random()<0.5;return ['A: 今 何時ですか。','B: '+(ap?'午前':'午後')+' '+h+'時'+(m?(m+'分'):'')+'です。'];},
+    ()=>{const d=day();return ['A: 今日は 何曜日ですか。','B: '+d[0]+'です。'];},
+    ()=>{const h1=hr(),h2=hr();return ['A: 銀行は 何時から 何時までですか。','B: '+h1+'時から '+h2+'時までです。'];},
+    ()=>{const r=rv(),h=hr();return ['毎日 '+h+'時に '+cj(r,'ます')+'。'];},
+    ()=>{const r=rv();return ['昨日 '+cj(r,'ました')+'。'];},
+    ()=>{const r=rv(),d=day();return [d[0]+'は '+cj(r,'ません')+'。'];},
+    ()=>['A: 休みは 何曜日ですか。','B: 休みは 土曜日と 日曜日です。'],
+    ()=>['A: 大変ですね。','B: そうですね。']
+  ];
+  return T;
+}
+function buildReading4(rs){const T=rtmpl4(rs);if(!T.length)return '';return cycleTemplates(T,52).join('\n');}
+function genTotalReading(){const rs=allVocabRows();const T=rtmpl1(rs).concat(rtmpl2(rs)).concat(rtmpl3(rs)).concat(rtmpl4(rs));if(!T.length)return '';const ex=[];let g=0;while(ex.length<50&&g<400){const pr=rpick(T)();if(pr&&pr.length)ex.push(pr);g++;}shuffle(ex);const L=[];ex.forEach(pr=>pr.forEach(x=>L.push(x)));return L.join('\n');}
+function genReadingText(n,source){const rs=(source==='all')?allVocabRows():(workbook.lessons[n]||[]);if(n===1)return buildReading1(rs);if(n===3)return buildReading3(rs);if(n===4)return buildReading4(rs);return buildReading2(rs);}
 function loadReading(){
   if(lesson===playLesson&&readState!=='idle'){buildReadView(readAllLines);showPlayView();for(let k=0;k<playIdx;k++)litAll(k);if(playIdx>=0&&playIdx<readAllLines.length){setPast(playIdx);litUpto(playIdx,litCountL(playIdx));}return;}
   readEdit();const t=document.getElementById('read-text');const s=workbook.reading[lesson];t.value=(s!=null&&s!=='')?s:genReadingText(lesson);document.getElementById('readhint').textContent='';
@@ -4843,6 +5591,14 @@ const QUIZ_GRAMMAR={
  {q:'A：これは どこの 車ですか。 B：（　）の 車です。',opts:['ドイツ','なん','どこ','いくら'],ans:0,exp:'どこの＝哪一國／品牌製，回答用國家或品牌。'},
  {q:'この 靴は（　）ですか。（問價格）',opts:['いくら','どこ','どちら','なん'],ans:0,exp:'問價格用「いくら」。'},
  {q:'A：いくらですか。 B：5000（　）です。',opts:['円','歳','人','階'],ans:0,exp:'日圓的量詞是「円（えん）」。'}
+],
+4:[
+ {q:'7時（　）8時まで 働きます。',opts:['から','まで','と','に'],ans:0,exp:'起點（從）用「から」，終點（到）用「まで」。'},
+ {q:'休みは 土曜日（　）日曜日です。',opts:['と','から','まで','も'],ans:0,exp:'連接兩個名詞「和」用「と」。'},
+ {q:'（很好吃喔，告訴對方）おいしいです（　）。',opts:['よ','ね','か','の'],ans:0,exp:'告知對方新資訊用「よ」。'},
+ {q:'（真辛苦呀，徵求認同）大変です（　）。',opts:['ね','よ','か','わ'],ans:0,exp:'徵求同意／確認用「ね」。'},
+ {q:'今日は（　）ですか。（問今天星期幾）',opts:['何曜日','何時','何分','いくら'],ans:0,exp:'問星期幾用「何曜日（なんようび）」。'},
+ {q:'今（　）ですか。（問現在幾點）',opts:['何時','何曜日','どこ','だれ'],ans:0,exp:'問時間用「何時（なんじ）」。'}
 ]
 };
 let quiz=[],quizPrefix='',quizEmptyMsg='',kanaScope=null;
@@ -4945,7 +5701,7 @@ function aqReveal(){const a=document.getElementById('aq-a');if(!a||!aqRow)return
 function setAllQuizH(){const q=document.getElementById('all-quiz');if(q)document.documentElement.style.setProperty('--allquiz-h',q.offsetHeight+'px');}
 window.addEventListener('resize',setAllQuizH);
 if(window.ResizeObserver){const _aqel=document.getElementById('all-quiz');if(_aqel)new ResizeObserver(setAllQuizH).observe(_aqel);}
-function applyAqMin(on){document.querySelectorAll('#voc-quiz,#all-quiz').forEach(el=>el.classList.toggle('aq-min',on));if(typeof setVocQuizH==='function')setVocQuizH();if(typeof setAllQuizH==='function')setAllQuizH();}
+function applyAqMin(on){document.querySelectorAll('#voc-quiz,#all-quiz,#verb-quiz').forEach(el=>el.classList.toggle('aq-min',on));if(typeof setVocQuizH==='function')setVocQuizH();if(typeof setAllQuizH==='function')setAllQuizH();}
 document.addEventListener('click',function(e){const b=e.target.closest&&e.target.closest('.aq-collapse');if(!b)return;const on=localStorage.getItem('jp_aqmin')!=='1';localStorage.setItem('jp_aqmin',on?'1':'0');applyAqMin(on);});
 if(localStorage.getItem('jp_aqmin')==='1')applyAqMin(true);
 let vqMode='zh2jp',vqRow=null,vqLesson=null,vqQueue=[];
@@ -5015,6 +5771,42 @@ function ageExtraHTML(){return '<div class="gp"><div class="gp-label">問年齡�
 function renderCounter(){const sel=document.getElementById('cnt-sel');if(!sel)return;if(!sel.options.length){COUNTER_DATA.forEach((c,i)=>{const o=document.createElement('option');o.value=i;o.textContent=c.name;sel.appendChild(o);});sel.value=localStorage.getItem('jp_cnt')||'0';}let idx=parseInt(sel.value);if(!(idx>=0&&idx<COUNTER_DATA.length))idx=0;const c=COUNTER_DATA[idx];const body=document.getElementById('cnt-body'),extra=document.getElementById('cnt-extra');if(!body)return;if(c.grid){const R=c.rows.filter(r=>/^[0-9]+歳$/.test(r[0]));AGE_ROWS=R;const pairs=[];for(let s=0;s<R.length;s+=10)pairs.push(R.slice(s,s+10));let html='<table class="agegrid"><thead><tr>';pairs.forEach(()=>{html+='<th>數字＋量詞</th><th>假名</th>';});html+='</tr></thead><tbody>';for(let r=0;r<10;r++){html+='<tr>';pairs.forEach(g=>{const cell=g[r];if(cell){const hl=cell[0]==='20歳'?' ag-hl':'';html+='<td class="num">'+esc(cell[0])+'</td><td class="kana'+hl+'" data-say="'+esc(sayOf(cell[1]))+'"'+(hl?' title="特殊唸法"':'')+'>'+esc(cell[1])+'</td>';}else{html+='<td></td><td></td>';}});html+='</tr>';}html+='</tbody></table>';body.innerHTML=html;if(extra)extra.innerHTML=ageExtraHTML();}else{let rows;if(c.rows){rows=c.rows;}else{rows=[];for(let i=0;i<10;i++)rows.push([(i+1)+c.unit,c.k[i]]);rows.push([c.q[0],c.q[1]]);}body.innerHTML='<table class="cnttable"><thead><tr><th>數字＋量詞</th><th>假名</th></tr></thead><tbody>'+rows.map(r=>'<tr><td class="num">'+esc(r[0])+'</td><td class="kana" data-say="'+esc(sayOf(r[1]))+'">'+esc(r[1])+'</td></tr>').join('')+'</tbody></table>';if(extra)extra.innerHTML='';}}
 (function(){const s=document.getElementById('cnt-sel');if(s)s.addEventListener('change',()=>{localStorage.setItem('jp_cnt',s.value);renderCounter();});})();
 document.getElementById('panel-num').addEventListener('click',e=>{const c=e.target.closest('td.kana');if(c&&c.dataset.say)speak(c.dataset.say,c);});
+/* ===== 時間頁（星期／時／分 參考表 ＋ 小考）===== */
+const DAY_KJ=['月曜日','火曜日','水曜日','木曜日','金曜日','土曜日','日曜日'];
+const DAY_KN=['げつようび','かようび','すいようび','もくようび','きんようび','どようび','にちようび'];
+function hourKana(h){return ['','いちじ','にじ','さんじ','よじ','ごじ','ろくじ','しちじ','はちじ','くじ','じゅうじ','じゅういちじ','じゅうにじ'][h]||'';}
+function minKana(m){if(m===0)return '';const one={1:'いっぷん',2:'にふん',3:'さんぷん',4:'よんぷん',5:'ごふん',6:'ろっぷん',7:'ななふん',8:'はっぷん',9:'きゅうふん'};const tensX={1:'じゅっぷん',2:'にじゅっぷん',3:'さんじゅっぷん',4:'よんじゅっぷん',5:'ごじゅっぷん'};const tensP={1:'じゅう',2:'にじゅう',3:'さんじゅう',4:'よんじゅう',5:'ごじゅう'};if(m<10)return one[m];const t=Math.floor(m/10),o=m%10;return o===0?tensX[t]:tensP[t]+one[o];}
+function renderTime(){const body=document.getElementById('time-body');if(!body)return;
+  const cell=(a,b,extra)=>'<tr><td class="num">'+a+'</td><td class="kana" data-say="'+b+'">'+b+(extra||'')+'</td></tr>';
+  let s='<div class="timecol"><h4>星期（曜日）</h4><table class="cnttable"><thead><tr><th>星期</th><th>假名</th></tr></thead><tbody>';
+  for(let i=0;i<7;i++)s+=cell(DAY_KJ[i],DAY_KN[i]);s+=cell('何曜日','なんようび')+'</tbody></table></div>';
+  let hh='<div class="timecol"><h4>時（…時／じ）</h4><table class="cnttable"><thead><tr><th>時</th><th>假名</th></tr></thead><tbody>';
+  for(let h=1;h<=12;h++)hh+=cell(h+'時',hourKana(h));hh+=cell('何時','なんじ')+'</tbody></table></div>';
+  let mm='<div class="timecol"><h4>分（…分／ふん・ぷん）</h4><table class="cnttable"><thead><tr><th>分</th><th>假名</th></tr></thead><tbody>';
+  for(let m=1;m<=10;m++)mm+=cell(m+'分',minKana(m));mm+=cell('30分','さんじゅっぷん','（＝半 はん）')+cell('何分','なんぷん')+'</tbody></table></div>';
+  let pp='<div class="timecol"><h4>時段（口語）</h4><table class="cnttable"><thead><tr><th>詞</th><th>假名</th><th>中文</th></tr></thead><tbody>';
+  const PD=[['午前','ごぜん','上午（AM）'],['午後','ごご','下午（PM）'],['朝','あさ','早上'],['昼','ひる','中午・白天'],['夕方','ゆうがた','傍晚'],['夜','よる','晚上'],['夜中','よなか','半夜'],['正午','しょうご','正午（中午12點）']];
+  PD.forEach(r=>pp+='<tr><td class="num">'+r[0]+'</td><td class="kana" data-say="'+r[1]+'">'+r[1]+'</td><td>'+r[2]+'</td></tr>');
+  pp+='</tbody></table></div>';
+  body.innerHTML='<div class="timewrap">'+s+hh+mm+pp+'</div>';
+}
+let tqItem=null;
+const PERIODS=[
+ {kj:'午前',kn:'ごぜん',no:false,hrs:[1,2,3,4,5,6,7,8,9,10,11]},
+ {kj:'午後',kn:'ごご',no:false,hrs:[1,2,3,4,5,6,7,8,9,10,11]},
+ {kj:'朝',kn:'あさ',no:true,hrs:[6,7,8,9,10]},
+ {kj:'昼',kn:'ひる',no:true,hrs:[12,1]},
+ {kj:'夕方',kn:'ゆうがた',no:true,hrs:[5,6]},
+ {kj:'夜',kn:'よる',no:true,hrs:[7,8,9,10,11]},
+ {kj:'夜中',kn:'よなか',no:true,hrs:[1,2,3]}
+];
+function tqOpts(){const o={day:true,period:true,time:true};document.querySelectorAll('#time-quiz .tq-opt').forEach(cb=>{o[cb.dataset.k]=cb.checked;});return o;}
+function tqPick(){const d=Math.floor(Math.random()*7);const p=PERIODS[Math.floor(Math.random()*PERIODS.length)];const h=p.hrs[Math.floor(Math.random()*p.hrs.length)];const m=Math.floor(Math.random()*60);const o=tqOpts();const useNo=p.no&&o.time;const dp=[],segs=[];if(o.day){dp.push(DAY_KJ[d]);segs.push(DAY_KN[d]);}if(o.period){dp.push(p.kj+(useNo?'の':''));segs.push(p.kn+(useNo?'の':''));}if(o.time){dp.push(h+':'+(m<10?'0'+m:m));segs.push(hourKana(h)+(m?(' '+minKana(m)):''));}tqItem={disp:dp.length?dp.join('　'):'（請至少勾選一項）',segs:segs};const q=document.getElementById('tq-q');if(q)q.textContent=tqItem.disp;}
+function tqSpeak(segs,btn){if(!segs||!segs.length)return;if(!('speechSynthesis' in window)){alert('這個瀏覽器不支援語音朗讀，建議改用 Chrome、Edge 或 Safari。');return;}speechSynthesis.cancel();const rate=+ttsCfg.rate||0.9,pitch=+ttsCfg.pitch||1,v=(typeof voiceFor==='function')?voiceFor('A'):null;let i=0;if(btn)btn.classList.add('playing');function nx(){if(i>=segs.length){if(btn)btn.classList.remove('playing');return;}const u=new SpeechSynthesisUtterance(segs[i]);u.lang='ja-JP';u.rate=rate;u.pitch=pitch;if(v)u.voice=v;u.onend=u.onerror=function(){i++;setTimeout(nx,350);};speechSynthesis.speak(u);}nx();}
+(function(){try{const o=JSON.parse(localStorage.getItem('jp_tqopt')||'null');if(o)document.querySelectorAll('#time-quiz .tq-opt').forEach(cb=>{if(typeof o[cb.dataset.k]==='boolean')cb.checked=o[cb.dataset.k];});}catch(e){}
+document.querySelectorAll('#time-quiz .tq-opt').forEach(cb=>cb.addEventListener('change',()=>{localStorage.setItem('jp_tqopt',JSON.stringify(tqOpts()));tqPick();}));
+const n=document.getElementById('tq-next');if(n)n.addEventListener('click',tqPick);const s=document.getElementById('tq-say');if(s)s.addEventListener('click',()=>{if(tqItem)tqSpeak(tqItem.segs,s);});const box=document.getElementById('time-quiz'),c=document.getElementById('tq-collapse');if(c)c.addEventListener('click',()=>{const on=!box.classList.contains('nq-min');box.classList.toggle('nq-min',on);localStorage.setItem('jp_tqmin',on?'1':'0');});if(box&&localStorage.getItem('jp_tqmin')==='1')box.classList.add('nq-min');tqPick();})();
+document.getElementById('panel-time').addEventListener('click',e=>{const c=e.target.closest('td.kana');if(c&&c.dataset.say)speak(c.dataset.say,c);});
 document.getElementById('all-tbody').addEventListener('click',e=>{const c=e.target.closest('td.spk-c');if(c&&c.dataset.say)speak(c.dataset.say,c);});
 document.getElementById('panel-counter').addEventListener('click',e=>{const k=e.target.closest('td.kana');if(k&&k.dataset.say){speak(k.dataset.say,k);return;}const b=e.target.closest('.gspk');if(b){e.preventDefault();speak(b.getAttribute('data-say')||b.textContent,b);return;}if(e.target.closest('#age-regen')){const ex=document.getElementById('age-ex');if(ex)ex.innerHTML=ageExampleHTML();}});
 
