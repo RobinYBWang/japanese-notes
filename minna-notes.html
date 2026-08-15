@@ -117,6 +117,7 @@
   #time-quiz.nq-min .nq-collapse{transform:rotate(180deg)}
   .timewrap{display:flex;flex-wrap:wrap;gap:18px}
   .timecol h4{margin:0 0 6px;font-size:14px;color:var(--accent)}
+  .cnttable tr.tok-hl td.kana{background:#fff3e0;color:#c0561a;font-weight:700}
   .conjtable{border-collapse:collapse;margin:8px 0}
   .conjtable th,.conjtable td{border:1px solid var(--line);padding:8px 14px;text-align:center;font-size:15px}
   .conjtable th{background:var(--head);font-weight:600;color:#3a4750}
@@ -163,7 +164,7 @@
   .agegrid td.kana{cursor:pointer}
   .agegrid td.kana:hover{background:#fff7cc}
   .agegrid thead th,.cnttable thead th,.numtable thead th{position:static;top:auto;z-index:1}
-  .agegrid td.ag-hl{color:#0a8a3c;font-weight:700}
+  .agegrid td.ag-hl{background:#fff3e0;color:#c0561a;font-weight:700}
   .spk-c:hover{background:#f4f9ff}
   #tbody td{cursor:pointer}
   #tbody td.drag{cursor:grab}
@@ -5781,7 +5782,7 @@ function renderTime(){const body=document.getElementById('time-body');if(!body)r
   let s='<div class="timecol"><h4>星期（曜日）</h4><table class="cnttable"><thead><tr><th>星期</th><th>假名</th></tr></thead><tbody>';
   for(let i=0;i<7;i++)s+=cell(DAY_KJ[i],DAY_KN[i]);s+=cell('何曜日','なんようび')+'</tbody></table></div>';
   let hh='<div class="timecol"><h4>時（…時／じ）</h4><table class="cnttable"><thead><tr><th>時</th><th>假名</th></tr></thead><tbody>';
-  for(let h=1;h<=12;h++)hh+=cell(h+'時',hourKana(h));hh+=cell('何時','なんじ')+'</tbody></table></div>';
+  for(let h=1;h<=12;h++){const sp=(h===4||h===9);hh+='<tr'+(sp?' class="tok-hl"':'')+'><td class="num">'+h+'時</td><td class="kana" data-say="'+hourKana(h)+'"'+(sp?' title="特殊唸法"':'')+'>'+hourKana(h)+'</td></tr>';}hh+=cell('何時','なんじ')+'</tbody></table></div>';
   let mm='<div class="timecol"><h4>分（…分／ふん・ぷん）</h4><table class="cnttable"><thead><tr><th>分</th><th>假名</th></tr></thead><tbody>';
   for(let m=1;m<=10;m++)mm+=cell(m+'分',minKana(m));mm+=cell('30分','さんじゅっぷん','（＝半 はん）')+cell('何分','なんぷん')+'</tbody></table></div>';
   let pp='<div class="timecol"><h4>時段（口語）</h4><table class="cnttable"><thead><tr><th>詞</th><th>假名</th><th>中文</th></tr></thead><tbody>';
