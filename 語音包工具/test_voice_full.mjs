@@ -43,7 +43,7 @@ ok('朗讀套組 1/2/3/99', stat && ['1','2','3','99'].every(k => stat.reading.i
 // 覆蓋率:走遍每課每分頁,每個 data-say 都能找到目前聲音的 clip
 const cover = await page.evaluate(() => {
   const missing = [];
-  for (let n = 0; n <= LESSONS; n++) {
+  for (let n = 1; n <= LESSONS; n++) {
     for (const [s] of subsFor(n)) {
       try { switchLesson(n); switchSection(s); } catch (e) {}
       document.querySelectorAll('[data-say]').forEach(el => {
@@ -71,18 +71,7 @@ const vocabCover = await page.evaluate(() => {
 });
 ok('單字/假名全覆蓋', vocabCover.length === 0);
 
-// 五十音覆蓋
-const kanaCover = await page.evaluate(() => {
-  const miss = [];
-  for (const r of workbook.lessons['0'] || []) {
-    for (const t of [r.hira, r.kata,
-      ((r.hiraex || '').split('（')[0]).trim(), ((r.kataex || '').split('（')[0]).trim()]) {
-      if (t && !vvClip(t, 'A')) miss.push(t);
-    }
-  }
-  return miss;
-});
-ok('五十音全覆蓋', kanaCover.length === 0);
+// 五十音已於 2026-08-22 獨立成 kana.html，覆蓋率由 test_kana.mjs 驗
 
 // 語音設定選單:六個自訂名字
 await page.evaluate(() => { switchLesson(1); switchSection('vocab'); });
@@ -90,6 +79,7 @@ const names = await page.evaluate(() => { populateVoices(); return [...document.
 ok('選單含 Chloe', names.some(t => t.includes('Chloe')));ok('選單無 Emily/Vanessa/Kevin', !names.some(t => /Emily|Vanessa|Kevin/.test(t)));
 ok('選單含 Darren(無 Keanu)', names.some(t => t.includes('Darren')) && !names.some(t => t.includes('Keanu')));
 ok('選單 3 項', names.length === 3);
+ok('分頁不含第0課', await page.evaluate(() => ![...document.querySelectorAll('#tabs .tab')].some(t => /五十音|第0課/.test(t.textContent))));
 
 // 朗讀:預錄套組載入且每行有 clip
 const readOK = await page.evaluate(() => {
@@ -160,7 +150,6 @@ let fail = 0;
 for (const [n, c] of checks) { console.log((c ? 'PASS' : 'FAIL') + '  ' + n); if (!c) fail++; }
 if (cover.length) console.log('data-say missing sample:', cover.slice(0, 5));
 if (vocabCover.length) console.log('vocab missing sample:', vocabCover.slice(0, 5));
-if (kanaCover.length) console.log('kana missing sample:', kanaCover.slice(0, 5));
 console.log('clips ' + (stat && stat.clips) + ' / texts ' + (stat && stat.texts));
 if (errors.length) console.log('errors:', errors.slice(0, 6));
 await browser.close();

@@ -37,14 +37,20 @@ aid = lambda text, sp: hashlib.md5((str(sp) + '|' + text).encode()).hexdigest()[
 h = open(HTML, encoding='utf-8').read()
 
 
-def block(idv):
+def block(idv, required=True):
     m = re.search(r'<script[^>]*id="' + idv + r'"[^>]*>(.*?)</script>', h, re.S)
     if not m:
-        sys.exit('找不到 <script id="%s">' % idv)
+        if required:
+            sys.exit('找不到 <script id="%s">' % idv)
+        return None
     return json.loads(m.group(1))
 
 
-vd = block('vocab-data')
+# 這支同時吃兩種頁面：minna-notes（vocab-data）與 kana.html（kana-data）。
+vd = block('vocab-data', required=False)
+kana = block('kana-data', required=False)
+if vd is None and kana is None:
+    sys.exit('這個 HTML 既沒有 vocab-data 也沒有 kana-data，不知道要合成什麼')
 VV = block('vv-data')
 say, audio = VV['say'], VV['audio']
 
@@ -65,18 +71,23 @@ def add(t):
         texts.add(t)
 
 
-# A. 單字
-for k, rows in vd['lessons'].items():
-    if k == '0':      # 五十音例詞由完整管線處理
-        continue
-    for r in rows:
-        add(say_text(r))
-        add(r.get('kana'))
-        ka = r.get('kana') or ''
-        if ka.endswith('ます') and 2 < len(ka) <= 9:   # 動詞活用形（排除長片語）
-            stem = ka[:-2]
-            for s in VERB_SUFS:
-                add(stem + s)
+# A. 單字（minna-notes）／假名與例詞（kana.html）
+if vd:
+    for k, rows in vd['lessons'].items():   # 第0課已於 2026-08-22 獨立成 kana.html
+        for r in rows:
+            add(say_text(r))
+            add(r.get('kana'))
+            ka = r.get('kana') or ''
+            if ka.endswith('ます') and 2 < len(ka) <= 9:   # 動詞活用形（排除長片語）
+                stem = ka[:-2]
+                for s in VERB_SUFS:
+                    add(stem + s)
+if kana:
+    for r in kana:
+        add(r.get('hira'))
+        add(r.get('kata'))
+        for f in ('hiraex', 'kataex'):     # 例詞要去掉「（中文）」
+            add((r.get(f) or '').split('（')[0])
 
 # B. data-say
 for t in re.findall(r'data-say="([^"]*)"', h):
