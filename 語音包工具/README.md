@@ -34,7 +34,60 @@
     （<20MB 才能 commit，目前 17.4MB）
 11. 檔案在 repo 裡 → 照 `CLAUDE.md` 的分支流程 commit（工作分支不 push）
 
-## VOICEVOX engine 安裝（雲端容器）
+## 本機流程 —— 2026-08-22 起預設走這條
+
+在 Claude Code（本機 Windows）底下，引擎、ffmpeg、合成、合併全在同一台機器上，
+所以只要一行：
+
+```
+python 語音包工具\本機補音檔.py                      # 預設處理 ..\minna-notes.html
+python 語音包工具\本機補音檔.py ..
+5-vocab.html
+python 語音包工具\本機補音檔.py --engine-only        # 只把引擎叫起來
+```
+
+它會依序：找 ffmpeg（PATH 沒有就自己 glob 出來）→ 引擎沒跑就啟動
+`vv-engine
+un.exe`（無介面、約 4 秒、之後常駐）→ `export_missing_clips.py`
+（合成缺的 clip，中途包丟系統暫存）→ `merge_clips.py`（併回 vv-data）。
+**缺 0 個就原地結束，HTML 一個字元都不動。**
+
+驗證：
+
+```
+node 語音包工具	est_voice_full.mjs [要驗的 html]
+```
+
+### 新增一個聲音的成本（2026-08-22 實測，Emily 試作後放棄）
+
+三個聲音 = 1686 個文本 × 3 = 5058 個 clip。**多一個聲音就是整套再來一次 1686 個**。
+
+- 速度：實測 **每個 clip 約 2.5〜3 秒**（引擎單一請求就吃掉約 3.8 顆核心、自己會排隊，
+  workers 1／4／8 幾乎沒差；把行程優先權拉高、重啟引擎也沒用）。一個聲音約 **50〜80 分鐘**。
+- 體積：**+約 5.8MB**（17.9MB → 約 23.7MB）。
+- **陷阱**：`export_missing_clips.py` 的文本來源只有「單字 ＋ data-say」＝ **621 個**，
+  vv-data 卻有 **1686 個** —— 差的 1065 個是五十音、朗讀逐行、時間／數字小考的拼讀單位
+  （當年由 `gen_full_manifest.py` 那條完整管線產）。
+  拿它補新聲音只會補到六成，選了新聲音的人有一大半內容會退回瀏覽器語音。
+  真要加聲音，文本清單得**以 vv-data 現有的 say key 為準**，不是重跑 export。
+
+### 本機環境（2026-08-22 裝好）
+
+| 東西 | 位置／版本 |
+|---|---|
+| VOICEVOX ENGINE | 0.25.2 CPU，`winget install --id HiroshibaKazuyuki.VOICEVOX.CPU`。**解壓縮型套件**，在 `%LOCALAPPDATA%\Microsoft\WinGet\Packages\HiroshibaKazuyuki.VOICEVOX.CPU_*\VOICEVOXv-engine
+un.exe`（不是 `Programs\`） |
+| ffmpeg | Gyan.FFmpeg 9.0 full（含 libopus） |
+| node / playwright | v24.19.0；playwright 裝在本資料夾的 `node_modules`（已 gitignore） |
+
+兩個坑：
+- **winget 裝完，當下 shell 的 PATH 還是舊的**，所以腳本自己找 ffmpeg，不靠 PATH。
+- **Windows 主控台是 cp950，印日文會 `UnicodeEncodeError` 當掉** →
+  `本機補音檔.py` 開頭設 `PYTHONIOENCODING=utf-8`。手動跑子腳本時也要記得帶。
+
+---
+
+## VOICEVOX engine 安裝（雲端容器｜Cowork 時代，留作參考）
 
 - GitHub API 被擋，但 release 直鏈可以下載：
   `https://github.com/VOICEVOX/voicevox_engine/releases/download/0.25.2/voicevox_engine-linux-cpu-x64-0.25.2.7z.001`（1.7GB，7z 解壓）
@@ -44,7 +97,7 @@
 - 產檔 API：`POST /audio_query?speaker=ID&text=...` → `POST /synthesis?speaker=ID` → wav → ffmpeg
 - **只有 Cowork 雲端容器跑得動**。「在使用者電腦」模式無法下載 1.7GB、bash 也無法常駐 engine。
 
-## 補音檔的流程 —— 2026-08-22 改成 export / merge 兩段
+## 補音檔的流程（Cowork 兩段式｜本機不需要，留作參考）
 
 **大檔永遠不要往下走。** 這是整個流程的設計原則，理由是兩個方向的上限不對稱：
 
@@ -126,9 +179,10 @@ python3 語音包工具/merge_clips.py japanese-notes/minna-notes.html new-clips
 | add_verb_clips.py | 就地更新 vv-data 的範本（動詞活用形補 clip） |
 | add_missing_clips.py | **單字**缺音檔一鍵補齊（sayText＋kana＋動詞活用形），add_verb_clips 的超集 |
 | add_datasay_clips.py | **HTML 裡所有 `data-say`**（文法例句等）缺音檔一鍵補齊 |
-| export_missing_clips.py | **【雲端】** 只匯出缺的 clip 成小 JSON，不改 HTML（單字＋data-say 聯集） |
-| merge_clips.py | **【使用者電腦】** 把 clip 包併進 vv-data，冪等、就地 |
-| test_voice_full.mjs | Playwright 回歸測試 |
+| 本機補音檔.py | **【本機，現在用這支】** 起引擎 → export → merge 一步跑完 |
+| export_missing_clips.py | 只匯出缺的 clip 成小 JSON，不改 HTML（單字＋data-say 聯集） |
+| merge_clips.py | 把 clip 包併進 vv-data，冪等、就地 |
+| test_voice_full.mjs | Playwright 回歸測試（本機版；HTML 路徑吃參數，不再寫死 clip 數）|
 
 ## 授權
 

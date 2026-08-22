@@ -10,6 +10,11 @@
 #   python 本機補音檔.py ..\n5-vocab.html
 #   python 本機補音檔.py --engine-only        # 只把引擎叫起來，不合成
 #
+# 注意：這條路徑只補「單字 ＋ HTML 的 data-say」＝ 621 個文本，
+#   但 vv-data 實際有 1686 個（多的是五十音、朗讀逐行、時間／數字小考的拼讀單位，
+#   那些當年是 gen_full_manifest.py 那條完整管線產的）。
+#   日常新增課文用這支沒問題；**要新增一個聲音**的話這樣補只會到六成，見 README。
+#
 # 前置：VOICEVOX（CPU 版）已安裝、ffmpeg 在 PATH 上。
 #   引擎會由這支自動啟動（無介面，就是 VOICEVOX 內附的 vv-engine\run.exe），
 #   啟動後會繼續常駐，之後再跑就是秒開。
