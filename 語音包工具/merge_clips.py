@@ -73,4 +73,4 @@ sz = os.path.getsize(HTML) / 1e6
 print('合併完成：新增 %d 個 clip、%d 筆文本對應（跳過已存在 %d 個）' % (added_a, added_s, skipped))
 print('vv-data：audio %d → %d、say %d → %d' % (before_a, len(VV2['audio']), before_s, len(VV2['say'])))
 print('%s 現在 %.2fMB' % (HTML, sz))
-print('提醒：test_voice_full.mjs 裡寫死的 stat.clips 要改成 %d' % len(VV2['audio']))
+print('驗證：node test_voice_full.mjs %s' % HTML)

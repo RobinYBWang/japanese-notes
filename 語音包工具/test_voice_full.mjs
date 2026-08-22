@@ -1,13 +1,21 @@
 // 語音版驗證:載入、六角色選單、發音點覆蓋、朗讀預錄套組、測驗、無錯誤
 import { chromium } from 'playwright';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+// 用法：node test_voice_full.mjs [要驗的 HTML，預設 ..\minna-notes.html]
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const HTML = path.resolve(process.argv[2] || path.join(HERE, '..', 'minna-notes.html'));
 
 const errors = [];
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
+// 本機跑：用 playwright 自帶的 chromium（Cowork 時代才要指定 /opt/pw-browsers/chromium）
+const browser = await chromium.launch();
 const page = await browser.newPage();
 page.on('dialog', d => d.dismiss());
 page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
 page.on('pageerror', e => errors.push(String(e)));
-await page.goto('file:///mnt/user-data/uploads/日文學習/japanese-notes/minna-notes.html', { timeout: 90000 });
+console.log('驗證：' + HTML);
+await page.goto(pathToFileURL(HTML).href, { timeout: 90000 });
 await page.waitForTimeout(2500);
 
 const checks = [];
@@ -21,7 +29,14 @@ const stat = await page.evaluate(() => ({
   reading: Object.keys(VV_READING), voices: VV_VOICES.length,
 })).catch(() => null);
 ok('VV 資料載入', !!stat);
-ok('clips=7632', stat && stat.clips === 4884);
+// 原本這行是寫死的 clip 總數，每次補完音檔都要手改，否則會出現與本次改動無關的假 FAIL。
+// 改成驗「say 指到的 clip 都真的存在」，數量只印出來參考。
+const dangling = await page.evaluate(() => {
+  let n = 0;
+  for (const t in VV_SAY) for (const v in VV_SAY[t]) if (!VV_AUDIO[VV_SAY[t][v]]) n++;
+  return n;
+});
+ok('clip 對應無斷鏈', dangling === 0);
 ok('三角色', stat && stat.voices === 3);
 ok('朗讀套組 1/2/3/99', stat && ['1','2','3','99'].every(k => stat.reading.includes(k)));
 
@@ -146,6 +161,7 @@ for (const [n, c] of checks) { console.log((c ? 'PASS' : 'FAIL') + '  ' + n); if
 if (cover.length) console.log('data-say missing sample:', cover.slice(0, 5));
 if (vocabCover.length) console.log('vocab missing sample:', vocabCover.slice(0, 5));
 if (kanaCover.length) console.log('kana missing sample:', kanaCover.slice(0, 5));
+console.log('clips ' + (stat && stat.clips) + ' / texts ' + (stat && stat.texts));
 if (errors.length) console.log('errors:', errors.slice(0, 6));
 await browser.close();
 process.exit(fail ? 1 : 0);
