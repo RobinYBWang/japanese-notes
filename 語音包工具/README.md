@@ -44,22 +44,62 @@
 - 產檔 API：`POST /audio_query?speaker=ID&text=...` → `POST /synthesis?speaker=ID` → wav → ffmpeg
 - **只有 Cowork 雲端容器跑得動**。「在使用者電腦」模式無法下載 1.7GB、bash 也無法常駐 engine。
 
-## 兩支「補音檔」腳本的分工（新增內容後跑這兩支就好）
+## 補音檔的流程 —— 2026-08-22 改成 export / merge 兩段
 
-引擎起來後，依序跑：
+**大檔永遠不要往下走。** 這是整個流程的設計原則，理由是兩個方向的上限不對稱：
+
+| 方向 | 工具 | 上限 |
+|---|---|---|
+| 使用者電腦 → 雲端 | `device_stage_files` | **400MB** |
+| 雲端 → 使用者電腦 | `device_commit_files` | **20MB** ← 只有這邊會卡 |
+
+`minna-notes.html` 已經 17.9MB，用舊做法（雲端改完整份寫回）遲早過不去。
+新做法讓 HTML 從頭到尾待在使用者硬碟上，只有幾十 KB 的 clip 包過橋，
+檔案漲到 50MB 也一樣能用。
+
+### 步驟
 
 ```bash
-python3 add_datasay_clips.py minna-notes.html   # 文法例句等 data-say
-python3 add_missing_clips.py  minna-notes.html   # 單字 sayText / kana / 動詞活用形
+# 1) 雲端容器：引擎起來後，只匯出缺的 clip，不碰 HTML
+python3 export_missing_clips.py <staged 的 minna-notes.html> new-clips.json
+
+# 2) SendUserFile + device_commit_files 把 new-clips.json 送到使用者電腦
+#    （放進 japanese-notes\ 底下即可，合併完再 mv 進 _to_delete\）
+
+# 3) 使用者電腦（device_bash）：就地併進 vv-data
+python3 語音包工具/merge_clips.py japanese-notes/minna-notes.html new-clips.json
 ```
 
-- 兩支涵蓋範圍**不重疊**：`add_missing_clips.py` 只讀 `vocab-data`，
-  **看不到文法區塊 `GRAMMAR_DEFAULT` 裡的 `<button data-say="…">`**。
-  只跑它的話，新寫的文法例句一個音檔都不會產（2026-08-22 踩到）。
-- `add_datasay_clips.py` 用正規表示式收 HTML 原始碼裡所有 `data-say`，
-  但主程式裡有 `data-say="'+esc(x)+'"`、`data-say="${q.say}"` 這種**還沒求值的 JS 樣板字串**。
-  第一版沒過濾，合成出 30 個垃圾 clip、檔案胖 0.6MB。腳本已內建 `CODEY` 過濾，**不要拿掉**。
-- 兩支都是就地改寫 `vv-data` JSON，其他一律不動；跑完再跑 `test_voice_full.mjs`。
+實測：`merge_clips.py` 在使用者電腦上處理 17.9MB 的檔案**0.87 秒**跑完，
+遠低於 device_bash 每次呼叫 45 秒的上限。
+
+### export_missing_clips.py 的文本來源是兩者的聯集
+
+- **A：`vocab-data`** —— 各課單字的 sayText（漢字優先／`sayForceKana` 強制假名）＋ kana ＋ 動詞活用形
+- **B：HTML 原始碼裡所有 `data-say`** —— 文法例句的 🔊 按鈕等
+
+只收 A 會漏掉文法例句（2026-08-22 踩過：新寫的 15 句文法例句一個音檔都沒產）。
+
+**B 有個陷阱**：主程式裡有 `data-say="'+esc(x)+'"`、`data-say="${q.say}"` 這種
+**還沒被求值的 JS 樣板字串**。第一版沒過濾就全收去合成，產了 30 個垃圾 clip、
+檔案胖 0.6MB。腳本內建 `CODEY` 正規表示式過濾，**不要拿掉**。
+（真的混進去了，就從 vv-data 的 `say` 和 `audio` 兩個 map 一起刪掉。）
+
+### merge_clips.py 的保證
+
+- **冪等**：同一個 clip 包重複跑不會出事，已存在的直接跳過（實測過）
+- **只動 `<script id="vv-data">`**，用切片繞過整份重寫。
+  特別是不會碰到 `<script id="vocab-data">` —— 那是 `indent=2` 的縮排 JSON，
+  被壓成一行會讓 `git diff` 變成「-4556 +3」完全無法 review（2026-08-22 踩過）。
+  腳本裡有一條 assert 專門擋這件事。
+- 合併後重讀驗證：JSON 解得開、clip 包每一筆都真的在裡面、結尾是 `</html>`
+- 新的 key 會接在 JSON 尾端（順序跟原本不同，但 vv-data 本來就是壓成一行，diff 無差別）
+
+### 舊的一體式腳本
+
+`add_missing_clips.py`（只有單字）和 `add_datasay_clips.py`（只有 data-say）留著，
+它們是「在雲端直接改整份 HTML」的做法，檔案還小或臨時要用時仍可跑。
+**新增內容的正規流程請走 export / merge 那條。**
 
 ## 關鍵約定（前後端必須一致，錯了不會報錯）
 
@@ -86,6 +126,8 @@ python3 add_missing_clips.py  minna-notes.html   # 單字 sayText / kana / 動�
 | add_verb_clips.py | 就地更新 vv-data 的範本（動詞活用形補 clip） |
 | add_missing_clips.py | **單字**缺音檔一鍵補齊（sayText＋kana＋動詞活用形），add_verb_clips 的超集 |
 | add_datasay_clips.py | **HTML 裡所有 `data-say`**（文法例句等）缺音檔一鍵補齊 |
+| export_missing_clips.py | **【雲端】** 只匯出缺的 clip 成小 JSON，不改 HTML（單字＋data-say 聯集） |
+| merge_clips.py | **【使用者電腦】** 把 clip 包併進 vv-data，冪等、就地 |
 | test_voice_full.mjs | Playwright 回歸測試 |
 
 ## 授權
