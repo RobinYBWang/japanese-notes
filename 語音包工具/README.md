@@ -44,6 +44,23 @@
 - 產檔 API：`POST /audio_query?speaker=ID&text=...` → `POST /synthesis?speaker=ID` → wav → ffmpeg
 - **只有 Cowork 雲端容器跑得動**。「在使用者電腦」模式無法下載 1.7GB、bash 也無法常駐 engine。
 
+## 兩支「補音檔」腳本的分工（新增內容後跑這兩支就好）
+
+引擎起來後，依序跑：
+
+```bash
+python3 add_datasay_clips.py minna-notes.html   # 文法例句等 data-say
+python3 add_missing_clips.py  minna-notes.html   # 單字 sayText / kana / 動詞活用形
+```
+
+- 兩支涵蓋範圍**不重疊**：`add_missing_clips.py` 只讀 `vocab-data`，
+  **看不到文法區塊 `GRAMMAR_DEFAULT` 裡的 `<button data-say="…">`**。
+  只跑它的話，新寫的文法例句一個音檔都不會產（2026-08-22 踩到）。
+- `add_datasay_clips.py` 用正規表示式收 HTML 原始碼裡所有 `data-say`，
+  但主程式裡有 `data-say="'+esc(x)+'"`、`data-say="${q.say}"` 這種**還沒求值的 JS 樣板字串**。
+  第一版沒過濾，合成出 30 個垃圾 clip、檔案胖 0.6MB。腳本已內建 `CODEY` 過濾，**不要拿掉**。
+- 兩支都是就地改寫 `vv-data` JSON，其他一律不動；跑完再跑 `test_voice_full.mjs`。
+
 ## 關鍵約定（前後端必須一致，錯了不會報錯）
 
 這一節是本資料夾存在的主要理由。以下任何一條跟 HTML 前端對不上，
@@ -67,6 +84,8 @@
 | synth_full.py | 批次合成（cached 自動跳過） |
 | supervisor.sh | 引擎看門狗 |
 | add_verb_clips.py | 就地更新 vv-data 的範本（動詞活用形補 clip） |
+| add_missing_clips.py | **單字**缺音檔一鍵補齊（sayText＋kana＋動詞活用形），add_verb_clips 的超集 |
+| add_datasay_clips.py | **HTML 裡所有 `data-say`**（文法例句等）缺音檔一鍵補齊 |
 | test_voice_full.mjs | Playwright 回歸測試 |
 
 ## 授權
