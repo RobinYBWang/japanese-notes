@@ -73,6 +73,16 @@ ok('單字/假名全覆蓋', vocabCover.length === 0);
 
 // 五十音已於 2026-08-22 獨立成 kana.html，覆蓋率由 test_kana.mjs 驗
 
+// 動詞總表（總學習）
+const verbTable = await page.evaluate(() => {
+  switchLesson(14); switchSection('allverb');
+  const tds = [...document.querySelectorAll('#allverb-tbody td[data-say]')];
+  return { rows: document.querySelectorAll('#allverb-tbody tr').length,
+    cells: tds.length, miss: tds.filter(td => !vvClip(td.dataset.say, 'A')).map(td => td.dataset.say) };
+});
+ok('動詞總表有內容', verbTable.rows > 0 && verbTable.cells === verbTable.rows * 4);
+ok('動詞總表四種變化全有音檔', verbTable.miss.length === 0);
+
 // 語音設定選單:六個自訂名字
 await page.evaluate(() => { switchLesson(1); switchSection('vocab'); });
 const names = await page.evaluate(() => { populateVoices(); return [...document.getElementById('voicesel').options].map(o => o.text); });
